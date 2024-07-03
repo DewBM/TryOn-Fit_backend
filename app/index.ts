@@ -1,7 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import "reflect-metadata"
-import { AppDataSource } from './data-source';
 // import routes from './routes';
 
 const app = express();
@@ -9,10 +8,18 @@ const app = express();
 app.use(bodyParser.json());
 // app.use('/api', routes);
 
-AppDataSource.initialize()
-    .then(() => {
-        // here you can start to work with your database
-    })
-    .catch((error) => console.log(error))
+import { db } from './db';
+import { customers } from './db/schema/Customer';
+
+async function fetchCustomers() {
+  try {
+    const data = await db.select().from(customers);
+    console.log(data);
+  } catch (error) {
+    console.error('Error fetching customers:', error);
+  }
+}
+
+// fetchCustomers();
 
 module.exports = app;
