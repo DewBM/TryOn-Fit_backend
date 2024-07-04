@@ -1,25 +1,13 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import "reflect-metadata"
-// import routes from './routes';
 
 const app = express();
 
 app.use(bodyParser.json());
-// app.use('/api', routes);
+// app.use('/cloth-items', require('./routes/ClothItemRoutes'));
 
-import { db } from './db';
-import { customers } from './db/schema/Customer';
+import productRouter from './routes/ProductRoutes';
+app.use('/products', productRouter);
 
-async function fetchCustomers() {
-  try {
-    const data = await db.select().from(customers);
-    console.log(data);
-  } catch (error) {
-    console.error('Error fetching customers:', error);
-  }
-}
-
-// fetchCustomers();
-
-module.exports = app;
+export default app;

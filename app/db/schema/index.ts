@@ -1,4 +1,4 @@
-import { customers } from "./Customer";
-import { items } from "./Item";
+import { customer } from "./Customer";
+import { product } from "./Product";
 
-export {customers, items}
+export {customer, product}
