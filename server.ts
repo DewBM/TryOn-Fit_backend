@@ -1,5 +1,5 @@
-const app = require('./app')
-const express = require('express');
+import app from './app';
+import express from 'express';
 
 // Middleware and routes will be added here
 
