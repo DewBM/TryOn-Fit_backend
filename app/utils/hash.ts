@@ -1,8 +1,9 @@
-import bcrypt, { genSalt } from "bcrypt";
+import bcrypt, { compare, genSalt } from "bcrypt";
 
 export async function genPwdHash(password: string) {
-   // const salt = await genSalt(10);
-   const hash = await bcrypt.hash(password, 10);
+   return await bcrypt.hash(password, 10);
+}
 
-   return hash;
+export async function verifyHash(password: string, hash: string) {
+   return await compare(password, hash);
 }
