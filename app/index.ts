@@ -8,6 +8,9 @@ app.use(bodyParser.json());
 // app.use('/cloth-items', require('./routes/ClothItemRoutes'));
 
 import productRouter from './routes/ProductRoutes';
+import authRouter from './routes/AuthRoutes';
+
 app.use('/products', productRouter);
+app.use('/auth', authRouter)
 
 export default app;
