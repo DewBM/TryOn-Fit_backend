@@ -4,8 +4,8 @@ import { users } from "../schema";
 
 export type User = typeof users.$inferInsert;
 
-export async function insert(user: User) {
-   await db.insert(users).values(user);
+export async function insert(user: User): Promise<User[]> {
+   return await db.insert(users).values(user).onConflictDoNothing({target: users.username}).returning();
 }
 
 

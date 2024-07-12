@@ -3,10 +3,15 @@ import { genPwdHash, verifyHash } from '../utils/hash';
 
 export async function addUser({username, password}: userDAO.User)  {
    const hash = await genPwdHash(password);
-   return userDAO.insert({
+   const result = await userDAO.insert({
       username: username,
       password: hash
    });
+
+   if(result.length==0) 
+      return false;
+   else
+      return true;
 }
 
 
