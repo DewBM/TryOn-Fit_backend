@@ -5,7 +5,7 @@ export const employee = pgTable('Employee',{
   First_Name: text('first_Name'),
   Last_Name: text('last_Name'),
   Email: text('email').unique(),
-  Enrolled_Date: date('enrolled_Date'),
+  Enrolled_Date: text('enrolled_Date'),
   Role: text('role'),
   Phone_Number: text('phone_Number')
 
