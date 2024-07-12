@@ -10,4 +10,7 @@ app.use(bodyParser.json());
 import productRouter from './routes/ProductRoutes';
 app.use('/products', productRouter);
 
+import employeeRouter  from './routes/EmployeeRoutes';
+app.use('/employee', employeeRouter)
+
 export default app;
