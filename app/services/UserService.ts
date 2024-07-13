@@ -16,11 +16,23 @@ export async function addUser({username, password}: userDAO.User)  {
 
 
 export async function verifyUser({username, password}: userDAO.User) {
-   const user = await userDAO.getUserById(username);
+   const user = await userDAO.getUserByUsername(username);
    if (user==undefined){
       console.log('incorrect username');
-      return false;
+      return {
+         isSuccess: false,
+         user: null
+      };
    }
-   else
-      return await verifyHash(password, user.password);
+   else{
+      return {
+         isSuccess: await verifyHash(password, user.password),
+         user: user
+      };
+   }
+}
+
+
+export async function getUser(userId: number) {
+   return await userDAO.getUserById(userId);
 }
