@@ -15,4 +15,7 @@ import authRouter from './routes/AuthRoutes';
 app.use('/products', productRouter);
 app.use('/auth', authRouter)
 
+import employeeRouter  from './routes/EmployeeRoutes';
+app.use('/employee', employeeRouter)
+
 export default app;
