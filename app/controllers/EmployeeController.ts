@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createEmployee, getEmployee , updateEmployee } from "../services/EmployeeService";
+import { createEmployee, getEmployee , updateEmployee,deleteEmployee } from "../services/EmployeeService";
 import { createNewEmployee } from '../db/dao/employeeDao';
 import { Param } from 'drizzle-orm';
 import qs from 'qs';
@@ -26,7 +26,7 @@ export async function doPost( req: Request , resp: Response){
 
 
 export async function doPut(req : Request , resp : Response) {
-    console.log(16);
+   
     const id = 16;
     console.log(id);
     try {
@@ -34,11 +34,20 @@ export async function doPut(req : Request , resp : Response) {
         
         resp.status(201).send(data);
     } catch (error) {
-        resp.status(500).send({ error: 'Failed to create employee' });
+        resp.status(500).send({ error: 'Failed to update employee' });
     }
 }
 
-export function doDel(arg0: string, doDel: any) {
-    throw new Error("Function not implemented.");
+export async function doDel(req : Request , resp : Response) {
+       
+    const id = 27;
+    console.log(id);
+    try {
+        const data = await deleteEmployee( id);
+        
+        resp.status(201).send(data);
+    } catch (error) {
+        resp.status(500).send({ error: 'Failed to update employee' });
+    }
 }
 

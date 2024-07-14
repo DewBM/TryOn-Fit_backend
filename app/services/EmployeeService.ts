@@ -1,6 +1,7 @@
 import { getAllEmployee } from "../db/dao/employeeDao"
 import { createNewEmployee} from "../db/dao/employeeDao"
 import { updateExistEmp} from "../db/dao/employeeDao"
+import { deleteExistEmployee}from "../db/dao/employeeDao"
 
 export const getEmployee = () => {
     return getAllEmployee();
@@ -32,4 +33,7 @@ export const updateEmployee = (EmpData : {
     return updateExistEmp(EmpData,id);
 };
 
+export const deleteEmployee = (id : number) => {
+    return deleteExistEmployee(id );
+}
 

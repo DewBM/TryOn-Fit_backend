@@ -56,3 +56,8 @@ export async function updateExistEmp(EmpData: empDataType , id : number) {
 }
 
 // returning({updatedEmpId : employee.Emp_Id})
+
+
+export async function deleteExistEmployee(id:number) {
+    const delEmp = await db.delete(employee).where(eq(employee.Emp_Id, id));
+}
