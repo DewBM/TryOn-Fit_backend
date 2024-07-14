@@ -9,6 +9,7 @@
       // "rootDir": "./app",
       "strict": true,
       "esModuleInterop": true,
-      "skipLibCheck": true
+      "skipLibCheck": true,
+      "typeRoots": ["./app/types", "./node_modules/@types"]
    }
 }

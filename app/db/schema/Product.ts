@@ -9,5 +9,5 @@ export const product = pgTable('Product', {
    name: text('name'),
    price: numeric('price'),
    age_group: ageGroupEnum('age_group'),
-   gender: genderEnum('gender'),
+   gender: genderEnum('gender')
 });
