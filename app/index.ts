@@ -18,4 +18,7 @@ app.use('/auth', authRouter)
 import employeeRouter  from './routes/EmployeeRoutes';
 app.use('/employee', employeeRouter)
 
+import supplierRouter from './routes/SupplierRoutes'
+app.use('/supplier', supplierRouter)
+
 export default app;

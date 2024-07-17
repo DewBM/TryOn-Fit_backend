@@ -8,3 +8,4 @@ export const suppliersTable = pgTable('supplier', {
    contact_no: text('contact_no'),
    address: text('address')
 });
+export type selectSupllier = typeof suppliersTable.$inferSelect;
