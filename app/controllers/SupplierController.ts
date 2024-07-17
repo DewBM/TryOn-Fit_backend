@@ -23,8 +23,9 @@ export async function doPost( req: Request , resp: Response){
 } 
 
 export async function doPut(req : Request , resp : Response) {
+    const supid =4;
     try{
-        const data = await updateSupplier(req.body);
+        const data = await updateSupplier(req.body, supid);
         resp.status(201).send(data);
     }catch(error){
         resp.status(500).send({error : 'Failed to create Supplier'})

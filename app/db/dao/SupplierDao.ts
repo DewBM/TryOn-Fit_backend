@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { db } from ".."
 import { suppliersTable } from "../schema/Supplier"
 interface supDataType {
@@ -33,4 +34,25 @@ export async function createNewSupplier(supData:supDataType) {
     }catch(error){
         console.error('Error executing query', error);
     }
+}
+
+export async function updateSupplierData(supData:supDataType,id : number) {
+    console.log(supData)
+    try{
+        const updatedEmp  = await db.update(suppliersTable)
+        .set({ 
+                first_name: supData.first_name,
+                last_name: supData.last_name,
+                brand_name: supData.brand_name,
+                contact_no: supData.contact_no,
+                address: supData.address
+            
+         })
+        .where(eq(suppliersTable.supplier_id,id));
+            console.log(id);
+            return updatedEmp;
+        }catch(error){
+            console.error('Error executing query', error);
+        
+        }
 }
