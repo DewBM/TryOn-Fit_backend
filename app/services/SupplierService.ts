@@ -1,4 +1,4 @@
-import {createNewSupplier,getAllSupplier, updateSupplierData} from "../db/dao/SupplierDao"
+import {createNewSupplier,getAllSupplier, updateSupplierData,deleteExistSuplier} from "../db/dao/SupplierDao"
 
 interface supDataType {
     supplier_id: string,
@@ -19,4 +19,7 @@ export const getSupplier = () => {
 
 export const updateSupplier = (supData : supDataType, id : number) => {
    return updateSupplierData(supData, id);
+}
+export const deleteSupplier = (id : number) => {
+   return deleteExistSuplier(id);
 }

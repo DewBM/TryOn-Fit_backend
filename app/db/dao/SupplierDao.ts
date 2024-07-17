@@ -56,3 +56,12 @@ export async function updateSupplierData(supData:supDataType,id : number) {
         
         }
 }
+
+export async function deleteExistSuplier(id:number) {
+    try{
+        const delsup = await db.delete(suppliersTable).where(eq(suppliersTable.supplier_id, id));
+    }catch(error){
+        console.error('Error executing query', error);
+    }
+    
+}
