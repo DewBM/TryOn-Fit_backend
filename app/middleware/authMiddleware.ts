@@ -1,12 +1,13 @@
 import { Strategy as JwtStrategy, ExtractJwt, StrategyOptions } from 'passport-jwt';
 import passport from 'passport';
-import { secretKey } from '../utils/jwtUtils';
+import { cookieExtracotr, secretKey } from '../utils/jwtUtils';
 import * as UserService from '../services/UserService';
 import { NextFunction, Request, Response } from 'express';
 
 
 const options: StrategyOptions = {
-   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+   // jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+   jwtFromRequest: cookieExtracotr,
    secretOrKey: secretKey,
    algorithms: ['HS256']
 };
