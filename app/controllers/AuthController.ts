@@ -18,7 +18,7 @@ export async function doSignin(req: Request, res: Response) {
    if (isSuccess && user){
       const token = jwtUtils.generateJWT(user); 
       res.cookie('access-token', token, {httpOnly: true, sameSite: 'lax', secure: true, maxAge:1000*60*60});     
-      res.status(200).json({isSuccess: true, msg: 'login successfull'});
+      res.status(200).json({isSuccess: true, msg: 'login successfull', role: user.role});
    }
    else
       res.status(401).send({isSuccess: false, msg: 'incorrect username or password'});
