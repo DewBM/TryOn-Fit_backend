@@ -8,12 +8,12 @@ export const getEmployee = () => {
 }
 
 export const createEmployee = (EmpData: {
-    First_Name: string;
-    Last_Name: string;
-    Email: string;
-    Enrolled_Date: string;
-    Role: string;
-    Phone_Number: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    enrolled_date: string;
+    role: string;
+    contact_number: string;
 }) => {
     console.log(5);
     return createNewEmployee(EmpData);
@@ -21,12 +21,12 @@ export const createEmployee = (EmpData: {
 
 export const updateEmployee = (EmpData : {
     // Emp_Id : number;
-    First_Name: string;
-    Last_Name: string;
-    Email: string;
-    Enrolled_Date: string;
-    Role: string;
-    Phone_Number: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    enrolled_date: string;
+    role: string;
+    contact_number: string;
 
 },id : number) =>{
     console.log(2);
