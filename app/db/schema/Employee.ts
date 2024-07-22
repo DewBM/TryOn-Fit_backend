@@ -1,14 +1,14 @@
 import { date, integer, pgEnum, pgTable, serial, text, uniqueIndex, varchar  } from "drizzle-orm/pg-core";
 
-export const employee = pgTable('Employee',{
-  Emp_Id: serial('Emp_Id').primaryKey(),
-  First_Name: text('first_Name'),
-  Last_Name: text('last_Name'),
-  Email: text('email').unique(),
-  Enrolled_Date: text('enrolled_Date'),
-  Role: text('role'),
-  Phone_Number: text('phone_Number')
+export const employeesTable = pgTable('employee',{
+  emp_id: serial('emp_id').primaryKey(),
+  first_name: text('first_name'),
+  last_name: text('last_name'),
+  email: text('email').unique(),
+  enrolled_date: text('enrolled_date'),
+  role: text('role'),
+  contact_number: text('contact_number')
 
 });
 
-export type selectEmployee = typeof employee.$inferSelect;
+export type selectEmployee = typeof employeesTable.$inferSelect;

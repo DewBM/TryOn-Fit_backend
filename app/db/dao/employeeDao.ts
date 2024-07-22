@@ -1,11 +1,11 @@
 import { eq } from "drizzle-orm";
 import { db } from "..";
-import { employee } from "../schema";
+import { employeesTable } from "../schema";
 
 // get all employee
 export async function getAllEmployee() {
 try{
-    return db.query.employee.findMany();
+    return db.query.employeesTable.findMany();
 }catch(error){  
     console.error('Error executing query', error);
 }
@@ -18,26 +18,26 @@ try{
 // create Employee
 export async function createNewEmployee(EmpData: {
     // Emp_Id: number;
-    First_Name: string;
-    Last_Name: string;
-    Email: string;
-    Enrolled_Date: string;
-    Role: string;
-    Phone_Number: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    enrolled_date: string;
+    role: string;
+    contact_number: string;
 } ) {
     console.log(6);
     const formattedData = {
         ...EmpData,
-        Enrolled_Date: EmpData.Enrolled_Date.toString() // Convert to string
+        enrolled_date: EmpData.enrolled_date.toString() // Convert to string
       };
       console.log(7);
 
     // Insert new employee into the database
     try{
-    const newEmployee = await db.insert(employee).values({ First_Name : formattedData.First_Name,
-         Last_Name : formattedData.Last_Name, Email : formattedData.Email,
-         Enrolled_Date : formattedData.Enrolled_Date, Role : formattedData.Role,
-          Phone_Number : formattedData.Phone_Number});  
+    const newEmployee = await db.insert(employeesTable).values({ first_name : formattedData.first_name,
+         last_name : formattedData.last_name, email : formattedData.email,
+         enrolled_date : formattedData.enrolled_date, role : formattedData.role,
+          contact_number : formattedData.contact_number});  
     return newEmployee;
     }catch(error){  
         console.error('Error executing query', error);
@@ -51,25 +51,25 @@ export async function createNewEmployee(EmpData: {
 // update employee
 interface empDataType {
     // Emp_Id : number;
-    First_Name: string;
-    Last_Name: string;
-    Email: string; 
-    Enrolled_Date: string; 
-    Role: string; 
-    Phone_Number: string;
+    first_name: string;
+    last_name: string;
+    email: string; 
+    enrolled_date: string; 
+    role: string; 
+    contact_number: string;
 
 }
 
 export async function updateExistEmp(EmpData: empDataType , id : number) {
     console.log(EmpData);
     try{
-    const updatedEmp  = await db.update(employee)
-    .set({ First_Name: EmpData.First_Name,Last_Name : EmpData.Last_Name,
-        Email : EmpData.Email, Enrolled_Date : EmpData.Enrolled_Date, 
-        Role : EmpData.Role , Phone_Number : EmpData.Phone_Number
+    const updatedEmp  = await db.update(employeesTable)
+    .set({ first_name: EmpData.first_name,last_name : EmpData.last_name,
+        email : EmpData.email, enrolled_date : EmpData.enrolled_date, 
+        role : EmpData.enrolled_date , contact_number : EmpData.contact_number
         
      })
-    .where(eq(employee.Emp_Id,id));
+    .where(eq(employeesTable.emp_id,id));
         console.log(4);
         return updatedEmp;
     }catch(error){
@@ -84,7 +84,7 @@ export async function updateExistEmp(EmpData: empDataType , id : number) {
 // delete employee
 export async function deleteExistEmployee(id:number) {
     try{
-        const delEmp = await db.delete(employee).where(eq(employee.Emp_Id, id));
+        const delEmp = await db.delete(employeesTable).where(eq(employeesTable.emp_id, id));
     }catch(error){
         console.error('Error executing query', error);
     }
