@@ -7,11 +7,5 @@ export const getProducts = () => {
 
 
 export const createProduct = async (product: Product) => {
-   try {
-      const res = await insertProduct(product);
-      console.log("Product response: ", res);
-   }
-   catch (e) {
-      console.log('Product error: ', e);
-   }
+   return await insertProduct(product);
 }

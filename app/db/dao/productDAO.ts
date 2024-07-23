@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "..";
 import { categoriesTable, measurementTypesTable, Product, productsTable, productVariantsTable, sizeChartsTable, sizesTable } from "../schema/Product";
+import { error } from "console";
 
 export async function getAllProducts() {
    return db.query.productsTable.findMany();
@@ -62,6 +63,12 @@ export async function insertProduct(product :Product) {
             .onConflictDoNothing();
          }
       });
+
+      return {
+         isSuccess: true,
+         msg: "Product added successfully.",
+         error: ""
+      }
    }
    catch(e) {
       return {

@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import * as ProductService from '../services/ProductService';
-import productRrouter from '../routes/ProductRoutes';
 
 export async function doGet(req: Request, res: Response) {
    const data = await ProductService.getProducts();
@@ -11,7 +10,11 @@ export async function doGet(req: Request, res: Response) {
 
 export async function doPost(req: Request, res: Response) {
    const data = req.body;
-   console.log(data);
-   ProductService.createProduct(data);
-   res.status(200).json({msg: 'product received.'});
+   const result = await ProductService.createProduct(data);
+   if (result.isSuccess)
+      res.status(200).json(result);
+   else {
+      console.log('Product insert error: ', result);
+      res.status(400).json({isSuccess: result.isSuccess, msg: result.msg});
+   }
 }
