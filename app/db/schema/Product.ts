@@ -1,12 +1,14 @@
 import { numeric, pgEnum, pgTable, text, serial, timestamp, unique, integer, foreignKey, primaryKey } from "drizzle-orm/pg-core";
 import { suppliersTable } from "./Supplier";
+import { relations } from "drizzle-orm";
 
 const ageGroupEnum = pgEnum('age_group', ['adult', 'kids']);
-const genderEnum = pgEnum('gender', ['Male', 'Female']);
+const genderEnum = pgEnum('gender', ['Male', 'Female', 'Unisex']);
 
 
 export const sizesTable = pgTable('size_labels', {
-   size_label: text('size_label').primaryKey()
+   size_label: text('size_label').primaryKey(),
+   size_name: text('size_name')
 });
 
 
@@ -20,17 +22,7 @@ export const categoriesTable = pgTable('cloth_category', {
 });
 
 
-// export const categoryMeasurementsTable = pgTable('category_measurements', {
-//    category: text('category').references(()=> categoriesTable.category_type),
-//    measurement_type: text('measurement_type').references(()=> measurementTypesTable.measurement_type)
-// }, (table) => {
-//    return {
-//       pk: primaryKey({columns: [table.category, table.measurement_type]})
-//    }
-// });
-
 export const sizeChartsTable = pgTable('size_chart', {
-   // chart_id: serial('chart_id').primaryKey(),
    sup_id: integer('sup_id').references(()=> suppliersTable.supplier_id),
    size: text('size').references(()=> sizesTable.size_label),
    measurement: text('measurement').references(()=> measurementTypesTable.measurement_type),
@@ -45,7 +37,6 @@ export const sizeChartsTable = pgTable('size_chart', {
 export const productsTable = pgTable('product', {
    product_id: text('product_id').primaryKey(),
    name: text('name'),
-   description: text('description'),
    supplier: integer('supplier').references(()=> suppliersTable.supplier_id),
    category: text('category').references(()=> categoriesTable.category_type),
    gender: genderEnum('gender'),
@@ -61,9 +52,41 @@ export const productVariantsTable = pgTable('product_variants', {
    size: text('size').references(()=> sizesTable.size_label),
    color: text('color'),
    design: text('design'),
-   price: text('price'),
-   stock_quantity: text('stock_quantity'),
+   price: numeric('price'),
+   stock_quantity: integer('stock_quantity'),
    description: text('description'),
    createdAt: timestamp('createdAt'),
    updatedAt: timestamp('updatedAt')
 });
+
+
+export type Product = {
+   product_id: string,
+   name: string,
+   supplier: number,
+   category: string,
+   gender: "Male" | "Female" | "Unisex",
+   ageGroup: "adult" | "kids",
+   variant: {
+      variant_id: string,
+      product_id: string,
+      size: string,
+      color: string,
+      design: string,
+      price: number,
+      stock_quantity: number,
+      description: string,
+      createdAt: DataView,
+      updatedAt: DataView,
+      sizes: [{
+         size: string,
+         price: string,
+         stock_quantity: number,
+         measurements: [{
+            measurement_type: string,
+            value_min: string,
+            value_max: string
+         }]
+      }]
+   },
+};

@@ -7,7 +7,7 @@ const productRrouter = Router();
 // const { getClothItems } = require('../controllers/ClothItemController');
 
 productRrouter.get('/', passporthMiddleware, authenticate(['ADMIN']), ProductController.doGet);
-
+productRrouter.post('/', passporthMiddleware, authenticate(['ADMIN']), ProductController.doPost);
 // module.exports = () => {
 //    router.get('/', getClothItems)
 // }
