@@ -16,7 +16,6 @@ export async function insertProduct(product :Product) {
 
          await tx.insert(productsTable).values({
             product_id: product.product_id,
-            name: product.name,
             supplier: product.supplier,
             category: product.category,
             gender: product.gender,
@@ -52,6 +51,7 @@ export async function insertProduct(product :Product) {
                variant_id: product.variant.variant_id,
                product_id: product.product_id,
                size: sizeObj.size,
+               name: product.name,
                color: product.variant.color,
                design: product.variant.design,
                description: product.variant.description,
