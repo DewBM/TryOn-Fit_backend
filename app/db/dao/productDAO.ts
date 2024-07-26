@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { desc, eq, getTableColumns, sql } from "drizzle-orm";
 import { db } from "..";
 import { categoriesTable, measurementTypesTable, Product, productsTable, productVariantsTable, sizeChartsTable, sizesTable } from "../schema/Product";
 import { error } from "console";
@@ -7,6 +7,19 @@ export async function getAllProducts() {
    return db.query.productsTable.findMany();
 }
 
+
+
+export async function queryProducts(prompt: string) {
+   return await db
+      .select({...
+         getTableColumns(productVariantsTable),
+         rank: sql`ts_rank(searchable_text, websearch_to_tsquery('english', ${prompt}))`
+      })
+      .from(productVariantsTable)
+      .where(sql`searchable_text @@ websearch_to_tsquery('english', ${prompt})`)
+      // .orderBy(sql`ts_rank(searchable_text, websearch_to_tsquery('english', ${prompt}))`);
+      .orderBy(t=> desc(t.rank));
+}
 
 
 export async function insertProduct(product :Product) {
