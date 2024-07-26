@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { desc, eq, getTableColumns, sql } from "drizzle-orm";
 import { db } from "..";
 import { categoriesTable, measurementTypesTable, Product, productsTable, productVariantsTable, sizeChartsTable, sizesTable } from "../schema/Product";
 import { error } from "console";
@@ -9,6 +9,19 @@ export async function getAllProducts() {
 
 
 
+export async function queryProducts(prompt: string) {
+   return await db
+      .select({...
+         getTableColumns(productVariantsTable),
+         rank: sql`ts_rank(searchable_text, websearch_to_tsquery('english', ${prompt}))`
+      })
+      .from(productVariantsTable)
+      .where(sql`searchable_text @@ websearch_to_tsquery('english', ${prompt})`)
+      // .orderBy(sql`ts_rank(searchable_text, websearch_to_tsquery('english', ${prompt}))`);
+      .orderBy(t=> desc(t.rank));
+}
+
+
 export async function insertProduct(product :Product) {
    try {
       await db.transaction(async (tx) => {
@@ -16,7 +29,6 @@ export async function insertProduct(product :Product) {
 
          await tx.insert(productsTable).values({
             product_id: product.product_id,
-            name: product.name,
             supplier: product.supplier,
             category: product.category,
             gender: product.gender,
@@ -52,6 +64,7 @@ export async function insertProduct(product :Product) {
                variant_id: product.variant.variant_id,
                product_id: product.product_id,
                size: sizeObj.size,
+               name: product.name,
                color: product.variant.color,
                design: product.variant.design,
                description: product.variant.description,

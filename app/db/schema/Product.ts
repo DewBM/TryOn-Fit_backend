@@ -1,6 +1,7 @@
-import { numeric, pgEnum, pgTable, text, serial, timestamp, unique, integer, foreignKey, primaryKey } from "drizzle-orm/pg-core";
+import { numeric, pgEnum, pgTable, text, serial, timestamp, unique, integer, foreignKey, primaryKey, index } from "drizzle-orm/pg-core";
 import { suppliersTable } from "./Supplier";
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
+import { tsvector } from "../db-utils";
 
 const ageGroupEnum = pgEnum('age_group', ['adult', 'kids']);
 const genderEnum = pgEnum('gender', ['Male', 'Female', 'Unisex']);
@@ -36,7 +37,6 @@ export const sizeChartsTable = pgTable('size_chart', {
 
 export const productsTable = pgTable('product', {
    product_id: text('product_id').primaryKey(),
-   name: text('name'),
    supplier: integer('supplier').references(()=> suppliersTable.supplier_id),
    category: text('category').references(()=> categoriesTable.category_type),
    gender: genderEnum('gender'),
@@ -49,6 +49,7 @@ export const productsTable = pgTable('product', {
 export const productVariantsTable = pgTable('product_variants', {
    variant_id: text('variant_id').primaryKey(),
    product_id: text('product_id').references(()=> productsTable.product_id),
+   name: text('name'),
    size: text('size').references(()=> sizesTable.size_label),
    color: text('color'),
    design: text('design'),
@@ -56,8 +57,16 @@ export const productVariantsTable = pgTable('product_variants', {
    stock_quantity: integer('stock_quantity'),
    description: text('description'),
    createdAt: timestamp('createdAt'),
-   updatedAt: timestamp('updatedAt')
-});
+   updatedAt: timestamp('updatedAt'),
+   searchable_text: tsvector("searchable_text", {
+      sources: ['name', 'design', 'description'], // list of column names
+      weighted: true
+   }),
+},(table) => ({
+   titleSearchIndex: index('textsearch_idx')
+   .using('gin', sql`(${table.searchable_text})`),
+ })
+);
 
 
 export type Product = {
