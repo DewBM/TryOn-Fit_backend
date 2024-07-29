@@ -2,7 +2,7 @@ import { integer, pgEnum, pgTable, text } from "drizzle-orm/pg-core";
 import { productsTable } from "./Product";
 import { suppliersTable } from "./Supplier";
 
-const statusEnum = pgEnum('status', ['Available', 'Unavailable', 'Low Stock'])
+const statusEnum = pgEnum('inventory_status', ['Available', 'Unavailable', 'Low Stock'])
 
 export const inventoriesTable = pgTable('inventory', {
    product_id: text('product_id').primaryKey().references(()=> productsTable.product_id),
