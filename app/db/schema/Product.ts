@@ -48,7 +48,7 @@ export const productsTable = pgTable('product', {
 
 export const productVariantsTable = pgTable('product_variants', {
    variant_id: text('variant_id').primaryKey(),
-   product_id: text('product_id').references(()=> productsTable.product_id),
+   product_id: text('product_id').references(()=> productsTable.product_id).notNull(),
    name: text('name'),
    size: text('size').references(()=> sizesTable.size_label),
    color: text('color'),
