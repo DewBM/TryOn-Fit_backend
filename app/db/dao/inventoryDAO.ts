@@ -22,15 +22,42 @@ export async function insertNewInvItem(item: InventoryInsert) {
 }
 
 
-export async function updateStock(product_id: string, new_quantity: number) {
+export async function updateStock(product_id: string, new_quantity: number, type: "stock"|"incart"|"processing"|"total" ) {
+   
+   try {
+      switch(type) {
+         case "stock": await db.update(inventoriesTable).set({stock_quantity: new_quantity}).where(eq(inventoriesTable.product_id, product_id));
+         case "incart": await db.update(inventoriesTable).set({incart_quantity: new_quantity}).where(eq(inventoriesTable.product_id, product_id));
+         case "processing": await db.update(inventoriesTable).set({processing_quantity: new_quantity}).where(eq(inventoriesTable.product_id, product_id));
+         case "total": await db.update(inventoriesTable).set({total_sold: new_quantity}).where(eq(inventoriesTable.product_id, product_id));
+      }
+           
+      return {
+         isSuccess: true,
+         msg: "Inventory item quantity updated successfully",
+         error: ""
+      };
+   }
+   catch (e) {
+      console.log(e);
+      return {
+         isSuccess: false,
+         msg: "Couldn't update inventory item quantity.",
+         error: e
+      };
+   } 
+}
+
+
+export async function updateStockCart(product_id: string, new_quantity: number) {
    try {
       await db.update(inventoriesTable)
-         .set({stock_quantity: new_quantity})
+         .set({incart_quantity: new_quantity})
          .where(eq(inventoriesTable.product_id, product_id));
       
          return {
             isSuccess: true,
-            msg: "Inventory item quantity updated successfully",
+            msg: "Inventory item cart quantity updated successfully",
             error: ""
          };
    }
@@ -41,7 +68,7 @@ export async function updateStock(product_id: string, new_quantity: number) {
          msg: "Couldn't update inventory item quantity.",
          error: e
       };
-   } 
+   }
 }
 
 

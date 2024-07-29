@@ -91,3 +91,28 @@ export async function insertProduct(product :Product) {
       };
    }
 }
+
+
+export async function queryVariantById(variant_id: string) {
+   try {
+      const variant = await db
+         .select()
+         .from(productVariantsTable)
+         .where(eq(productVariantsTable.variant_id, variant_id));
+
+      return {
+         isSuccess: true,
+         data: variant[0],
+         msg: "",
+         error: ""
+      };
+   }
+   catch (e) {
+      return {
+         isSuccess: false,
+         data: null,
+         msg: "Couldn't get variant from database.",
+         error: e
+      };
+   }
+}
