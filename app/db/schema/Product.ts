@@ -24,20 +24,20 @@ export const categoriesTable = pgTable('cloth_category', {
 
 
 export const sizeChartsTable = pgTable('size_chart', {
-   sup_id: integer('sup_id').references(()=> suppliersTable.supplier_id),
+   supolier: text('sup_id').references(()=> suppliersTable.supplier_id),
    size: text('size').references(()=> sizesTable.size_label),
    measurement: text('measurement').references(()=> measurementTypesTable.measurement_type),
    category: text('category').references(()=> categoriesTable.category_type),
    value_min: numeric('value_min'),
    value_max: numeric('value_max')
 }, (table) => ({
-   pk: primaryKey({columns: [table.sup_id, table.size, table.measurement, table.category]})
+   pk: primaryKey({columns: [table.supolier, table.size, table.measurement, table.category]})
 }));
 
 
 export const productsTable = pgTable('product', {
    product_id: text('product_id').primaryKey(),
-   supplier: integer('supplier').references(()=> suppliersTable.supplier_id),
+   supplier: text('supplier').references(()=> suppliersTable.supplier_id),
    category: text('category').references(()=> categoriesTable.category_type),
    gender: genderEnum('gender'),
    age_group: ageGroupEnum('age_group'),
@@ -72,7 +72,7 @@ export const productVariantsTable = pgTable('product_variants', {
 export type Product = {
    product_id: string,
    name: string,
-   supplier: number,
+   supplier: string,
    category: string,
    gender: "Male" | "Female" | "Unisex",
    ageGroup: "adult" | "kids",

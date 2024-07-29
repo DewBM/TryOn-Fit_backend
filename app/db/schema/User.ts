@@ -4,7 +4,7 @@ import { text } from 'drizzle-orm/pg-core';
 import { roles } from "./Role";
 
 export const users = pgTable('User', {
-   userId: serial('userId'),
+   userId: serial('userId').unique(),
    username: text('username').primaryKey(),
    password: text('password').notNull(),
    role: text('role').references(() => roles.role)
