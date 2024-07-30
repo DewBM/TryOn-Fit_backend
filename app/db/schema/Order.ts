@@ -1,4 +1,4 @@
-import { date, integer, numeric, pgEnum, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { date, integer, numeric, pgEnum, pgTable, primaryKey, serial, text, timestamp } from "drizzle-orm/pg-core";
 import { customersTable } from "./Customer";
 import { productVariantsTable } from "./Product";
 
@@ -22,4 +22,6 @@ export const orderItemsTable = pgTable('order_item', {
    quantity: integer('quantity'),
    price: numeric('price'),
    disount: numeric('discount'),
-});
+}, (table) => ({
+   pk: primaryKey({columns: [table.order_id, table.item_id]})
+}));
