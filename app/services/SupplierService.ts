@@ -17,9 +17,9 @@ export const getSupplier = () => {
    return getAllSupplier()
 }
 
-export const updateSupplier = (supData : supDataType, id : number) => {
+export const updateSupplier = (supData : supDataType, id : string) => {
    return updateSupplierData(supData, id);
 }
-export const deleteSupplier = (id : number) => {
+export const deleteSupplier = (id : string) => {
    return deleteExistSuplier(id);
 }

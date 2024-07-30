@@ -23,7 +23,7 @@ export async function doPost( req: Request , resp: Response){
 } 
 
 export async function doPut(req : Request , resp : Response) {
-    const supid =8;
+    const supid ="";
     try{
         const data = await updateSupplier(req.body, supid);
         resp.status(201).send(data);
@@ -34,7 +34,7 @@ export async function doPut(req : Request , resp : Response) {
 }
 
 export async function doDelete(req : Request , resp : Response) {
-    const id = 8;
+    const id = "";
     try{
         const data = await deleteSupplier(id);
         resp.status(201).send(data);
