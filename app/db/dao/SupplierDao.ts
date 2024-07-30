@@ -23,6 +23,7 @@ export async function createNewSupplier(supData:supDataType) {
 
         const newSupplier = await db.insert(suppliersTable).values(
             {
+                supplier_id: supData.supplier_id,
                 first_name: supData.first_name,
                 last_name: supData.last_name,
                 brand_name: supData.brand_name,
@@ -36,7 +37,7 @@ export async function createNewSupplier(supData:supDataType) {
     }
 }
 
-export async function updateSupplierData(supData:supDataType,id : number) {
+export async function updateSupplierData(supData:supDataType,id : string) {
     console.log(supData)
     try{
         const updatedEmp  = await db.update(suppliersTable)
@@ -57,7 +58,7 @@ export async function updateSupplierData(supData:supDataType,id : number) {
         }
 }
 
-export async function deleteExistSuplier(id:number) {
+export async function deleteExistSuplier(id:string) {
     try{
         const delsup = await db.delete(suppliersTable).where(eq(suppliersTable.supplier_id, id));
     }catch(error){
