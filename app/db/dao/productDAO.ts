@@ -47,7 +47,7 @@ export async function insertProduct(product :Product) {
                .onConflictDoNothing();
 
                await tx.insert(sizeChartsTable).values({
-                  sup_id: product.supplier,
+                  supplier: product.supplier,
                   size: sizeObj.size,
                   category: product.category,
                   measurement: measurement.measurement_type,
@@ -55,7 +55,7 @@ export async function insertProduct(product :Product) {
                   value_max: measurement.value_max
                })
                .onConflictDoUpdate({
-                  target: [sizeChartsTable.sup_id, sizeChartsTable.size, sizeChartsTable.measurement, sizeChartsTable. category],
+                  target: [sizeChartsTable.supplier, sizeChartsTable.size, sizeChartsTable.measurement, sizeChartsTable. category],
                   set: {value_min: measurement.value_min, value_max: measurement.value_max}
                });
             }

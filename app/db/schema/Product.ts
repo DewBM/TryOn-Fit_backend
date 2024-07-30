@@ -24,14 +24,14 @@ export const categoriesTable = pgTable('cloth_category', {
 
 
 export const sizeChartsTable = pgTable('size_chart', {
-   supolier: text('sup_id').references(()=> suppliersTable.supplier_id),
+   supplier: text('sup_id').references(()=> suppliersTable.supplier_id),
    size: text('size').references(()=> sizesTable.size_label),
    measurement: text('measurement').references(()=> measurementTypesTable.measurement_type),
    category: text('category').references(()=> categoriesTable.category_type),
    value_min: numeric('value_min'),
    value_max: numeric('value_max')
 }, (table) => ({
-   pk: primaryKey({columns: [table.supolier, table.size, table.measurement, table.category]})
+   pk: primaryKey({columns: [table.supplier, table.size, table.measurement, table.category]})
 }));
 
 
