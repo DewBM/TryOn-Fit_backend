@@ -2,11 +2,11 @@ import { date, integer, numeric, pgEnum, pgTable, primaryKey, serial, text, time
 import { customersTable } from "./Customer";
 import { productVariantsTable } from "./Product";
 
-const orderStatusEnum = pgEnum('order_status', ['']);
+const orderStatusEnum = pgEnum('order_status', ['Confirmed', 'Processing', 'Shipped', 'Delivered']);
 
 export const ordersTable = pgTable('order', {
    order_id: serial('order_id').primaryKey(),
-   customer_id: text('customer_id').references(()=> customersTable.customer_id),
+   customer_id: integer('customer_id').references(()=> customersTable.customer_id),
    order_status: orderStatusEnum('order_status'),
    order_date: timestamp('order_date'),
    delivery_date: timestamp('delivery_date'),
@@ -25,3 +25,7 @@ export const orderItemsTable = pgTable('order_item', {
 }, (table) => ({
    pk: primaryKey({columns: [table.order_id, table.item_id]})
 }));
+
+
+export type OrderInsert = typeof ordersTable.$inferInsert;
+export type OrderItemInsert = typeof orderItemsTable.$inferInsert;
