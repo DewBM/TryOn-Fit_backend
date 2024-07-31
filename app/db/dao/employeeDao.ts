@@ -50,7 +50,7 @@ export async function createNewEmployee(EmpData: {
 
 // update employee
 interface empDataType {
-    // Emp_Id : number;
+    emp_id : number;
     first_name: string;
     last_name: string;
     email: string; 
@@ -60,8 +60,10 @@ interface empDataType {
 
 }
 
-export async function updateExistEmp(EmpData: empDataType , id : number) {
+export async function updateExistEmp(EmpData: empDataType ) {
     console.log(EmpData);
+   
+    console.log(EmpData.emp_id);
     try{
     const updatedEmp  = await db.update(employeesTable)
     .set({ first_name: EmpData.first_name,last_name : EmpData.last_name,
@@ -69,7 +71,7 @@ export async function updateExistEmp(EmpData: empDataType , id : number) {
         role : EmpData.enrolled_date , contact_number : EmpData.contact_number
         
      })
-    .where(eq(employeesTable.emp_id,id));
+    .where(eq(employeesTable.emp_id,EmpData.emp_id));
         console.log(4);
         return updatedEmp;
     }catch(error){
@@ -82,9 +84,9 @@ export async function updateExistEmp(EmpData: empDataType , id : number) {
 
 
 // delete employee
-export async function deleteExistEmployee(id:number) {
+export async function deleteExistEmployee(id:{emp_id : number}) {
     try{
-        const delEmp = await db.delete(employeesTable).where(eq(employeesTable.emp_id, id));
+        const delEmp = await db.delete(employeesTable).where(eq(employeesTable.emp_id, id.emp_id));
     }catch(error){
         console.error('Error executing query', error);
     }

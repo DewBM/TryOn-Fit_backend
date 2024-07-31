@@ -20,7 +20,7 @@ export const createEmployee = (EmpData: {
 };
 
 export const updateEmployee = (EmpData : {
-    // Emp_Id : number;
+    emp_id : number;
     first_name: string;
     last_name: string;
     email: string;
@@ -28,12 +28,12 @@ export const updateEmployee = (EmpData : {
     role: string;
     contact_number: string;
 
-},id : number) =>{
+}) =>{
     console.log(2);
-    return updateExistEmp(EmpData,id);
+    return updateExistEmp(EmpData);
 };
 
-export const deleteEmployee = (id : number) => {
+export const deleteEmployee = (id : {emp_id : number}) => {
     return deleteExistEmployee(id );
 }
 
