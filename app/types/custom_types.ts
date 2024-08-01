@@ -1,3 +1,5 @@
+import ExcelJS from "exceljs";
+
 export type SizeType = {
    size: string,
    stock_quantity: number,
@@ -17,7 +19,9 @@ export type VariantType = {
    sizes: {
       size: string,
       stock_quantity: number,
-   }[]
+   }[],
+   img_front: ExcelJS.Buffer | string,
+   img_rear: ExcelJS.Buffer | string | null
 }
 
 export type AgeGroupType = "adult" | "kids";

@@ -1,10 +1,12 @@
-import ExcelJS, { CellValue, Workbook } from 'exceljs';
+import ExcelJS, { CellValue, Workbook, Worksheet } from 'exceljs';
 import { Product } from '../db/schema/Product';
 import { AgeGroupType, GenderType, SizeType, VariantType } from '../types/custom_types';
 
 const DATA_ROW = 5;
 const MAX_ROWS = 500;
 const NEW_PRODUCT_SEPERATOR = "<<NEW>>";
+const IMG_FRONT_COL = 9; // 1-based index (1-A, 2-B, etc.)
+const IMG_REAR_COL = 10; // 1-based index (1-A, 2-B, etc.)
 
 export function createExcel() {
    // Create a new workbook and add a worksheet
@@ -198,6 +200,8 @@ export function readProductExcel(file: string) {
    if (sheet!=undefined) {
       const product: Partial<Product> = {variants: []};
 
+      const images = sheet.getImages();
+
       const supplier = sheet.getCell('A2').value?.toString().split(':')[1].trim();
       const category = sheet.getCell('A1').value?.toString().split(':')[1].trim();
       const gender = sheet.getCell('F1').value?.toString() as GenderType ;
@@ -294,13 +298,27 @@ export function readProductExcel(file: string) {
                   const size = row.getCell('F').value?.toString() as string;
                   const quantity = row.getCell('G').value?.toString() as string;
                   sizes.push({size: size, stock_quantity: parseInt(quantity)});
+
+                  const img_front = getImageByCell(IMG_FRONT_COL, row.number, sheet, images);
+                  const img_rear = getImageByCell(IMG_REAR_COL, row.number, sheet, images);
+                  if (img_front==null)
+                     return { isSuccess: false, msg: `Cannot get front image from cell I${row.number}` };
+                  variant.img_front = workbook.getImage(Number(img_front.imageId)).buffer;
+                  variant.img_rear = img_rear!=null ? workbook.getImage(Number(img_rear.imageId)).buffer : null;
+
                }
             }
             else {
                const size = row.getCell('F').value?.toString() as string;
                const quantity = row.getCell('G').value?.toString() as string;
-               
                sizes.push({size: size, stock_quantity: parseInt(quantity)});
+
+               const img_front = getImageByCell(IMG_FRONT_COL, row.number, sheet, images);
+               const img_rear = getImageByCell(IMG_REAR_COL, row.number, sheet, images);
+               if (img_front==null)
+                  return { isSuccess: false, msg: `Cannot get front image from cell I${row.number}` };
+               variant.img_front = workbook.getImage(Number(img_front.imageId)).buffer;
+               variant.img_rear = img_rear!=null ? workbook.getImage(Number(img_rear.imageId)).buffer : null;
             }
 
             counter++;
@@ -337,5 +355,22 @@ export function readProductExcel(file: string) {
 
       }
    }
-})
+});
+}
+
+
+function getImageByCell(column: number, row: number, sheet: Worksheet, images: {
+   type: "image";
+   imageId: string;
+   range: ExcelJS.ImageRange;
+}[]) {
+   for (const image of images) {
+      const { range } = image;
+      // Check if the image's range includes the specified cell address
+      if (range.tl.nativeCol === column - 1 &&
+         range.tl.nativeRow === row - 1) {
+      return image;
+      }
+   }
+   return null;
 }

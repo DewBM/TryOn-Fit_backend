@@ -2,6 +2,7 @@ import { numeric, pgEnum, pgTable, text, serial, timestamp, unique, integer, for
 import { suppliersTable } from "./Supplier";
 import { relations, sql } from "drizzle-orm";
 import { tsvector } from "../db-utils";
+import ExcelJS from "exceljs";
 
 const ageGroupEnum = pgEnum('age_group', ['adult', 'kids']);
 const genderEnum = pgEnum('gender', ['Male', 'Female', 'Unisex']);
@@ -90,7 +91,9 @@ export type Product = {
       sizes: {
          size: string,
          stock_quantity: number,
-      }[]
+      }[],
+      img_front: ExcelJS.Buffer | string,
+      img_rear: ExcelJS.Buffer | string | null
    }[],
 };
 
