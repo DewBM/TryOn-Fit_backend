@@ -26,11 +26,12 @@ export async function createNewEmployee(EmpData: {
     contact_number: string;
 } ) {
     console.log(6);
+    console.log(EmpData);
     const formattedData = {
         ...EmpData,
         enrolled_date: EmpData.enrolled_date.toString() // Convert to string
       };
-      console.log(7);
+      
 
     // Insert new employee into the database
     try{
