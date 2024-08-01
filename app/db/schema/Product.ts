@@ -69,6 +69,34 @@ export const productVariantsTable = pgTable('product_variants', {
 );
 
 
+
+export type Product = {
+   product_id: string,
+   name: string,
+   supplier: string,
+   category: string,
+   gender: "Male" | "Female" | "Unisex",
+   ageGroup: "adult" | "kids",
+   price: number,
+   variants: {
+      variant_id: string,
+      product_id: string,
+      color: string,
+      design: string,
+      stock_quantity: number,
+      description: string,
+      createdAt: DataView,
+      updatedAt: DataView,
+      sizes: {
+         size: string,
+         stock_quantity: number,
+      }[]
+   }[],
+};
+
+
+
+/*
 export type Product = {
    product_id: string,
    name: string,
@@ -99,3 +127,4 @@ export type Product = {
       }]
    },
 };
+*/

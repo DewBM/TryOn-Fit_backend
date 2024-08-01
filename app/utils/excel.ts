@@ -1,6 +1,10 @@
 import ExcelJS, { CellValue, Workbook } from 'exceljs';
+import { Product } from '../db/schema/Product';
+import { AgeGroupType, GenderType, SizeType, VariantType } from '../types/custom_types';
 
-
+const DATA_ROW = 5;
+const MAX_ROWS = 500;
+const NEW_PRODUCT_SEPERATOR = "<<NEW>>";
 
 export function createExcel() {
    // Create a new workbook and add a worksheet
@@ -62,6 +66,10 @@ export function createProductTemplate(supplier: string, category: string) {
 
 
 export function addProductSheet(workbook: Workbook, gender_list: string[], age_groups: string[], sizes: string[]) {
+   const startRow = 5;
+   const interval = sizes.length;
+   const maxRows = 500;
+
    const sheet = workbook.addWorksheet('Product', {views: [{state: 'frozen', ySplit: 4}]});
 
    // Product metadata
@@ -127,24 +135,16 @@ export function addProductSheet(workbook: Workbook, gender_list: string[], age_g
    sheet.getColumn('H').alignment = { wrapText: true }
 
 
-   const startRow = 5;
-   const interval = sizes.length;
-   const maxRows = 500;
-
-   for (let currentRow = startRow+interval; currentRow <= maxRows; currentRow += interval) {
+   for (let currentRow = startRow; currentRow <= maxRows; currentRow += interval+1) {
       sheet.getCell(`A${currentRow}`).dataValidation = {
          type: 'list',
          allowBlank: false,
          formulae: ['"<<NEW>>"']
       };
+      sheet.getCell(`A${currentRow}`).value = '<<NEW>>';
    }
 
    for (let i=startRow; i<=maxRows; i++) {
-      sheet.getCell(`F${i}`).dataValidation = {
-         type: 'list',
-         allowBlank: false,
-         formulae: [`"${sizes.join(',')}"`]
-      };
       sheet.getCell(`E${i}`).dataValidation = {
          type: 'decimal',
          operator: 'greaterThan',
@@ -163,8 +163,179 @@ export function addProductSheet(workbook: Workbook, gender_list: string[], age_g
       }
    }
 
-   // sheet.getColumn('H').width = 30;
-   // sheet.getColumn('H').alignment = {wrapText: true}
+
+   for (let currentRow=startRow+1; currentRow <= maxRows; currentRow) {
+    // Insert sizes
+    for (const size of sizes) {
+      if (currentRow > maxRows) break;
+      sheet.getCell(`F${currentRow}`).dataValidation = {
+         type: 'whole',
+         formulae: [`'"${size}"'`],
+         allowBlank: false
+      }
+      sheet.getCell(`F${currentRow}`).value = size;
+      currentRow++;
+    }
+    // Insert an empty row
+    if (currentRow <= maxRows) {
+      sheet.getCell(`F${currentRow}`).value = '';
+      currentRow++;
+    }
+  }
+
 
    return sheet;
+}
+
+
+export function readProductExcel(file: string) {
+   const workbook = new ExcelJS.Workbook();
+   workbook.xlsx.readFile(file).then(()=> {
+
+   
+
+   const sheet = workbook.getWorksheet('Product');
+   if (sheet!=undefined) {
+      const product: Partial<Product> = {variants: []};
+
+      const supplier = sheet.getCell('A2').value?.toString().split(':')[1].trim();
+      const category = sheet.getCell('A1').value?.toString().split(':')[1].trim();
+      const gender = sheet.getCell('F1').value?.toString() as GenderType ;
+      const age_group = sheet.getCell('F2').value?.toString() as AgeGroupType;
+
+      if (supplier && category && gender && age_group) {
+         product.supplier = supplier;
+         product.category = category;
+         product.gender = gender;
+         product.ageGroup = age_group
+      }
+      else {
+         return {
+            isSuccess: false,
+            data: null,
+            msg: ""
+         }
+      }
+
+      
+      const rows = sheet.getRows(DATA_ROW, MAX_ROWS);
+      if (rows==undefined) {
+         return {
+            isSuccess: false,
+            data: null,
+            msg: "Cannot read rows form sheet."
+         };
+      }
+
+      let counter = 0;
+      let sizes: SizeType[] = [];
+      let variant: Partial<VariantType> = {};
+      for(const row of rows){
+         if (row.number >= DATA_ROW) {
+            if (row.number == DATA_ROW+1) {
+               const name = row.getCell('B').value?.toString();
+               if (name==undefined)
+                  return { isSuccess: false, msg: `Cannot read name from cell B${row.number}` };
+               else
+                  product.name = name;
+
+               const price = row.getCell('E').value?.toString();
+               if (price==undefined)
+                  return { isSuccess: false, msg: `Cannot read name from cell D${row.number}` };
+               else
+                  product.price = parseFloat(price);
+            }
+
+            if (row.getCell('A').value == NEW_PRODUCT_SEPERATOR) {
+               if(sizes.length!=0) {
+                  variant.sizes = sizes;
+                  product.variants?.push(variant as VariantType);
+               }
+               counter = 0;
+               sizes = [];
+               continue;
+            }
+
+            if (counter == 0) {
+               const variant_id = row.getCell('A').value?.toString();
+               if (variant_id == undefined) {
+                  return {
+                     isSuccess: true,
+                     data: product,
+                     msg: "Successfully read the excel file",
+                     error: ""
+                  };
+               }
+               else {
+                  // const variant_id = row.getCell('A').value?.toString();
+                  // if (variant_id==undefined)
+                  //    return { isSuccess: false, msg: `Cannot read name from cell A${row.number}` };
+                  // else
+                  variant.variant_id = variant_id;
+
+                  const design = row.getCell('D').value?.toString();
+                  if (design==undefined)
+                     return { isSuccess: false, msg: `Cannot read name from cell D${row.number}` };
+                  else
+                     variant.design = design;
+
+                  const color = row.getCell('C').value?.toString();
+                  if (color==undefined)
+                     return { isSuccess: false, msg: `Cannot read name from cell C${row.number}` };
+                  else
+                     variant.color = color;
+
+                  const description = row.getCell('H').value?.toString();
+                  if (description==undefined)
+                     return { isSuccess: false, msg: `Cannot read name from cell H${row.number}` };
+                  else
+                     variant.description = description;
+
+                  const size = row.getCell('F').value?.toString() as string;
+                  const quantity = row.getCell('G').value?.toString() as string;
+                  sizes.push({size: size, stock_quantity: parseInt(quantity)});
+               }
+            }
+            else {
+               const size = row.getCell('F').value?.toString() as string;
+               const quantity = row.getCell('G').value?.toString() as string;
+               
+               sizes.push({size: size, stock_quantity: parseInt(quantity)});
+            }
+
+            counter++;
+            // if (sheet.getCell(`A${rowNumber-1}`).value == "<<NEW>>") {
+            //    const variant_id = sheet.getCell(`A${rowNumber}`).value?.toString().trim();
+            //    if (variant_id == undefined) {
+            //       return {
+            //          isSuccess: true,
+            //          data: product,
+            //          msg: "Successfully read the excel file",
+            //          error: ""
+            //       };
+            //    }
+            //    else {
+            //       // const name = sheet.getCell(`B${rowNumber}`).value?.toString();
+            //       // const color = sheet.getCell(`C${rowNumber}`).value?.toString();
+            //       // const design = sheet.getCell(`D${rowNumber}`).value?.toString();
+            //       // const price = sheet.getCell(`E${rowNumber}`).value?.toString();
+            //       const size = sheet.getCell(`F${rowNumber}`).value?.toString();
+            //       const quantity = sheet.getCell(`G${rowNumber}`).value?.toString();
+            //       // const description = sheet.getCell(`H${rowNumber}`).value?.toString();
+
+            //       product.variant.push({
+            //          variant_id: variant_id,
+            //          color: color,
+            //          sizes: []
+            //          design: design,
+            //          price: price
+            //       })
+            //    }
+            // }
+
+         }
+
+      }
+   }
+})
 }
