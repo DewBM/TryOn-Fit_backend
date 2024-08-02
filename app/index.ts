@@ -3,10 +3,13 @@ import bodyParser from 'body-parser';
 import "reflect-metadata"
 import cookieParser from 'cookie-parser';
 import cors from 'cors'
+import { config } from 'dotenv';
 
 // require('./utils/generateSecretKey'); // Ensure secret key is generated
 
 const app = express();
+
+config({ path: '.env' });
 
 app.use(cookieParser());
 app.use(bodyParser.json());

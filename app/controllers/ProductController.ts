@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import { readProductExcel } from '../utils/excel';
+import path from 'path';
 // import * as ProductService from '../services/ProductService';
 
 export async function doGet(req: Request, res: Response) {
@@ -21,7 +23,10 @@ export async function doPost(req: Request, res: Response) {
       return res.status(400).send('No file uploaded');
    }
 
-   console.log(req.file);
+   const product = await readProductExcel(path.join(process.env.EXCEL_UPLOADS!, req.file.filename));
+   console.log(product);
+
+   res.status(200).send();
    // const result = await ProductService.createProduct(data);
    // if (result.isSuccess)
    //    res.status(200).json(result);

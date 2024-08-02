@@ -11,10 +11,11 @@ const productRrouter = Router();
 
 const storage = multer.diskStorage({
    destination: function (req, file, cb) {
-     cb(null, 'product_excels/');
+     cb(null, path.join(path.resolve(__dirname, '../../'), process.env.EXCEL_UPLOADS!));
    },
    filename: function (req, file, cb) {
      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+   //   const filename = uniqueSuffix + path.extname(file.originalname);
      cb(null, uniqueSuffix + path.extname(file.originalname));
    }
  });

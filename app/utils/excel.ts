@@ -190,9 +190,11 @@ export function addProductSheet(workbook: Workbook, gender_list: string[], age_g
 }
 
 
-export function readProductExcel(file: string) {
+export async function readProductExcel(file: string) {
+   console.log(file);
    const workbook = new ExcelJS.Workbook();
-   workbook.xlsx.readFile(file).then(()=> {
+   await workbook.xlsx.readFile(file)
+   // .then(()=> {
 
    
 
@@ -355,7 +357,7 @@ export function readProductExcel(file: string) {
 
       }
    }
-});
+// });
 }
 
 
