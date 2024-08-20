@@ -229,7 +229,7 @@ export async function readProductExcel(file: string) {
          return {
             isSuccess: false,
             data: null,
-            msg: "Cannot read rows form sheet."
+            msg: "Cannot read rows from sheet."
          };
       }
 
@@ -241,15 +241,15 @@ export async function readProductExcel(file: string) {
             if (row.number == DATA_ROW+1) {
                const name = row.getCell('B').value?.toString();
                if (name==undefined)
-                  return { isSuccess: false, msg: `Cannot read name from cell B${row.number}` };
+                  return { isSuccess: false, msg: `Cannot read name from cell B${row.number}`, data: null };
                else
                   product.name = name;
 
                const price = row.getCell('E').value?.toString();
                if (price==undefined)
-                  return { isSuccess: false, msg: `Cannot read name from cell D${row.number}` };
+                  return { isSuccess: false, msg: `Cannot read name from cell D${row.number}`, data: null };
                else
-                  product.price = parseFloat(price);
+                  product.price = price;
             }
 
             if (row.getCell('A').value == NEW_PRODUCT_SEPERATOR) {
@@ -281,19 +281,19 @@ export async function readProductExcel(file: string) {
 
                   const design = row.getCell('D').value?.toString();
                   if (design==undefined)
-                     return { isSuccess: false, msg: `Cannot read name from cell D${row.number}` };
+                     return { isSuccess: false, msg: `Cannot read name from cell D${row.number}`, data: null };
                   else
                      variant.design = design;
 
                   const color = row.getCell('C').value?.toString();
                   if (color==undefined)
-                     return { isSuccess: false, msg: `Cannot read name from cell C${row.number}` };
+                     return { isSuccess: false, msg: `Cannot read name from cell C${row.number}`, data: null };
                   else
                      variant.color = color;
 
                   const description = row.getCell('H').value?.toString();
                   if (description==undefined)
-                     return { isSuccess: false, msg: `Cannot read name from cell H${row.number}` };
+                     return { isSuccess: false, msg: `Cannot read name from cell H${row.number}`, data: null };
                   else
                      variant.description = description;
 
@@ -304,7 +304,7 @@ export async function readProductExcel(file: string) {
                   const img_front = getImageByCell(IMG_FRONT_COL, row.number, sheet, images);
                   const img_rear = getImageByCell(IMG_REAR_COL, row.number, sheet, images);
                   if (img_front==null)
-                     return { isSuccess: false, msg: `Cannot get front image from cell I${row.number}` };
+                     return { isSuccess: false, msg: `Cannot get front image from cell I${row.number}`, data: null };
                   variant.img_front = workbook.getImage(Number(img_front.imageId)).buffer;
                   variant.img_rear = img_rear!=null ? workbook.getImage(Number(img_rear.imageId)).buffer : null;
 
@@ -318,7 +318,7 @@ export async function readProductExcel(file: string) {
                const img_front = getImageByCell(IMG_FRONT_COL, row.number, sheet, images);
                const img_rear = getImageByCell(IMG_REAR_COL, row.number, sheet, images);
                if (img_front==null)
-                  return { isSuccess: false, msg: `Cannot get front image from cell I${row.number}` };
+                  return { isSuccess: false, msg: `Cannot get front image from cell I${row.number}`, data: null };
                variant.img_front = workbook.getImage(Number(img_front.imageId)).buffer;
                variant.img_rear = img_rear!=null ? workbook.getImage(Number(img_rear.imageId)).buffer : null;
             }
@@ -357,6 +357,12 @@ export async function readProductExcel(file: string) {
 
       }
    }
+   // return {
+   //    isSuccess: false,
+   //    data: null,
+   //    msg: "Couldn't read excel file, something went wrong!",
+   //    error: "Couldn't read excel file, something went wrong!"
+   // }
 // });
 }
 
