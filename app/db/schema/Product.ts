@@ -54,7 +54,7 @@ export const productsTable = pgTable('product', {
    updatedAt: timestamp('updatedAt')
 });
 
-
+export type selectProduct  = typeof productsTable.$inferSelect;
 export const productVariantsTable = pgTable('product_variants', {
    variant_id: text('variant_id').primaryKey(),
    product_id: text('product_id').references(()=> productsTable.product_id),
