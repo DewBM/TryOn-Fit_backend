@@ -27,4 +27,7 @@ app.use('/employee', employeeRouter)
 import supplierRouter from './routes/SupplierRoutes'
 app.use('/supplier', supplierRouter)
 
+import inquiryFormRouter from './routes/InquiryFormRoutes';
+app.use('/inquiryform', inquiryFormRouter)
+
 export default app;
