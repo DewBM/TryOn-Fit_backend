@@ -20,8 +20,8 @@ export type VariantType = {
       size: string,
       stock_quantity: number,
    }[],
-   img_front: ExcelJS.Buffer | string,
-   img_rear: ExcelJS.Buffer | string | null
+   img_front: ExcelJS.Buffer | null,
+   img_rear: ExcelJS.Buffer | null
 }
 
 export type AgeGroupType = "adult" | "kids";
