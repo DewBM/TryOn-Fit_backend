@@ -8,6 +8,10 @@ export async function doGet(req: Request, res: Response) {
     if(result.isSuccess){
       res.status(200).json(result);  
   } else {
-    res.status(500).json({error: "Could not get customer data" });
+      res.status(500).json({
+      isSuccess:false,
+      data:null,
+      msg: "Could not get customer data",
+      error:" " });
   }
 }
