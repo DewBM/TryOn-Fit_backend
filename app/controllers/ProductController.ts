@@ -20,20 +20,27 @@ export async function doGet(req: Request, res: Response) {
 
 export async function doPost(req: Request, res: Response) {
    const { supplier, category } = req.body;
-   if (!req.file) {
-      return res.status(400).send('No file uploaded');
+   if (!req.file)
+      res.status(400).send('No file uploaded');
+
+   else {
+      const result = await ProductService.createProduct(req.file.filename);
+      if (result.isSuccess)
+         res.status(200).json(result);
+      else
+      res.status(400).json(result);
    }
 
-   const excelRes = await readProductExcel(path.join(process.env.EXCEL_UPLOADS!, req.file.filename));
-   console.log(excelRes);
+   // const excelRes = await readProductExcel(path.join(process.env.EXCEL_UPLOADS!, req.file.filename));
+   // console.log(excelRes);
 
-   if (excelRes && excelRes?.isSuccess) {
-      const product = excelRes.data as Product;
-      const result = await ProductService.createProduct(product);
-      res.status(200).json(result);
-   }
-   else
-      res.status(500).send('Something went wrong');
+   // if (excelRes && excelRes?.isSuccess) {
+   //    const product = excelRes.data as Product;
+   //    const result = await ProductService.createProduct(product);
+      // res.status(200).json(result);
+   // }
+   // else
+      // res.status(500).send('Something went wrong');
 
    // if (result.isSuccess)
    //    res.status(200).json(result);

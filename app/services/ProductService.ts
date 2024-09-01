@@ -1,5 +1,7 @@
+import path from "path";
 import { getAllProducts, insertProduct, queryProducts, queryVariantById } from "../db/dao/productDAO";
 import { Product } from "../db/schema/Product";
+import { readProductExcel } from "../utils/excel";
 
 export const getProducts = () => {
    return getAllProducts();
@@ -13,8 +15,17 @@ export const searchProducts = async (prompt: string) => {
 }
 
 
-export const createProduct = async (product: Product) => {
-   return await insertProduct(product);
+export const createProduct = async (filename: string) => {
+   const excelRes = await readProductExcel(path.join(process.env.EXCEL_UPLOADS!, filename));
+   console.log(excelRes);
+
+   if (excelRes && excelRes?.isSuccess) {
+      const product = excelRes.data as Product;
+      return await insertProduct(product);
+   }
+   else
+      return {isSuccess: false, msg: "Couldn't get product form excel file.", error: ""};
+   
 }
 
 
