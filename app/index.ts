@@ -30,4 +30,7 @@ app.use('/supplier', supplierRouter);
 import CustomerRouter from './routes/CustomerRoutes';
 app.use('/customer', CustomerRouter);
 
+import inquiryFormRouter from './routes/InquiryFormRoutes';
+app.use('/inquiryform', inquiryFormRouter)
+
 export default app;
