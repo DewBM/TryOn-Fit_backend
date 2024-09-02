@@ -1,5 +1,6 @@
 // import { getURL } from "next/dist/shared/lib/utils";
 import {createNewSupplier,getAllSupplier, updateSupplierData,deleteExistSuplier} from "../db/dao/SupplierDao"
+import { SelectSupllier } from "../db/schema/Supplier";
 
 // interface supDataType {
 //     supplier_id: string,
@@ -10,7 +11,7 @@ import {createNewSupplier,getAllSupplier, updateSupplierData,deleteExistSuplier}
 //    address: string
 // }
 
-export const createSupplier = (supData :supDataType) => {
+export const createSupplier = (supData :SelectSupllier) => {
    return createNewSupplier(supData);
 }
 
