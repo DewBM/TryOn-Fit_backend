@@ -1,3 +1,4 @@
+import { getURL } from "next/dist/shared/lib/utils";
 import {createNewSupplier,getAllSupplier, updateSupplierData,deleteExistSuplier} from "../db/dao/SupplierDao"
 
 interface supDataType {
@@ -20,6 +21,6 @@ export const getSupplier = () => {
 export const updateSupplier = (supData : supDataType, id : string) => {
    return updateSupplierData(supData, id);
 }
-export const deleteSupplier = (id : string) => {
-   return deleteExistSuplier(id);
+export const deleteSupplier = (id : {supplier_id:string}) => {
+   return deleteExistSuplier(id );
 }
