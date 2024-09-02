@@ -31,3 +31,29 @@ export async function createNewInquiryForm(inqData: InsertInquiryReport) {
 }
 
 
+export async function getAllInquiryForm() {
+  try {
+    // Get all inquiry forms from the database
+    const inquiryForms = await db.select().from(inquiry_reportTable).execute();
+
+    console.log("Successfully fetched inquiry forms!");
+
+    // Return success response
+    return {
+      isSuccess: true,
+      data: inquiryForms, // Assuming `inquiryForms` contains the fetched data
+      msg: "Successfully fetched inquiry forms!",
+      error: null,
+    };
+  } catch (error) {
+    console.error("Error executing query", error);
+
+    // Return failure response
+    return {
+      isSuccess: false,
+      data: null,
+      msg: "Failed to fetch inquiry forms from the database",
+      error: error,
+    };
+  }
+}
