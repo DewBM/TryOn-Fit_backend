@@ -1,0 +1,329 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.readProductExcel = exports.addProductSheet = exports.createProductTemplate = exports.readExcelFile = exports.createExcel = void 0;
+const exceljs_1 = __importDefault(require("exceljs"));
+const DATA_ROW = 5;
+const MAX_ROWS = 500;
+const NEW_PRODUCT_SEPERATOR = "<<NEW>>";
+const IMG_FRONT_COL = 9; // 1-based index (1-A, 2-B, etc.)
+const IMG_REAR_COL = 10; // 1-based index (1-A, 2-B, etc.)
+function createExcel() {
+    // Create a new workbook and add a worksheet
+    const workbook = new exceljs_1.default.Workbook();
+    const worksheet = workbook.addWorksheet('Sheet1');
+    // Add header row
+    // worksheet.addRow(['Description', 'Image Placeholder']);
+    // // Add a few rows with placeholders
+    // worksheet.addRow(['Item 1', 'Click to add image']);
+    // worksheet.addRow(['Item 2', 'Click to add image']);
+    // worksheet.addRow(['Item 3', 'Click to add image']);
+    worksheet.getCell('A1').dataValidation = {
+        type: 'list',
+        allowBlank: true,
+        formulae: ['"One,Two,Three,Four"']
+    };
+    // Save the workbook to a file
+    workbook.xlsx.writeFile('example_with_placeholders.xlsx')
+        .then(() => {
+        console.log('File created with placeholders!');
+    });
+}
+exports.createExcel = createExcel;
+function readExcelFile() {
+    // Create a new workbook instance and read the file
+    const workbook = new exceljs_1.default.Workbook();
+    workbook.xlsx.readFile('data-excel.xlsx')
+        .then(() => {
+        const worksheet = workbook.getWorksheet('Sheet1');
+        if (worksheet != undefined) {
+            worksheet.getImages().forEach(image => {
+                const row = worksheet.getRow(image.range.tl.nativeRow + 1); // tl refers to top-left of the image's range
+                console.log(`Found image in row ${row.number}`);
+                // Example: Save the image to a file
+                const buffer = workbook.getImage(Number(image.imageId)).buffer;
+                require('fs').writeFileSync(`row_${row.number}_image.png`, buffer);
+            });
+        }
+    });
+}
+exports.readExcelFile = readExcelFile;
+function createProductTemplate(supplier, category) {
+    const workbook = new exceljs_1.default.Workbook();
+    const sheet = addProductSheet(workbook, ['Male', 'Female', 'Unisex'], ['Adult', 'Kids'], ['S', 'M', 'L', 'XL', 'XXL', 'XXXL']);
+    workbook.xlsx.writeFile('sample.xlsx')
+        .then(() => {
+        console.log('File created!');
+    });
+}
+exports.createProductTemplate = createProductTemplate;
+function addProductSheet(workbook, gender_list, age_groups, sizes) {
+    const startRow = 5;
+    const interval = sizes.length;
+    const maxRows = 500;
+    const sheet = workbook.addWorksheet('Product', { views: [{ state: 'frozen', ySplit: 4 }] });
+    // Product metadata
+    sheet.mergeCells('A1:D1');
+    const categoryMetadata = sheet.getCell('A1');
+    categoryMetadata.value = 'Category: T-Shirt';
+    categoryMetadata.font = { bold: true };
+    sheet.mergeCells('A2:D2');
+    const supplierMetadata = sheet.getCell('A2');
+    supplierMetadata.value = 'Supplier: Moose';
+    supplierMetadata.font = { bold: true };
+    const genderHeader = sheet.getCell('E1');
+    genderHeader.value = 'Gender: ';
+    genderHeader.font = { bold: true };
+    sheet.getCell('F1').dataValidation = {
+        type: 'list',
+        allowBlank: false,
+        formulae: [`"${gender_list.join(',')}"`]
+    };
+    const ageGroupHeader = sheet.getCell('E2');
+    ageGroupHeader.value = 'Age Group: ';
+    ageGroupHeader.font = { bold: true };
+    sheet.getCell('F2').dataValidation = {
+        type: 'list',
+        allowBlank: false,
+        formulae: [`"${age_groups.join(',')}"`]
+    };
+    // Product table column headers
+    sheet.getRow(4).font = { bold: true };
+    sheet.getCell('A4').value = 'Variant Id';
+    sheet.getCell('B4').value = 'Name';
+    sheet.getCell('C4').value = 'Color';
+    sheet.getCell('D4').value = 'Design';
+    sheet.getCell('E4').value = 'Price';
+    sheet.getCell('F4').value = 'Size';
+    sheet.getCell('G4').value = 'Quantity';
+    sheet.getCell('H4').value = 'Description';
+    sheet.getCell('I4').value = 'Front Image';
+    sheet.getCell('J4').value = 'Rear Image';
+    sheet.columns = [
+        { key: 'varient', width: 20 },
+        { key: 'name', width: 32 },
+        { key: 'color', width: 20 },
+        { key: 'design', width: 30 },
+        { key: 'price', width: 10 },
+        { key: 'size', width: 10 },
+        { key: 'quantity', width: 10 },
+        { key: 'description', width: 40 },
+        { key: 'fornt_image', width: 15 },
+        { key: 'rear_image', width: 15 }
+    ];
+    sheet.getColumn('D').alignment = { wrapText: true };
+    sheet.getColumn('H').alignment = { wrapText: true };
+    for (let currentRow = startRow; currentRow <= maxRows; currentRow += interval + 1) {
+        sheet.getCell(`A${currentRow}`).dataValidation = {
+            type: 'list',
+            allowBlank: false,
+            formulae: ['"<<NEW>>"']
+        };
+        sheet.getCell(`A${currentRow}`).value = '<<NEW>>';
+    }
+    for (let i = startRow; i <= maxRows; i++) {
+        sheet.getCell(`E${i}`).dataValidation = {
+            type: 'decimal',
+            operator: 'greaterThan',
+            formulae: ['0'],
+            showErrorMessage: true,
+            errorTitle: 'Invalid input',
+            error: 'Please enter a positive decimal value.',
+        };
+        sheet.getCell(`G${i}`).dataValidation = {
+            type: 'whole',
+            operator: 'greaterThanOrEqual',
+            formulae: ['0'],
+            showErrorMessage: true,
+            errorTitle: 'Invalid input',
+            error: 'Please enter a positive integer or zero.',
+        };
+    }
+    for (let currentRow = startRow + 1; currentRow <= maxRows; currentRow) {
+        // Insert sizes
+        for (const size of sizes) {
+            if (currentRow > maxRows)
+                break;
+            sheet.getCell(`F${currentRow}`).dataValidation = {
+                type: 'whole',
+                formulae: [`'"${size}"'`],
+                allowBlank: false
+            };
+            sheet.getCell(`F${currentRow}`).value = size;
+            currentRow++;
+        }
+        // Insert an empty row
+        if (currentRow <= maxRows) {
+            sheet.getCell(`F${currentRow}`).value = '';
+            currentRow++;
+        }
+    }
+    return sheet;
+}
+exports.addProductSheet = addProductSheet;
+async function readProductExcel(file) {
+    console.log(file);
+    const workbook = new exceljs_1.default.Workbook();
+    await workbook.xlsx.readFile(file);
+    // .then(()=> {
+    const sheet = workbook.getWorksheet('Product');
+    if (sheet != undefined) {
+        const product = { variants: [] };
+        const images = sheet.getImages();
+        const supplier = sheet.getCell('A2').value?.toString().split(':')[1].trim();
+        const category = sheet.getCell('A1').value?.toString().split(':')[1].trim();
+        const gender = sheet.getCell('F1').value?.toString();
+        const age_group = sheet.getCell('F2').value?.toString();
+        if (supplier && category && gender && age_group) {
+            product.supplier = supplier;
+            product.category = category;
+            product.gender = gender;
+            product.ageGroup = age_group;
+        }
+        else {
+            return {
+                isSuccess: false,
+                data: null,
+                msg: ""
+            };
+        }
+        const rows = sheet.getRows(DATA_ROW, MAX_ROWS);
+        if (rows == undefined) {
+            return {
+                isSuccess: false,
+                data: null,
+                msg: "Cannot read rows from sheet."
+            };
+        }
+        let counter = 0;
+        let sizes = [];
+        let variant = {};
+        for (const row of rows) {
+            if (row.number >= DATA_ROW) {
+                if (row.number == DATA_ROW + 1) {
+                    const name = row.getCell('B').value?.toString();
+                    if (name == undefined)
+                        return { isSuccess: false, msg: `Cannot read name from cell B${row.number}`, data: null };
+                    else
+                        product.name = name;
+                    const price = row.getCell('E').value?.toString();
+                    if (price == undefined)
+                        return { isSuccess: false, msg: `Cannot read name from cell D${row.number}`, data: null };
+                    else
+                        product.price = price;
+                }
+                if (row.getCell('A').value == NEW_PRODUCT_SEPERATOR) {
+                    if (sizes.length != 0) {
+                        variant.sizes = sizes;
+                        product.variants?.push(variant);
+                    }
+                    counter = 0;
+                    sizes = [];
+                    continue;
+                }
+                if (counter == 0) {
+                    const variant_id = row.getCell('A').value?.toString();
+                    if (variant_id == undefined) {
+                        return {
+                            isSuccess: true,
+                            data: product,
+                            msg: "Successfully read the excel file",
+                            error: ""
+                        };
+                    }
+                    else {
+                        // const variant_id = row.getCell('A').value?.toString();
+                        // if (variant_id==undefined)
+                        //    return { isSuccess: false, msg: `Cannot read name from cell A${row.number}` };
+                        // else
+                        variant.variant_id = variant_id;
+                        const design = row.getCell('D').value?.toString();
+                        if (design == undefined)
+                            return { isSuccess: false, msg: `Cannot read name from cell D${row.number}`, data: null };
+                        else
+                            variant.design = design;
+                        const color = row.getCell('C').value?.toString();
+                        if (color == undefined)
+                            return { isSuccess: false, msg: `Cannot read name from cell C${row.number}`, data: null };
+                        else
+                            variant.color = color;
+                        const description = row.getCell('H').value?.toString();
+                        if (description == undefined)
+                            return { isSuccess: false, msg: `Cannot read name from cell H${row.number}`, data: null };
+                        else
+                            variant.description = description;
+                        const size = row.getCell('F').value?.toString();
+                        const quantity = row.getCell('G').value?.toString();
+                        sizes.push({ size: size, stock_quantity: parseInt(quantity) });
+                        const img_front = getImageByCell(IMG_FRONT_COL, row.number, sheet, images);
+                        const img_rear = getImageByCell(IMG_REAR_COL, row.number, sheet, images);
+                        if (img_front == null)
+                            return { isSuccess: false, msg: `Cannot get front image from cell I${row.number}`, data: null };
+                        variant.img_front = workbook.getImage(Number(img_front.imageId)).buffer;
+                        variant.img_rear = img_rear != null ? workbook.getImage(Number(img_rear.imageId)).buffer : null;
+                    }
+                }
+                else {
+                    const size = row.getCell('F').value?.toString();
+                    const quantity = row.getCell('G').value?.toString();
+                    sizes.push({ size: size, stock_quantity: parseInt(quantity) });
+                    const img_front = getImageByCell(IMG_FRONT_COL, row.number, sheet, images);
+                    const img_rear = getImageByCell(IMG_REAR_COL, row.number, sheet, images);
+                    if (img_front == null)
+                        return { isSuccess: false, msg: `Cannot get front image from cell I${row.number}`, data: null };
+                    variant.img_front = workbook.getImage(Number(img_front.imageId)).buffer;
+                    variant.img_rear = img_rear != null ? workbook.getImage(Number(img_rear.imageId)).buffer : null;
+                }
+                counter++;
+                // if (sheet.getCell(`A${rowNumber-1}`).value == "<<NEW>>") {
+                //    const variant_id = sheet.getCell(`A${rowNumber}`).value?.toString().trim();
+                //    if (variant_id == undefined) {
+                //       return {
+                //          isSuccess: true,
+                //          data: product,
+                //          msg: "Successfully read the excel file",
+                //          error: ""
+                //       };
+                //    }
+                //    else {
+                //       // const name = sheet.getCell(`B${rowNumber}`).value?.toString();
+                //       // const color = sheet.getCell(`C${rowNumber}`).value?.toString();
+                //       // const design = sheet.getCell(`D${rowNumber}`).value?.toString();
+                //       // const price = sheet.getCell(`E${rowNumber}`).value?.toString();
+                //       const size = sheet.getCell(`F${rowNumber}`).value?.toString();
+                //       const quantity = sheet.getCell(`G${rowNumber}`).value?.toString();
+                //       // const description = sheet.getCell(`H${rowNumber}`).value?.toString();
+                //       product.variant.push({
+                //          variant_id: variant_id,
+                //          color: color,
+                //          sizes: []
+                //          design: design,
+                //          price: price
+                //       })
+                //    }
+                // }
+            }
+        }
+    }
+    // return {
+    //    isSuccess: false,
+    //    data: null,
+    //    msg: "Couldn't read excel file, something went wrong!",
+    //    error: "Couldn't read excel file, something went wrong!"
+    // }
+    // });
+}
+exports.readProductExcel = readProductExcel;
+function getImageByCell(column, row, sheet, images) {
+    for (const image of images) {
+        const { range } = image;
+        // Check if the image's range includes the specified cell address
+        if (range.tl.nativeCol === column - 1 &&
+            range.tl.nativeRow === row - 1) {
+            return image;
+        }
+    }
+    return null;
+}

@@ -1,12 +1,12 @@
-import { pgTable, serial, text } from "drizzle-orm/pg-core";
+import { pgTable, serial, text ,integer, numeric} from "drizzle-orm/pg-core";
+import { ordersTable } from "./Order";
+import { productsTable } from "./Product";
 
 export const inquiry_reportTable = pgTable('InquiryReport', {
-  //orderId: text('order_id').primaryKey().notNull(),
-  order_id: text('order_id').primaryKey(),
-  product_id: text('product_id'),
-  customer_id: text('customer_id'),
-  customer_name : text('customer_name'),
-  customer_tele : text('customer_tele'),
+
+  inquiry_id: serial('inquiry_id').primaryKey(),
+  order_id: integer('order_id').references(()=> ordersTable.order_id),
+  product_id: text('product_id').references(()=>productsTable.product_id),
   issue_type: text('issue_type').notNull(),
   image: text('image'),
   issue_description: text('issue_description').notNull(),
@@ -18,5 +18,6 @@ export const inquiry_reportTable = pgTable('InquiryReport', {
 });
 
 export type SelectInquiryReport = typeof inquiry_reportTable.$inferSelect;
+export type InsertInquiryReport = typeof inquiry_reportTable.$inferInsert;
 
 
