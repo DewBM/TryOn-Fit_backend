@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from ".."
 import { suppliersTable } from "../schema/Supplier"
-import {selectSupllier} from "../schema/Supplier"
+import {SelectSupllier} from "../schema/Supplier"
 
 export async function getAllSupplier() {
     try{
@@ -11,7 +11,7 @@ export async function getAllSupplier() {
     }
 }
 
-export async function createNewSupplier(supData:selectSupllier) {
+export async function createNewSupplier(supData:SelectSupllier) {
     console.log(supData);
     try{
 
@@ -22,7 +22,11 @@ export async function createNewSupplier(supData:selectSupllier) {
                 last_name: supData.last_name,
                 brand_name: supData.brand_name,
                 contact_no: supData.contact_no,
-                address: supData.address
+                address: supData.address,
+                email: supData.email,
+                register_date : supData.register_date,
+                status: supData.status
+                
             }
         )
 
@@ -31,7 +35,7 @@ export async function createNewSupplier(supData:selectSupllier) {
     }
 }
 
-export async function updateSupplierData(supData:selectSupllier,id : string) {
+export async function updateSupplierData(supData:SelectSupllier,id : string) {
     console.log(supData)
     try{
         const updatedEmp  = await db.update(suppliersTable)
