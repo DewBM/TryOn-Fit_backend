@@ -1,12 +1,12 @@
 import { integer, pgEnum,pgTable,serial,text,uniqueIndex,varchar,} from "drizzle-orm/pg-core";
+import { users } from "./User";
 
 export const customersTable = pgTable("Customer", {
   customer_id: serial("customer_id").primaryKey(),
+  user_id: integer('user_id').references(()=> users.userId),
   first_name: text("first_name"),
   last_name: text("last_name"),
   email: text("email"),
-  username: text("username"),
-  password: text("password"),
 });
 
 export const addressesTable = pgTable("addresses", {
