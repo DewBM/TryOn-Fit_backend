@@ -1,5 +1,5 @@
 import { pgEnum, pgTable, serial, text } from "drizzle-orm/pg-core";
-const supplierStatus = pgEnum('status',['available','unavailable']);
+const supplierStatus = pgEnum('supplier_status',['available','unavailable']);
 export const suppliersTable = pgTable('supplier', {
    supplier_id: text('supplier_id').primaryKey(),
    first_name: text('first_name'),
@@ -9,6 +9,6 @@ export const suppliersTable = pgTable('supplier', {
    address: text('address'),
    email: text('email'),
    register_date: text('register_date'),
-   status: supplierStatus('status') 
+   status: supplierStatus('supplier_status') 
 });
 export type SelectSupllier = typeof suppliersTable.$inferSelect;
