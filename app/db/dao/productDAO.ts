@@ -116,3 +116,71 @@ export async function queryVariantById(variant_id: string) {
       };
    }
 }
+export async function getProductDetailsByVariantId(variant_id: string) {
+   try {
+     // Select specific columns from the productVariantsTable
+     const variant = await db
+       .select({
+         name: productVariantsTable.name,
+         color: productVariantsTable.color,
+         price: productVariantsTable.price,
+         description: productVariantsTable.description,
+       })
+       .from(productVariantsTable)
+       .where(eq(productVariantsTable.variant_id, variant_id));
+ 
+     // Return the result
+     return {
+       isSuccess: true,
+       data: variant[0] || null, // Ensure to handle the case where no data is returned
+       msg: "",
+       error: ""
+     };
+   }
+   catch (e) {
+     return {
+       isSuccess: false,
+       data: null,
+       msg: "Couldn't get variant from database.",
+       error: e
+     };
+   }
+ }
+
+
+ 
+
+export async function getProductIdByVariantDAO(variant_id: string) {
+    try {
+        const variant = await db.select({
+            product_id: productVariantsTable.product_id
+        })
+        .from(productVariantsTable)
+        .where(eq(productVariantsTable.variant_id, variant_id))
+        .limit(1);
+
+        if (variant.length > 0) {
+            return {
+                isSuccess: true,
+                data: variant[0].product_id,
+                msg: "Product ID fetched successfully",
+                error: ""
+            };
+        } else {
+            return {
+                isSuccess: false,
+                data: null,
+                msg: "Product ID not found for the given variant ID",
+                error: ""
+            };
+        }
+    } catch (error) {
+        console.log("Error fetching product ID by variant ID:", error);
+        return {
+            isSuccess: false,
+            data: null,
+            msg: "Couldn't fetch product ID",
+            error: error
+        };
+    }
+}
