@@ -2,6 +2,8 @@ import { numeric, pgEnum, pgTable, text, serial, timestamp, unique, integer, for
 import { suppliersTable } from "./Supplier";
 import { relations, sql } from "drizzle-orm";
 import { tsvector } from "../db-utils";
+import ExcelJS from "exceljs";
+import { table } from "console";
 
 const ageGroupEnum = pgEnum('age_group', ['adult', 'kids']);
 const genderEnum = pgEnum('gender', ['Male', 'Female', 'Unisex']);
@@ -50,11 +52,11 @@ export const productVariantsTable = pgTable('product_variants', {
    variant_id: text('variant_id').primaryKey(),
    product_id: text('product_id').references(()=> productsTable.product_id).notNull(),
    name: text('name'),
-   size: text('size').references(()=> sizesTable.size_label),
+   // size: text('size').references(()=> sizesTable.size_label),
    color: text('color'),
    design: text('design'),
    price: numeric('price'),
-   stock_quantity: integer('stock_quantity'),
+   // stock_quantity: integer('stock_quantity'),
    description: text('description'),
    createdAt: timestamp('createdAt'),
    updatedAt: timestamp('updatedAt'),
@@ -69,6 +71,45 @@ export const productVariantsTable = pgTable('product_variants', {
 );
 
 
+
+export const sizeStocksTable = pgTable('size_stocks', {
+   variant_id: text('variant_id').references(()=> productVariantsTable.variant_id),
+   size: text('size').references(()=> sizesTable.size_label),
+   quantity: integer('quantity')
+}, (table) => ({
+   pk: primaryKey({columns: [table.variant_id, table.size]})
+})
+);
+
+
+export type Product = {
+   product_id: string,
+   name: string,
+   supplier: string,
+   category: string,
+   gender: "Male" | "Female" | "Unisex",
+   ageGroup: "adult" | "kids",
+   price: string,
+   variants: {
+      variant_id: string,
+      product_id: string,
+      color: string,
+      design: string,
+      description: string,
+      createdAt: DataView,
+      updatedAt: DataView,
+      sizes: {
+         size: string,
+         stock_quantity: number,
+      }[],
+      img_front: ExcelJS.Buffer | string,
+      img_rear: ExcelJS.Buffer | string | null
+   }[],
+};
+
+
+
+/*
 export type Product = {
    product_id: string,
    name: string,
@@ -99,3 +140,4 @@ export type Product = {
       }]
    },
 };
+*/

@@ -150,7 +150,7 @@ export async function getProductDetailsByVariantId(variant_id: string) {
 
  
 
-export async function getProductIdByVariantDAO(variant_id: string) {
+export async function getProductIdByVariant(variant_id: string) {
     try {
         const variant = await db.select({
             product_id: productVariantsTable.product_id

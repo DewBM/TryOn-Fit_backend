@@ -6,3 +6,4 @@ tmp/
 temp/
 supabase/
 .env
+dist/
