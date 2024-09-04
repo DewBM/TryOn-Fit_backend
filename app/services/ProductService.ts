@@ -1,4 +1,4 @@
-import { getAllProducts, insertProduct, queryProducts, queryVariantById } from "../db/dao/productDAO";
+import { getAllProducts, insertProduct, queryProducts, queryVariantById, getProductDetailsByVariantId,  getProductIdByVariantDAO } from "../db/dao/productDAO";
 import { Product } from "../db/schema/Product";
 
 export const getProducts = () => {
@@ -20,4 +20,14 @@ export const createProduct = async (product: Product) => {
 
 export async function getVariantById(variant_id: string) {
    return await queryVariantById(variant_id);
+}
+
+
+export async function getProductsbyVariant(variant_id: string) {
+  return await  getProductDetailsByVariantId(variant_id);
+}
+
+export async function getProductIdByVariant(variant_id: string) {
+   return await  getProductIdByVariantDAO(variant_id);
+   
 }
