@@ -24,4 +24,8 @@ app.use('/employee', employeeRouter)
 import supplierRouter from './routes/SupplierRoutes'
 app.use('/supplier', supplierRouter)
 
+import CartRouter from './routes/CartRoutes';
+app.use('/cart',CartRouter);
+app.use('/auth', authRouter);
+
 export default app;
