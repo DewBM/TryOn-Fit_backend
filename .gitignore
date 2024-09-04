@@ -6,3 +6,5 @@ tmp/
 tsupabase/emp/
 excel_uploads/
 supabase/
+.env
+dist/

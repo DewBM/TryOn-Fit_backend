@@ -1,14 +1,8 @@
 import { eq } from "drizzle-orm";
 import { db } from ".."
 import { suppliersTable } from "../schema/Supplier"
-interface supDataType {
-    supplier_id: string,
-   first_name: string,
-   last_name: string,
-   brand_name: string,
-   contact_no: string,
-   address: string
-}
+import {selectSupllier} from "../schema/Supplier"
+
 export async function getAllSupplier() {
     try{
         return db.query.suppliersTable.findMany();
@@ -17,7 +11,7 @@ export async function getAllSupplier() {
     }
 }
 
-export async function createNewSupplier(supData:supDataType) {
+export async function createNewSupplier(supData:selectSupllier) {
     console.log(supData);
     try{
 
@@ -37,7 +31,7 @@ export async function createNewSupplier(supData:supDataType) {
     }
 }
 
-export async function updateSupplierData(supData:supDataType,id : string) {
+export async function updateSupplierData(supData:selectSupllier,id : string) {
     console.log(supData)
     try{
         const updatedEmp  = await db.update(suppliersTable)
@@ -58,9 +52,9 @@ export async function updateSupplierData(supData:supDataType,id : string) {
         }
 }
 
-export async function deleteExistSuplier(id:string) {
+export async function deleteExistSuplier(id:{supplier_id:string}) {
     try{
-        const delsup = await db.delete(suppliersTable).where(eq(suppliersTable.supplier_id, id));
+        const delsup = await db.delete(suppliersTable).where(eq(suppliersTable.supplier_id, id.supplier_id));
     }catch(error){
         console.error('Error executing query', error);
     }

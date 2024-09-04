@@ -30,7 +30,7 @@ export async function doPut(req : Request , resp : Response) {
     const id = 16;
     console.log(id);
     try {
-        const data = await updateEmployee(req.body, id);
+        const data = await updateEmployee(req.body);
         
         resp.status(201).send(data);
     } catch (error) {
@@ -43,7 +43,7 @@ export async function doDel(req : Request , resp : Response) {
     const id = 27;
     console.log(id);
     try {
-        const data = await deleteEmployee( id);
+        const data = await deleteEmployee( req.body);
         
         resp.status(201).send(data);
     } catch (error) {
