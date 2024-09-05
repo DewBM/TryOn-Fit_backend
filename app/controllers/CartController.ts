@@ -4,7 +4,7 @@ import { getProductsbyVariant } from '../services/ProductService';
 import { updateCartItemQuantityService, deleteCartItemService,  addToCartService } from '../services/CartService';
 
 export async function doGet(req: Request, res: Response) {
-  try {
+
     const userId = req.user?.userId;
 
     if (!userId || typeof userId !== 'number') {
@@ -62,17 +62,13 @@ export async function doGet(req: Request, res: Response) {
 
     console.log('Items with Details:', itemsWithDetails); // Log final items with details
 
-    return res.status(200).json({ ...cartResult, items: itemsWithDetails });
-  } catch (error: any) {
-    console.error("Error in getCartbyCustomer controller:", error);
-    return res.status(500).json({ isSuccess: false, msg: "Internal server error", error: error.message });
-  }
+ 
 }
 
 
 
 export async function doPut(req: Request, res: Response) {
-   try {
+   
      const { cart_item_id, quantity } = req.body;
  
      if (typeof cart_item_id !== 'number' || typeof quantity !== 'number') {
@@ -87,16 +83,13 @@ export async function doPut(req: Request, res: Response) {
      } else {
        return res.status(500).json(result);
      }
-   } catch (error: any) {
-     console.error("Error in updating cart item quantity:", error);
-     return res.status(500).json({ isSuccess: false, msg: "Internal server error", error: error.message });
-   }
+ 
  }
 
 
 
 export async function doDel(req: Request, res: Response) {
-  try {
+
     const { cart_item_id } = req.body;
 
     // Validate that cart_item_id is a number
@@ -112,14 +105,11 @@ export async function doDel(req: Request, res: Response) {
     } else {
       return res.status(500).json(result);
     }
-  } catch (error: any) {
-    console.error("Error in deleting cart item:", error);
-    return res.status(500).json({ isSuccess: false, msg: "Internal server error", error: error.message });
-  }
+
 }
 
 export async function doPost(req: Request, res: Response) {
-    try {
+  
         const { user_id, variant_id, quantity } = req.body;
 
         if (!user_id || !variant_id || !quantity) {
@@ -133,8 +123,5 @@ export async function doPost(req: Request, res: Response) {
         } else {
             return res.status(400).json(result);
         }
-    } catch (error: any) {
-        console.error("Error in addToCart controller:", error);
-        return res.status(500).json({ isSuccess: false, msg: "Internal server error", error: error.message });
-    }
+   
 }
