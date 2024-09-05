@@ -1,4 +1,5 @@
-import { getAllProducts, insertProduct, queryProducts, queryVariantById, getProductDetailsByVariantId,  getProductIdByVariantDAO } from "../db/dao/productDAO";
+import { getAllProducts,  queryProducts, queryVariantById, getProductDetailsByVariantId,  } from "../db/dao/productDAO";
+import { getProductIdByVariantDAO } from "../db/dao/productDAO";
 import { Product } from "../db/schema/Product";
 
 export const getProducts = () => {
@@ -13,9 +14,9 @@ export const searchProducts = async (prompt: string) => {
 }
 
 
-export const createProduct = async (product: Product) => {
-   return await insertProduct(product);
-}
+// export const createProduct = async (product: Product) => {
+//    return await insertProduct(product);
+// }
 
 
 export async function getVariantById(variant_id: string) {

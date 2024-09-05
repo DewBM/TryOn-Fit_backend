@@ -31,6 +31,7 @@ export async function insertNewCartItem(cartItem: CartItemInsert) {
       await db.insert(cartItemsTable).values(cartItem);
       return {
          isSuccess: true,
+         data: null,
          msg: "Cart item inserted successfully",
          error: ""
       };
@@ -38,6 +39,7 @@ export async function insertNewCartItem(cartItem: CartItemInsert) {
       console.log("Error inserting new cart item:", e);
       return {
          isSuccess: false,
+         data: null,
          msg: "Couldn't insert cart item to database",
          error: e
       };
@@ -196,6 +198,7 @@ export async function addToCartDAO(user_id: number, variant_id: string, quantity
            } else {
                return {
                    isSuccess: false,
+                   data: null,
                    msg: "Couldn't create a new cart",
                    error: ""
                };
@@ -220,12 +223,14 @@ export async function addToCartDAO(user_id: number, variant_id: string, quantity
        if (cartResult) {
            return {
                isSuccess: true,
+               data: null,
                msg: "Cart item added successfully",
                error: ""
            };
        } else {
            return {
                isSuccess: false,
+               data: null,
                msg: "Couldn't add cart item",
                error: ""
            };
@@ -234,6 +239,9 @@ export async function addToCartDAO(user_id: number, variant_id: string, quantity
        console.error("Error in addToCartDAO:", error);
        return {
            isSuccess: false,
+           data: null,
+           msg: "err to add cart item",
+           error: ""
         
        };
    }
