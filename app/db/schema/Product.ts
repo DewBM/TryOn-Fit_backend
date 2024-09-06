@@ -52,14 +52,14 @@ export const productVariantsTable = pgTable('product_variants', {
    variant_id: text('variant_id').primaryKey(),
    product_id: text('product_id').references(()=> productsTable.product_id).notNull(),
    name: text('name'),
-   // size: text('size').references(()=> sizesTable.size_label),
    color: text('color'),
    design: text('design'),
    price: numeric('price'),
-   // stock_quantity: integer('stock_quantity'),
    description: text('description'),
    createdAt: timestamp('createdAt'),
    updatedAt: timestamp('updatedAt'),
+   img_front: text('img_front'),
+   img_back: text('img_back'),
    searchable_text: tsvector("searchable_text", {
       sources: ['name', 'design', 'description'], // list of column names
       weighted: true
@@ -80,64 +80,3 @@ export const sizeStocksTable = pgTable('size_stocks', {
    pk: primaryKey({columns: [table.variant_id, table.size]})
 })
 );
-
-
-export type Product = {
-   product_id: string,
-   name: string,
-   supplier: string,
-   category: string,
-   gender: "Male" | "Female" | "Unisex",
-   ageGroup: "adult" | "kids",
-   price: string,
-   variants: {
-      variant_id: string,
-      product_id: string,
-      color: string,
-      design: string,
-      description: string,
-      createdAt: DataView,
-      updatedAt: DataView,
-      sizes: {
-         size: string,
-         stock_quantity: number,
-      }[],
-      img_front: ExcelJS.Buffer | string,
-      img_rear: ExcelJS.Buffer | string | null
-   }[],
-};
-
-
-
-/*
-export type Product = {
-   product_id: string,
-   name: string,
-   supplier: string,
-   category: string,
-   gender: "Male" | "Female" | "Unisex",
-   ageGroup: "adult" | "kids",
-   variant: {
-      variant_id: string,
-      product_id: string,
-      size: string,
-      color: string,
-      design: string,
-      price: number,
-      stock_quantity: number,
-      description: string,
-      createdAt: DataView,
-      updatedAt: DataView,
-      sizes: [{
-         size: string,
-         price: string,
-         stock_quantity: number,
-         measurements: [{
-            measurement_type: string,
-            value_min: string,
-            value_max: string
-         }]
-      }]
-   },
-};
-*/

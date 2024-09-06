@@ -1,12 +1,15 @@
 import ExcelJS, { CellValue, Workbook, Worksheet } from 'exceljs';
-import { Product } from '../db/schema/Product';
-import { AgeGroupType, GenderType, SizeType, VariantType } from '../types/custom_types';
+import { AgeGroupType, GenderType, Product, SizeType, VariantType } from '../types/custom_types';
 
-const DATA_ROW = 5;
+const HEADER_ROW = 5;
+const DATA_ROW = 6;
 const MAX_ROWS = 500;
 const NEW_PRODUCT_SEPERATOR = "<<NEW>>";
 const IMG_FRONT_COL = 9; // 1-based index (1-A, 2-B, etc.)
 const IMG_REAR_COL = 10; // 1-based index (1-A, 2-B, etc.)
+const PRODUCT_ID = 1;
+const CATEGORY = 2;
+const SUP_NAME = 3;
 
 export function createExcel() {
    // Create a new workbook and add a worksheet
@@ -68,22 +71,25 @@ export function createProductTemplate(supplier: string, category: string) {
 
 
 export function addProductSheet(workbook: Workbook, gender_list: string[], age_groups: string[], sizes: string[]) {
-   const startRow = 5;
    const interval = sizes.length;
-   const maxRows = 500;
 
    const sheet = workbook.addWorksheet('Product', {views: [{state: 'frozen', ySplit: 4}]});
 
    // Product metadata
-   sheet.mergeCells('A1:D1');
-   const categoryMetadata = sheet.getCell('A1');
+   sheet.mergeCells(`A${PRODUCT_ID}:D${PRODUCT_ID}`);
+   const supplierId = sheet.getCell(`A${PRODUCT_ID}`);
+   supplierId.value = 'Product ID: Moose-Tshirt-01';
+   supplierId.font = {bold: true};
+
+   sheet.mergeCells(`A${CATEGORY}:D${CATEGORY}`);
+   const categoryMetadata = sheet.getCell(`A${CATEGORY}`);
    categoryMetadata.value = 'Category: T-Shirt';
    categoryMetadata.font = {bold: true};
 
-   sheet.mergeCells('A2:D2');
-   const supplierMetadata = sheet.getCell('A2');
-   supplierMetadata.value = 'Supplier: Moose';
-   supplierMetadata.font = {bold: true};
+   sheet.mergeCells(`A${SUP_NAME}:D${SUP_NAME}`);
+   const supplierName = sheet.getCell(`A${SUP_NAME}`);
+   supplierName.value = 'Supplier: Moose';
+   supplierName.font = {bold: true};
 
    const genderHeader = sheet.getCell('E1');
    genderHeader.value = 'Gender: ';
@@ -106,17 +112,17 @@ export function addProductSheet(workbook: Workbook, gender_list: string[], age_g
 
 
    // Product table column headers
-   sheet.getRow(4).font = { bold: true };
-   sheet.getCell('A4').value = 'Variant Id';
-   sheet.getCell('B4').value = 'Name';
-   sheet.getCell('C4').value = 'Color';
-   sheet.getCell('D4').value = 'Design';
-   sheet.getCell('E4').value = 'Price';
-   sheet.getCell('F4').value = 'Size';
-   sheet.getCell('G4').value = 'Quantity';
-   sheet.getCell('H4').value = 'Description';
-   sheet.getCell('I4').value = 'Front Image';
-   sheet.getCell('J4').value = 'Rear Image';
+   sheet.getRow(HEADER_ROW).font = { bold: true };
+   sheet.getCell(`A${HEADER_ROW}`).value = 'Variant Id';
+   sheet.getCell(`B${HEADER_ROW}`).value = 'Name';
+   sheet.getCell(`C${HEADER_ROW}`).value = 'Color';
+   sheet.getCell(`D${HEADER_ROW}`).value = 'Design';
+   sheet.getCell(`E${HEADER_ROW}`).value = 'Price';
+   sheet.getCell(`F${HEADER_ROW}`).value = 'Size';
+   sheet.getCell(`G${HEADER_ROW}`).value = 'Quantity';
+   sheet.getCell(`H${HEADER_ROW}`).value = 'Description';
+   sheet.getCell(`${HEADER_ROW}`).value = 'Front Image';
+   sheet.getCell(`${HEADER_ROW}`).value = 'Rear Image';
 
 
    sheet.columns = [
@@ -137,7 +143,7 @@ export function addProductSheet(workbook: Workbook, gender_list: string[], age_g
    sheet.getColumn('H').alignment = { wrapText: true }
 
 
-   for (let currentRow = startRow; currentRow <= maxRows; currentRow += interval+1) {
+   for (let currentRow = DATA_ROW; currentRow <= MAX_ROWS; currentRow += interval+1) {
       sheet.getCell(`A${currentRow}`).dataValidation = {
          type: 'list',
          allowBlank: false,
@@ -146,7 +152,7 @@ export function addProductSheet(workbook: Workbook, gender_list: string[], age_g
       sheet.getCell(`A${currentRow}`).value = '<<NEW>>';
    }
 
-   for (let i=startRow; i<=maxRows; i++) {
+   for (let i=DATA_ROW; i<=MAX_ROWS; i++) {
       sheet.getCell(`E${i}`).dataValidation = {
          type: 'decimal',
          operator: 'greaterThan',
@@ -166,10 +172,10 @@ export function addProductSheet(workbook: Workbook, gender_list: string[], age_g
    }
 
 
-   for (let currentRow=startRow+1; currentRow <= maxRows; currentRow) {
+   for (let currentRow=DATA_ROW+1; currentRow <= MAX_ROWS; currentRow) {
     // Insert sizes
     for (const size of sizes) {
-      if (currentRow > maxRows) break;
+      if (currentRow > MAX_ROWS) break;
       sheet.getCell(`F${currentRow}`).dataValidation = {
          type: 'whole',
          formulae: [`'"${size}"'`],
@@ -179,7 +185,7 @@ export function addProductSheet(workbook: Workbook, gender_list: string[], age_g
       currentRow++;
     }
     // Insert an empty row
-    if (currentRow <= maxRows) {
+    if (currentRow <= MAX_ROWS) {
       sheet.getCell(`F${currentRow}`).value = '';
       currentRow++;
     }
@@ -204,12 +210,14 @@ export async function readProductExcel(file: string) {
 
       const images = sheet.getImages();
 
-      const supplier = sheet.getCell('A2').value?.toString().split(':')[1].trim();
-      const category = sheet.getCell('A1').value?.toString().split(':')[1].trim();
+      const productId = sheet.getCell(`A${PRODUCT_ID}`).value?.toString().split(':')[1].trim();
+      const supplier = sheet.getCell(`A${SUP_NAME}`).value?.toString().split(':')[1].trim();
+      const category = sheet.getCell(`A${CATEGORY}`).value?.toString().split(':')[1].trim();
       const gender = sheet.getCell('F1').value?.toString() as GenderType ;
       const age_group = sheet.getCell('F2').value?.toString() as AgeGroupType;
 
-      if (supplier && category && gender && age_group) {
+      if (productId && supplier && category && gender && age_group) {
+         product.product_id = productId;
          product.supplier = supplier;
          product.category = category;
          product.gender = gender;
@@ -298,29 +306,37 @@ export async function readProductExcel(file: string) {
                      variant.description = description;
 
                   const size = row.getCell('F').value?.toString() as string;
-                  const quantity = row.getCell('G').value?.toString() as string;
-                  sizes.push({size: size, stock_quantity: parseInt(quantity)});
+                  const quantity = parseInt(row.getCell('G').value!.toString());
+                  sizes.push({size: size, stock_quantity: quantity});
 
-                  const img_front = getImageByCell(IMG_FRONT_COL, row.number, sheet, images);
-                  const img_rear = getImageByCell(IMG_REAR_COL, row.number, sheet, images);
+                  const img_front = workbook.getImage(Number(getImageByCell(IMG_FRONT_COL, row.number, sheet, images)?.imageId));
+                  const img_rear = workbook.getImage(Number(getImageByCell(IMG_REAR_COL, row.number, sheet, images)?.imageId)) ;
                   if (img_front==null)
                      return { isSuccess: false, msg: `Cannot get front image from cell I${row.number}`, data: null };
-                  variant.img_front = workbook.getImage(Number(img_front.imageId)).buffer;
-                  variant.img_rear = img_rear!=null ? workbook.getImage(Number(img_rear.imageId)).buffer : null;
+                  variant.img_front = {
+                     name: `${product.product_id}_${variant.variant_id}_front_${Date.now()}.${img_front.extension}`,
+                     file: img_front.buffer ?? null
+                  }
+                  variant.img_rear = img_rear ? {
+                     name: `${product.product_id}_${variant.variant_id}_rear_${Date.now()}.${img_rear.extension}`,
+                     file: img_rear.buffer ?? null
+                  } : null
+                  // variant.img_front = img_front? workbook.getImage(Number(img_front.imageId)).buffer : null;
+                  // variant.img_rear = img_rear!=null ? workbook.getImage(Number(img_rear.imageId)).buffer : null;
 
                }
             }
             else {
                const size = row.getCell('F').value?.toString() as string;
-               const quantity = row.getCell('G').value?.toString() as string;
-               sizes.push({size: size, stock_quantity: parseInt(quantity)});
+               const quantity = parseInt(row.getCell('G').value!.toString());
+               sizes.push({size: size, stock_quantity: quantity});
 
-               const img_front = getImageByCell(IMG_FRONT_COL, row.number, sheet, images);
-               const img_rear = getImageByCell(IMG_REAR_COL, row.number, sheet, images);
-               if (img_front==null)
-                  return { isSuccess: false, msg: `Cannot get front image from cell I${row.number}`, data: null };
-               variant.img_front = workbook.getImage(Number(img_front.imageId)).buffer;
-               variant.img_rear = img_rear!=null ? workbook.getImage(Number(img_rear.imageId)).buffer : null;
+               // const img_front = getImageByCell(IMG_FRONT_COL, row.number, sheet, images);
+               // const img_rear = getImageByCell(IMG_REAR_COL, row.number, sheet, images);
+               // if (quantity>0 && img_front==null)
+               //    return { isSuccess: false, msg: `Cannot get front image from cell I${row.number}`, data: null };
+               // variant.img_front = img_front? workbook.getImage(Number(img_front.imageId)).base64 : null;
+               // variant.img_rear = img_rear!=null ? workbook.getImage(Number(img_rear.imageId)).base64 : null;
             }
 
             counter++;

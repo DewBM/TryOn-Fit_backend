@@ -1,5 +1,5 @@
 import ExcelJS from "exceljs";
-
+// import { Buffer } from "buffer";
 export type SizeType = {
    size: string,
    stock_quantity: number,
@@ -20,9 +20,28 @@ export type VariantType = {
       size: string,
       stock_quantity: number,
    }[],
-   img_front: ExcelJS.Buffer | string,
-   img_rear: ExcelJS.Buffer | string | null
+   img_front: {
+      file: ExcelJS.Buffer | null
+      name: string
+   },
+   img_rear: {
+      file: ExcelJS.Buffer | null,
+      name: string
+   } | null
 }
+
+
+export type Product = {
+   product_id: string,
+   name: string,
+   supplier: string,
+   category: string,
+   gender: "Male" | "Female" | "Unisex",
+   ageGroup: "adult" | "kids",
+   price: string,
+   variants: VariantType[],
+};
+
 
 export type AgeGroupType = "adult" | "kids";
 export type GenderType = "Male" | "Female" | "Unisex";
