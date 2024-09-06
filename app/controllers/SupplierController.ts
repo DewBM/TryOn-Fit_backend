@@ -24,6 +24,7 @@ export async function doPost( req: Request , resp: Response){
 
 export async function doPut(req : Request , resp : Response) {
     const supid ="";
+    
     try{
         const data = await updateSupplier(req.body, supid);
         resp.status(201).send(data);
@@ -35,8 +36,9 @@ export async function doPut(req : Request , resp : Response) {
 
 export async function doDelete(req : Request , resp : Response) {
     const id = "";
+    console.log(req.body);
     try{
-        const data = await deleteSupplier(id);
+        const data = await deleteSupplier(req.body);
         resp.status(201).send(data);
     }catch(error){
         resp.status(500).send({error : 'Failed to create Supplier'})
