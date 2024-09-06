@@ -1,7 +1,9 @@
 import { desc, eq, getTableColumns, sql } from "drizzle-orm";
 import { db } from "..";
-import { categoriesTable, measurementTypesTable, Product, productsTable, productVariantsTable, sizeChartsTable, sizesTable, sizeStocksTable } from "../schema/Product";
+import { categoriesTable, measurementTypesTable, productsTable, productVariantsTable, sizeChartsTable, sizesTable, sizeStocksTable } from "../schema/Product";
 import { error } from "console";
+import { Product } from "../../types/custom_types";
+import { uploadProductImgs } from "../../utils/imgHandler";
 
 export async function getAllProducts() {
    return db.query.productsTable.findMany();
@@ -62,6 +64,18 @@ export async function insertProduct(product :Product) {
                .onConflictDoNothing();
             }
          }
+
+         for (const variant of product.variants) {
+            await tx.update(productVariantsTable)
+               .set({
+                  img_front: variant.img_front.name,
+                  img_back: variant.img_rear ? variant.img_rear.name : ""
+               })
+               .where(eq(productVariantsTable.variant_id, variant.variant_id));
+         }
+
+         await uploadProductImgs(product);
+
       });
 
       return {
