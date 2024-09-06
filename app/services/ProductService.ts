@@ -1,7 +1,7 @@
 import path from "path";
 import { getAllProducts, insertProduct, queryProducts, queryVariantById } from "../db/dao/productDAO";
-import { Product } from "../db/schema/Product";
 import { readProductExcel } from "../utils/excel";
+import { Product } from "../types/custom_types";
 
 export const getProducts = () => {
    return getAllProducts();

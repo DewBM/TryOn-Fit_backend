@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { readProductExcel } from '../utils/excel';
 import path from 'path';
 import * as ProductService from '../services/ProductService';
-import { Product } from '../db/schema/Product';
 
 export async function doGet(req: Request, res: Response) {
    const param = await req.query.search as string;
