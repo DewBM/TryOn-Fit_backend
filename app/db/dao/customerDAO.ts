@@ -46,10 +46,10 @@ export async function inputBodyMeasurement(measureData: {
   console.log(6);
   console.log(measureData);
   const formattedData = {
-    ...measureData // Convert to string
+    ...measureData, // Convert to string
   };
 
-  // Insert new employee into the database
+  // Insert new bodymessurement into the database
   try {
     const bodyMeasurement = await db.insert(BodyMeasurementTable).values({
       chest: formattedData.chest,
