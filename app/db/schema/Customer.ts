@@ -1,9 +1,17 @@
-import { integer, pgEnum,pgTable,serial,text,uniqueIndex,varchar,} from "drizzle-orm/pg-core";
+import {
+  integer,
+  pgEnum,
+  pgTable,
+  serial,
+  text,
+  uniqueIndex,
+  varchar,
+} from "drizzle-orm/pg-core";
 import { users } from "./User";
 
 export const customersTable = pgTable("Customer", {
   customer_id: serial("customer_id").primaryKey(),
-  user_id: integer('user_id').references(()=> users.userId),
+  user_id: integer("user_id").references(() => users.userId),
   first_name: text("first_name"),
   last_name: text("last_name"),
   email: text("email"),
@@ -11,13 +19,31 @@ export const customersTable = pgTable("Customer", {
 
 export const addressesTable = pgTable("addresses", {
   address_id: serial("address_id").primaryKey(),
-  customer_id: integer("customer_id").references(() => customersTable.customer_id),
+  customer_id: integer("customer_id").references(
+    () => customersTable.customer_id
+  ),
   address_line_1: text("address_line_1").notNull(),
   address_line_2: text("address_line_2"),
   postal_code: text("postal_code"),
 });
 
+export const BodyMeasurementTable = pgTable("Measurement", {
+  emp_id: serial("emp_id").primaryKey(),
+  chest: text("chest"),
+  neck: text("neck"),
+  west: text("west"),
+  hip: text("hip"),
+  Arm_Length: text("Arm_Length"),
+  Thigh_Circumference: text("Thigh_Circumference"),
+  torso: text("torso"),
+  nseam: text("nseam"),
+  Calf_Circumference: text("Calf_Circumference"),
+  sholder: text("sholder"),
+  bicep: text("bicep"),
+  wrist: text("wrist"),
+});
+
+export type selectBodyMeasurement = typeof BodyMeasurementTable.$inferSelect;
+
 export type SelectCustomer = typeof customersTable.$inferSelect;
 export type SelectAddress = typeof addressesTable.$inferSelect;
-
-
