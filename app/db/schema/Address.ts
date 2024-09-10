@@ -13,7 +13,7 @@ import { suppliersTable } from "./Supplier";
 import { employeesTable } from "./Employee";
 
 export const addressesTable = pgTable("addresses", {
-  address_id: serial("address_id").primaryKey(),
+  address_id: serial("address_id").primaryKey().notNull(),
   customer_id: integer("customer_id").references(
     () => customersTable.customer_id
   ),
@@ -26,4 +26,5 @@ export const addressesTable = pgTable("addresses", {
   postal_code: text("postal_code").notNull(),
 });
 
-export type SelectAddress = typeof addressesTable.$inferSelect;
+export type SelectAddressType = typeof addressesTable.$inferSelect;
+export type InsertAddressType = typeof addressesTable.$inferInsert;

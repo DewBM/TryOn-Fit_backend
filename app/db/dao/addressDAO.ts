@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from "..";
-import { addressesTable } from "../schema/Address";
+import { addressesTable, InsertAddressType } from "../schema/Address";
 
 export async function getAddressById(address_id: number) {
   try {
@@ -27,17 +27,19 @@ export async function getAddressById(address_id: number) {
 }
 
 // Update address by ID
-interface AddressData {
-  address_id: number;
-  address_line_1: string;
-  address_line_2: string;
-  city: string;
-  district: string;
-  postal_code: string;
-}
+// interface AddressData {
+//   address_id: number;
+//   address_line_1: string;
+//   address_line_2: string;
+//   city: string;
+//   district: string;
+//   postal_code: string;
+// }
 
-export async function updateAddress(addressData: AddressData) {
+/*export async function updateAddress(addressData: InsertAddressType) {
   try {
+    // if (!addressData.address_id)
+    //     return;
     const updatedAddress = await db
       .update(addressesTable)
       .set({
@@ -47,7 +49,7 @@ export async function updateAddress(addressData: AddressData) {
         district: addressData.district,
         postal_code: addressData.postal_code,
       })
-      .where(eq(addressesTable.address_id, addressData.address_id));
+      .where(eq(addressesTable.address_id, addressData.address_id!));
 
     return {
       isSuccess: true,
@@ -64,4 +66,4 @@ export async function updateAddress(addressData: AddressData) {
       error,
     };
   }
-}
+}*/
