@@ -16,7 +16,9 @@ export const sizesTable = pgTable('size_labels', {
 
 
 export const measurementTypesTable = pgTable('measurement_type', {
-   measurement_type: text('measurement_type').primaryKey()
+   measurement_id: text('measurement_id').primaryKey(),
+   measurement_parameter: text('measurement_parameter'),
+   description: text('text')
 });
 
 
@@ -28,7 +30,7 @@ export const categoriesTable = pgTable('cloth_category', {
 export const sizeChartsTable = pgTable('size_chart', {
    supplier: text('sup_id').references(()=> suppliersTable.supplier_id),
    size: text('size').references(()=> sizesTable.size_label),
-   measurement: text('measurement').references(()=> measurementTypesTable.measurement_type),
+   measurement: text('measurement').references(()=> measurementTypesTable.measurement_id),
    category: text('category').references(()=> categoriesTable.category_type),
    value_min: numeric('value_min'),
    value_max: numeric('value_max')
