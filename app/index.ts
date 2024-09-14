@@ -33,4 +33,8 @@ app.use('/customer', CustomerRouter);
 import inquiryFormRouter from './routes/InquiryFormRoutes';
 app.use('/inquiryform', inquiryFormRouter)
 
+import CartRouter from './routes/CartRoutes';
+app.use('/cart',CartRouter);
+app.use('/auth', authRouter);
+
 export default app;
