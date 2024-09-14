@@ -57,7 +57,7 @@ export async function getCartByUserId(user_id: number) {
          return {
             isSuccess: false,
             data: null,
-            msg: "No cart found for the user",
+            msg: " ",
             error: null
          };
       }
@@ -69,11 +69,11 @@ export async function getCartByUserId(user_id: number) {
          error: ""
       };
    } catch (e) {
-      console.log("Error fetching cart by user ID:", e);
+      console.log(" ", e);
       return {
          isSuccess: false,
          data: null,
-         msg: "Couldn't get cart for user ID",
+         msg: " ",
          error: e
       };
    }

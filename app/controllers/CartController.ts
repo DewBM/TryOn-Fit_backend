@@ -8,7 +8,8 @@ export async function doGet(req: Request, res: Response) {
     const userId = req.user?.userId;
 
     if (!userId || typeof userId !== 'number') {
-      return res.status(400).json({ isSuccess: false, msg: "Invalid or missing User ID." });
+     // return res.status(400).json({ isSuccess: false, msg: "Invalid or missing User ID." });
+     return res.status(404).send("Invalied or missing user Id");
     }
 
     // Fetch the cart by userId
@@ -16,12 +17,14 @@ export async function doGet(req: Request, res: Response) {
     console.log('Cart Result:', cartResult); // Log cart result
 
     if (!cartResult.isSuccess) {
-      return res.status(404).json({ isSuccess: false, msg: "Cart not found" });
+      // return res.status(404).json({ isSuccess: false, msg: "Cart not found" });
+      return res.status(404).send("Cart Not Found");
     }
 
     const cartId = cartResult.data?.cart_id;
     if (!cartId) {
-      return res.status(404).json({ isSuccess: false, msg: "Cart ID not found" });
+      // return res.status(404).json({ isSuccess: false, msg: "Cart ID not found" });
+      return res.status(404).send("Cart Id Not Found");
     }
 
     // Fetch cart items using cartId
@@ -29,7 +32,8 @@ export async function doGet(req: Request, res: Response) {
     console.log('Cart Items Result:', itemsResult); // Log cart items result
 
     if (!itemsResult.isSuccess || !itemsResult.data) {
-      return res.status(404).json({ isSuccess: false, msg: "Cart items not found" });
+    //  return res.status(404).json({ isSuccess: false, msg: "Cart items not found" });
+    return res.status(404).send("Cart Items Not Found");
     }
 
     const cartItems = itemsResult.data;

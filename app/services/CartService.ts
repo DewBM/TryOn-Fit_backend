@@ -15,6 +15,7 @@ export async function getCart(userId: number) {
    return await getCartByUserId(userId);
 }
 
+
 export async function updateCartItemQuantityService(cart_item_id: number, newQuantity: number) {
    return await updateCartItemQuantity(cart_item_id, newQuantity);
 }
