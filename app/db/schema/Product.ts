@@ -16,7 +16,9 @@ export const sizesTable = pgTable('size_labels', {
 
 
 export const measurementTypesTable = pgTable('measurement_type', {
-   measurement_type: text('measurement_type').primaryKey()
+   measurement_id: text('measurement_id').primaryKey(),
+   measurement_parameter: text('measurement_parameter'),
+   description: text('text')
 });
 
 
@@ -28,7 +30,7 @@ export const categoriesTable = pgTable('cloth_category', {
 export const sizeChartsTable = pgTable('size_chart', {
    supplier: text('sup_id').references(()=> suppliersTable.supplier_id),
    size: text('size').references(()=> sizesTable.size_label),
-   measurement: text('measurement').references(()=> measurementTypesTable.measurement_type),
+   measurement: text('measurement').references(()=> measurementTypesTable.measurement_id),
    category: text('category').references(()=> categoriesTable.category_type),
    value_min: numeric('value_min'),
    value_max: numeric('value_max')
@@ -52,14 +54,14 @@ export const productVariantsTable = pgTable('product_variants', {
    variant_id: text('variant_id').primaryKey(),
    product_id: text('product_id').references(()=> productsTable.product_id).notNull(),
    name: text('name'),
-   // size: text('size').references(()=> sizesTable.size_label),
    color: text('color'),
    design: text('design'),
    price: numeric('price'),
-   // stock_quantity: integer('stock_quantity'),
    description: text('description'),
    createdAt: timestamp('createdAt'),
    updatedAt: timestamp('updatedAt'),
+   img_front: text('img_front'),
+   img_back: text('img_back'),
    searchable_text: tsvector("searchable_text", {
       sources: ['name', 'design', 'description'], // list of column names
       weighted: true
@@ -80,64 +82,3 @@ export const sizeStocksTable = pgTable('size_stocks', {
    pk: primaryKey({columns: [table.variant_id, table.size]})
 })
 );
-
-
-export type Product = {
-   product_id: string,
-   name: string,
-   supplier: string,
-   category: string,
-   gender: "Male" | "Female" | "Unisex",
-   ageGroup: "adult" | "kids",
-   price: string,
-   variants: {
-      variant_id: string,
-      product_id: string,
-      color: string,
-      design: string,
-      description: string,
-      createdAt: DataView,
-      updatedAt: DataView,
-      sizes: {
-         size: string,
-         stock_quantity: number,
-      }[],
-      img_front: ExcelJS.Buffer | string,
-      img_rear: ExcelJS.Buffer | string | null
-   }[],
-};
-
-
-
-/*
-export type Product = {
-   product_id: string,
-   name: string,
-   supplier: string,
-   category: string,
-   gender: "Male" | "Female" | "Unisex",
-   ageGroup: "adult" | "kids",
-   variant: {
-      variant_id: string,
-      product_id: string,
-      size: string,
-      color: string,
-      design: string,
-      price: number,
-      stock_quantity: number,
-      description: string,
-      createdAt: DataView,
-      updatedAt: DataView,
-      sizes: [{
-         size: string,
-         price: string,
-         stock_quantity: number,
-         measurements: [{
-            measurement_type: string,
-            value_min: string,
-            value_max: string
-         }]
-      }]
-   },
-};
-*/

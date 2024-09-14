@@ -3,7 +3,8 @@
 node_modules/
 build/
 tmp/
-temp/
+tsupabase/emp/
+excel_uploads/
 supabase/
 .env
 dist/
