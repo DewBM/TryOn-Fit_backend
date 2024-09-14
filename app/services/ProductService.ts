@@ -1,5 +1,5 @@
 import path from "path";
-import { getAllProducts, insertProduct, queryProducts, queryVariantById } from "../db/dao/productDAO";
+import { getAllProducts, insertProduct, queryProducts, queryVariantById, getProductDetailsByVariantId, getProductIdByVariantDAO } from "../db/dao/productDAO";
 import { readProductExcel } from "../utils/excel";
 import { Product } from "../types/custom_types";
 
