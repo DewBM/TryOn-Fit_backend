@@ -1,18 +1,15 @@
 import { Request, Response } from 'express';
-import { readProductExcel } from '../utils/excel';
-import path from 'path';
 import * as ProductService from '../services/ProductService';
 
 export async function doGet(req: Request, res: Response) {
    const param = await req.query.search as string;
    if (param) {
-      // const result = await ProductService.searchProducts(param);
-      // res.status(200).json(result);
+      const result = await ProductService.searchProducts(param);
+      res.status(result.isSuccess? 200 : 400).json(result);
    }
    else {
-      // const data = await ProductService.getProducts();
-      // console.log(data);
-      // res.status(200).send(data);
+      const result = await ProductService.getProducts();
+      res.status(result.isSuccess? 200 : 500).json(result.data);
    }
 }
 
@@ -27,24 +24,6 @@ export async function doPost(req: Request, res: Response) {
       if (result.isSuccess)
          res.status(200).json(result);
       else
-      res.status(400).json(result);
+      res.status(500).json(result);
    }
-
-   // const excelRes = await readProductExcel(path.join(process.env.EXCEL_UPLOADS!, req.file.filename));
-   // console.log(excelRes);
-
-   // if (excelRes && excelRes?.isSuccess) {
-   //    const product = excelRes.data as Product;
-   //    const result = await ProductService.createProduct(product);
-      // res.status(200).json(result);
-   // }
-   // else
-      // res.status(500).send('Something went wrong');
-
-   // if (result.isSuccess)
-   //    res.status(200).json(result);
-   // else {
-   //    console.log('Product insert error: ', result);
-   //    res.status(400).json({isSuccess: result.isSuccess, msg: result.msg});
-   // }
 }
