@@ -1,33 +1,30 @@
-import { getCartByUserId, insertNewCart, insertNewCartItem } from "../db/dao/cartDAO";
+import { getCartByUserId, insertNewCart, insertNewCartItem, getAllitems, updateCartItemQuantity, deleteCartItem } from "../db/dao/cartDAO";
+import { getCartItemsByCartIdA, addToCartDAO } from "../db/dao/cartDAO";
+import { getProductsbyVariant } from "./ProductService";
 import { updateIncart } from "./InventoryService";
-import { getVariantById } from "./ProductService";
 
-export async function addToCart(user_id: number, variant_id: string, quantity: number) {
-   let cart = await getCartByUserId(user_id);
-   let cart_id = -1;
-   if (cart.isSuccess && cart.data!=undefined)
-      cart_id = cart.data.cart_id;
-   else {
-      cart = await insertNewCart(user_id);
-      if (cart.isSuccess && cart.data!=undefined)
-         cart_id = cart.data.cart_id;
-      else
-         return cart;
-   }
+export const getCartitems = () => {
+   return getAllitems();
+};
 
-   const cartResult = await insertNewCartItem({
-      cart_id: cart_id,
-      variant_id: variant_id,
-      quantity: quantity
-   });
+export async function getCartItemsByCartId(cartId: number) {
+   return await getCartItemsByCartIdA(cartId);
+}
 
-   if (cartResult.isSuccess) {
-      const variatRes = await getVariantById(variant_id);
-      if (variatRes.isSuccess && variatRes.data!=undefined)
-         return await updateIncart(variatRes.data.product_id, quantity);
+export async function getCart(userId: number) {
+   return await getCartByUserId(userId);
+}
 
-      return variatRes;
-   }
-   else
-      return cartResult;
+
+export async function updateCartItemQuantityService(cart_item_id: number, newQuantity: number) {
+   return await updateCartItemQuantity(cart_item_id, newQuantity);
+}
+
+export async function deleteCartItemService(cart_item_id: number) {
+   return await deleteCartItem(cart_item_id);
+}
+
+
+export async function addToCartService(user_id: number, variant_id: string, quantity: number) {
+    return await addToCartDAO(user_id, variant_id, quantity);
 }
