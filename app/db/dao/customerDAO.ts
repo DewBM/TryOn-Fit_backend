@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from "..";
-import { customersTable } from "../schema";
+import { customersTable ,bodyMeasurementsTable } from "../schema/Customer";
 
 export async function getCustomerByCustomerId(customer_id: number) {
   try {
@@ -23,5 +23,21 @@ export async function getCustomerByCustomerId(customer_id: number) {
       msg: "Couldn't get customer data.",
       error: e,
     };
+  }
+}
+
+
+/////add for measurements 
+
+export async function addBodyMeasurements(customer_id: number, measurements: Record<string, number>) {
+  try {
+    await db.insert(bodyMeasurementsTable).values({
+      customer_id,
+      ...measurements,
+    });
+    return { isSuccess: true, msg: "Measurements added successfully.", error: "" };
+  } catch (e) {
+    console.error(e);
+    return { isSuccess: false, msg: "Failed to add measurements.", error: e };
   }
 }
