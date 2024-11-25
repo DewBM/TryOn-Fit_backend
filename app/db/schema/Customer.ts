@@ -8,6 +8,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { users } from "./User";
+import { addressesTable } from "./Address";
 
 export const customersTable = pgTable("Customer", {
   customer_id: serial("customer_id").primaryKey(),

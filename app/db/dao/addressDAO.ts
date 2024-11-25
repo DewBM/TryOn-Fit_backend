@@ -1,13 +1,14 @@
 import { eq } from "drizzle-orm";
 import { db } from "..";
 import { addressesTable, InsertAddressType } from "../schema/Address";
+import { customersTable } from "../schema";
 
-export async function getAddressById(address_id: number) {
+export async function getAddressByCustomerId(customer_id: number) {
   try {
     const address = await db
       .select()
       .from(addressesTable)
-      .where(eq(addressesTable.address_id, address_id));
+      .where(eq(addressesTable.customer_id, customer_id));
 
     return {
       isSuccess: true,
@@ -67,3 +68,7 @@ export async function getAddressById(address_id: number) {
     };
   }
 }*/
+
+
+
+
