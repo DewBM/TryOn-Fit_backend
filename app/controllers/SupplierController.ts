@@ -26,7 +26,7 @@ export async function doPut(req : Request , resp : Response) {
     const supid ="";
     
     try{
-        const data = await updateSupplier(req.body, supid);
+        const data = await updateSupplier(req.body);
         resp.status(201).send(data);
     }catch(error){
         resp.status(500).send({error : 'Failed to create Supplier'})

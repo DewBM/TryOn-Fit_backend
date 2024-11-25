@@ -19,8 +19,8 @@ export const getSupplier = () => {
    return getAllSupplier()
 }
 
-export const updateSupplier = (supData : SelectSupllier, id : string) => {
-   return updateSupplierData(supData, id);
+export const updateSupplier = (supData : SelectSupllier) => {
+   return updateSupplierData(supData);
 }
 export const deleteSupplier = (id : {supplier_id:string}) => {
    return deleteExistSuplier(id );
