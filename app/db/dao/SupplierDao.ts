@@ -35,8 +35,9 @@ export async function createNewSupplier(supData:SelectSupllier) {
     }
 }
 
-export async function updateSupplierData(supData:SelectSupllier,id : string) {
+export async function updateSupplierData(supData:SelectSupllier) {
     console.log(supData)
+    const id = supData.supplier_id
     try{
         const updatedEmp  = await db.update(suppliersTable)
         .set({ 
@@ -44,7 +45,10 @@ export async function updateSupplierData(supData:SelectSupllier,id : string) {
                 last_name: supData.last_name,
                 brand_name: supData.brand_name,
                 contact_no: supData.contact_no,
-                address: supData.address
+                address: supData.address,
+                email: supData.email,
+                register_date : supData.register_date,
+                status: supData.status
             
          })
         .where(eq(suppliersTable.supplier_id,id));
