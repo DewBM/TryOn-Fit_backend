@@ -27,6 +27,7 @@ export async function getCustomerByCustomerId(customer_id: number) {
 }
 
 
+//body measrumenets 
 export async function addBodyMeasurements(customer_id: number, measurements: Record<string, number>) {
   try {
     await db.insert(bodyMeasurementsTable).values({
