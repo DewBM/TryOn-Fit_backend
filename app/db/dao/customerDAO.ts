@@ -20,14 +20,13 @@ export async function getCustomerByCustomerId(customer_id: number) {
     return {
       isSuccess: false,
       data: null,
-      msg: "Couldn't get customer data.",
+      msg: "Couldnt get customer data here",
       error: e,
     };
   }
 }
 
 
-/////add for measurements 
 
 export async function addBodyMeasurements(customer_id: number, measurements: Record<string, number>) {
   try {
@@ -35,7 +34,7 @@ export async function addBodyMeasurements(customer_id: number, measurements: Rec
       customer_id,
       ...measurements,
     });
-    return { isSuccess: true, msg: "Measurements added successfully.", error: "" };
+    return { isSuccess: true, msg: "Measurement added successfully.", error: "" };
   } catch (e) {
     console.error(e);
     return { isSuccess: false, msg: "Failed to add measurements.", error: e };
