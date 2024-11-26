@@ -11,7 +11,7 @@ export async function doGet(req: Request, res: Response) {
       res.status(500).json({
         isSuccess: false,
         data: null,
-        msg: "Could not get customer data",
+        msg: "Couldnt  get customer data now ",
         error: " ",
       });
     }
