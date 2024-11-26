@@ -4,6 +4,8 @@ import { cartsTable } from "../schema";
 import { CartItemInsert, cartItemsTable } from "../schema/Cart";
 import { getProductIdByVariantDAO } from "./productDAO";
 
+import { productVariantsTable } from "../schema/Product";
+
 // Fetch all cart items
 export async function getAllitems() {
    try {
@@ -78,6 +80,105 @@ export async function getCartByUserId(user_id: number) {
       };
    }
 }
+export async function getCartItemsWithVariantDetails(cartId: number) {
+   try {
+      const itemsWithVariants = await db
+         .select({
+            cartItemId: cartItemsTable.cart_item_id,
+            cartId: cartItemsTable.cart_id,
+            variantId: cartItemsTable.variant_id,
+            quantity: cartItemsTable.quantity,
+            name: productVariantsTable.name,
+            color: productVariantsTable.color,
+            price: productVariantsTable.price,
+            description: productVariantsTable.description,
+            userId: cartsTable.user_id,  // Added user_id here
+         })
+         .from(cartItemsTable)
+         .innerJoin(
+            productVariantsTable,
+            eq(cartItemsTable.variant_id, productVariantsTable.variant_id)
+         )
+         .innerJoin(
+            cartsTable,  // Join with the cartsTable to fetch user_id
+            eq(cartItemsTable.cart_id, cartsTable.cart_id)
+         )
+         .where(eq(cartItemsTable.cart_id, cartId));
+
+      if (itemsWithVariants.length === 0) {
+         return {
+            isSuccess: false,
+            data: null,
+            msg: "No items found for the cart",
+            error: null
+         };
+      }
+
+      return {
+         isSuccess: true,
+         data: itemsWithVariants,
+         msg: "Cart items with variant details fetched successfully",
+         error: ""
+      };
+   } catch (e) {
+      console.error("Error fetching cart items with variant details:", e);
+      return {
+         isSuccess: false,
+         data: null,
+         msg: "Couldn't get cart items with variant details",
+         error: e
+      };
+   }
+}
+
+
+
+// export async function getCartItemsWithVariantDetails(cartId: number) {
+//    try {
+//       const itemsWithVariants = await db
+//          .select({
+//             cartItemId: cartItemsTable.cart_item_id,
+//             cartId: cartItemsTable.cart_id,
+//             variantId: cartItemsTable.variant_id,
+//             quantity: cartItemsTable.quantity,
+//             name: productVariantsTable.name,
+//             color: productVariantsTable.color,
+//             price: productVariantsTable.price,
+//             description: productVariantsTable.description,
+//          })
+//          .from(cartItemsTable)
+//          .innerJoin(
+//             productVariantsTable,
+//             eq(cartItemsTable.variant_id, productVariantsTable.variant_id)
+//          )
+//          .where(eq(cartItemsTable.cart_id, cartId));
+
+//       if (itemsWithVariants.length === 0) {
+//          return {
+//             isSuccess: false,
+//             data: null,
+//             msg: "No items found for the cart",
+//             error: null
+//          };
+//       }
+
+//       return {
+//          isSuccess: true,
+//          data: itemsWithVariants,
+//          msg: "Cart items with variant details fetched successfully",
+//          error: ""
+//       };
+//    } catch (e) {
+//       console.error("Error fetching cart items with variant details:", e);
+//       return {
+//          isSuccess: false,
+//          data: null,
+//          msg: "Couldn't get cart items with variant details",
+//          error: e
+//       };
+//    }
+// }
+
 
 // Insert a new cart
 export async function insertNewCart(user_id: number) {

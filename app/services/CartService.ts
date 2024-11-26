@@ -1,4 +1,4 @@
-import { getCartByUserId, insertNewCart, insertNewCartItem, getAllitems, updateCartItemQuantity, deleteCartItem } from "../db/dao/cartDAO";
+import { getCartByUserId, insertNewCart, insertNewCartItem, getAllitems, updateCartItemQuantity, deleteCartItem ,getCartItemsWithVariantDetails} from "../db/dao/cartDAO";
 import { getCartItemsByCartIdA, addToCartDAO } from "../db/dao/cartDAO";
 import { getProductsbyVariant } from "./ProductService";
 import { updateIncart } from "./InventoryService";
@@ -8,8 +8,9 @@ export const getCartitems = () => {
 };
 
 export async function getCartItemsByCartId(cartId: number) {
-   return await getCartItemsByCartIdA(cartId);
+   return await getCartItemsWithVariantDetails(cartId);
 }
+
 
 export async function getCart(userId: number) {
    return await getCartByUserId(userId);
