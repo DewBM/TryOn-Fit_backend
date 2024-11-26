@@ -27,14 +27,13 @@ export async function getCustomerByCustomerId(customer_id: number) {
 }
 
 
-//body measrumenets 
 export async function addBodyMeasurements(customer_id: number, measurements: Record<string, number>) {
   try {
     await db.insert(bodyMeasurementsTable).values({
       customer_id,
       ...measurements,
     });
-    return { isSuccess: true, msg: "Measurement added ...successfully...", error: "" };
+    return { isSuccess: true, msg: "Measurements added ...successfully...", error: "" };
   } catch (e) {
     console.error(e);
     return { isSuccess: false, msg: "Failed.... to add measurements...", error: e };
