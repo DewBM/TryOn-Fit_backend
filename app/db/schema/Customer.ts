@@ -25,5 +25,24 @@ export const customersTable = pgTable("Customer", {
 //   postal_code: text("postal_code"),
 // });
 
+//add for measurement part 
+export const bodyMeasurementsTable = pgTable("body_measurement", {
+  measurement_id: serial("measurement_id").primaryKey(),
+  customer_id: integer("customer_id").references(() => customersTable.customer_id),
+  chest: integer("chest"),
+  underbust: integer("underbust"),
+  neck: integer("neck"),
+  waist: integer("waist"),
+  hip: integer("hip"),
+  arm_length: integer("arm_length"),
+  thigh_circumference: integer("thigh_circumference"),
+  torso: integer("torso"),
+  inseam: integer("inseam"),
+  calf_circumference: integer("calf_circumference"),
+  shoulder: integer("shoulder"),
+  bicep: integer("bicep"),
+});
+
 export type SelectCustomer = typeof customersTable.$inferSelect;
 // export type SelectAddress = typeof addressesTable.$inferSelect;
+export type SelectBodyMeasurements = typeof bodyMeasurementsTable.$inferSelect;

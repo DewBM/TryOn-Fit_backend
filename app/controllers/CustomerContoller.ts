@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getCustomerByCustomerId } from "../services/CustomerService";
+import { getCustomerByCustomerId,storeBodyMeasurements} from "../services/CustomerService";
 
 export async function doGet(req: Request, res: Response) {
   const customer_id = req.query.customer_id as string;
@@ -15,5 +15,28 @@ export async function doGet(req: Request, res: Response) {
         error: " ",
       });
     }
+  }
+}
+
+
+//bodymeasurement 
+export async function addMeasurements(req: Request, res: Response) {
+  const userId = req.user?.userId;
+
+  if (!userId || typeof userId !== "number") {
+    return res.status(400).json({
+      isSuccess: false,
+      msg: "Invalid or missing User ID.",
+      error: null,
+    });
+  }
+
+  const measurements = req.body;
+
+  const result = await storeBodyMeasurements(userId, measurements);
+  if (result.isSuccess) {
+    res.status(200).json(result);
+  } else {
+    res.status(500).json(result);
   }
 }
