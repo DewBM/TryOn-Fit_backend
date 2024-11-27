@@ -27,4 +27,43 @@ export async function getCustomerByCustomerId(customer_id: number) {
   }
 }
 
+//update customer 
+
+
+export async function updateCustomerByCustomerId(
+  customer_id: number,
+  updatedData: Partial<SelectCustomer>
+) {
+  try {
+    const updatedCustomer = await db
+      .update(customersTable)
+      .set(updatedData) 
+      .where(eq(customersTable.customer_id, customer_id))
+      .returning();
+
+    if (updatedCustomer.length === 0) {
+      return {
+        isSuccess: false,
+        data: null,
+        msg: "Customer not found.",
+        error: "",
+      };
+    }
+
+    return {
+      isSuccess: true,
+      data: updatedCustomer[0],
+      msg: "Customer updated successfully.",
+      error: "",
+    };
+  } catch (e) {
+    console.log(e);
+    return {
+      isSuccess: false,
+      data: null,
+      msg: "Couldn't update customer data.",
+      error: e,
+    };
+  }
+}
 

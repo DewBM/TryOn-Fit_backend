@@ -1,10 +1,43 @@
 import { getCustomerByCustomerId as fetchCustomerById } from "../db/dao/customerDAO";
 import { SelectCustomer } from "../db/schema/Customer";
+import { updateCustomerByCustomerId as updateCustomerInDAO } from "../db/dao/customerDAO";
+
 
 export const getCustomerByCustomerId = (customer_id: number) => {
   return fetchCustomerById(customer_id);
 };
 
-// export const updateCustomer = (CusData :SelectCustomer,customer_id:number) => {
-//   updateExistCustomer(CusData,customer_id);
-// }
+
+export const updateCustomerByCustomerId = async (
+  customer_id: number,
+  updatedData: Partial<SelectCustomer>
+) => {
+  try {
+   
+    const result = await updateCustomerInDAO(customer_id, updatedData);
+
+    if (!result.isSuccess) {
+      return {
+        isSuccess: false,
+        data: null,
+        msg: result.msg,
+        error: result.error,
+      };
+    }
+
+    return {
+      isSuccess: true,
+      data: result.data,
+      msg: result.msg,
+      error: "",
+    };
+  } catch (error) {
+    console.error("Error:", error);
+    return {
+      isSuccess: false,
+      data: null,
+      msg: "Error occurred while updating customer data.",
+      error,
+    };
+  }
+};
