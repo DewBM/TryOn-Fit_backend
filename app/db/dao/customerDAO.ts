@@ -1,6 +1,5 @@
 import { eq } from "drizzle-orm";
 import { db } from "..";
-import { customersTable } from "../schema";
 import { SelectCustomer } from "../schema/Customer";
 import { customersTable ,bodyMeasurementsTable } from "../schema/Customer";
 
