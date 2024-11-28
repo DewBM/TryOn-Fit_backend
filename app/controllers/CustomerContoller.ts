@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { getCustomerByCustomerId } from "../services/CustomerService";
 import { getAddressByCustomerId } from "../db/dao/addressDAO";
 import { updateCustomerByCustomerId } from "../services/CustomerService";
 import { updateAddressByCustomerId } from "../db/dao/addressDAO";

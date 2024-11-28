@@ -1,4 +1,3 @@
-import { getCustomerByCustomerId as fetchCustomerById } from "../db/dao/customerDAO";
 import { SelectCustomer } from "../db/schema/Customer";
 import { updateCustomerByCustomerId as updateCustomerInDAO } from "../db/dao/customerDAO";
 import { getCustomerByCustomerId as fetchCustomerById ,addBodyMeasurements } from "../db/dao/customerDAO";
