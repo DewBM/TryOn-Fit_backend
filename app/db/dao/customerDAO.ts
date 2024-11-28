@@ -21,7 +21,7 @@ export async function getCustomerByCustomerId(customer_id: number) {
     return {
       isSuccess: false,
       data: null,
-      msg: "Couldn't get customer data.",
+      msg: "Couldnt get customer data here..",
       error: e,
     };
   }
