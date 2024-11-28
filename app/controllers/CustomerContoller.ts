@@ -3,6 +3,7 @@ import { getCustomerByCustomerId } from "../services/CustomerService";
 import { getAddressByCustomerId } from "../db/dao/addressDAO";
 import { updateCustomerByCustomerId } from "../services/CustomerService";
 import { updateAddressByCustomerId } from "../db/dao/addressDAO";
+import { getCustomerByCustomerId,storeBodyMeasurements} from "../services/CustomerService";
 
 export async function doGet(req: Request, res: Response) {
   try {
@@ -67,7 +68,6 @@ export async function doGet(req: Request, res: Response) {
     });
   }
 }
-
 
 
 
@@ -151,5 +151,27 @@ export async function doPut(req: Request, res: Response) {
       msg: "Error occurred while updating customer and address data",
       error,
     });
+  }
+}
+
+//bodymeasurement 
+export async function addMeasurements(req: Request, res: Response) {
+  const userId = req.user?.userId;
+
+  if (!userId || typeof userId !== "number") {
+    return res.status(400).json({
+      isSuccess: false,
+      msg: "Invalid or missing User ID.",
+      error: null,
+    });
+  }
+
+  const measurements = req.body;
+
+  const result = await storeBodyMeasurements(userId, measurements);
+  if (result.isSuccess) {
+    res.status(200).json(result);
+  } else {
+    res.status(500).json(result);
   }
 }
