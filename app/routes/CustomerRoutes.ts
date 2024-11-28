@@ -5,6 +5,7 @@ import { authenticate, passporthMiddleware } from "../middleware/authMiddleware"
 const CustomerRouter = Router();
 
 CustomerRouter.get('/', CustomerContoller.doGet);
+ CustomerRouter.put('/', CustomerContoller.doPut);
 
 
 
