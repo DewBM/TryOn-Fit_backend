@@ -11,9 +11,13 @@ const app = express();
 
 config({ path: '.env' });
 
+app.use(cors({
+    credentials: true, 
+    origin: ['http://localhost:3000', '127.0.0.1:3000',]
+}));
+
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(cors({ credentials: true, origin: ['http://localhost:3000'] }));
 
 import productRouter from './routes/ProductRoutes';
 import authRouter from './routes/AuthRoutes';
