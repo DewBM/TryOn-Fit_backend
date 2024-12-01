@@ -94,7 +94,7 @@ export async function insertNewOrder(order: OrderInsert & {order_items: OrderIte
 }
 
 
-export async function updateOrderStatus(order_id: number, status: 'Confirmed'|'Processing'|'Shipped'|'Delivered') {
+export async function updateOrderStatus(order_id: number, status: StatusType) {
    try {
       if (status==='Delivered')
          await db.update(ordersTable).set({order_status: status, delivery_date: new Date()}).where(eq(ordersTable.order_id, order_id));

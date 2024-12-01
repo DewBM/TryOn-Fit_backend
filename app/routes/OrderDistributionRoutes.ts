@@ -3,7 +3,7 @@ import * as OrderDistributionController from '../controllers/OrderDistributionCo
 
 const OrderDistributionRouter = Router();
 
-OrderDistributionRouter.put('/updateStatus', OrderDistributionController.doPut);  // Adjust the route as needed
+OrderDistributionRouter.put('/updateStatus', OrderDistributionController.doPut);  
 OrderDistributionRouter.get('/getOrdersByStatus', OrderDistributionController.getOrdersByStatus);
 
 
