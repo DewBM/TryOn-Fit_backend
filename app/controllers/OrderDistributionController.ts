@@ -43,7 +43,7 @@ export const doPut = async (req: Request, res: Response) => {
 
 
  // Controller method to fetch orders by status
-export const getOrdersByStatus = async (req: Request, res: Response) => {
+export const doGet = async (req: Request, res: Response) => {
    const { status } = req.query; 
 
    if (!status || typeof status !== "string") {

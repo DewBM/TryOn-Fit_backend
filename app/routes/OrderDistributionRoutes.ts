@@ -4,7 +4,7 @@ import * as OrderDistributionController from '../controllers/OrderDistributionCo
 const OrderDistributionRouter = Router();
 
 OrderDistributionRouter.put('/updateStatus', OrderDistributionController.doPut);  
-OrderDistributionRouter.get('/getOrdersByStatus', OrderDistributionController.getOrdersByStatus);
+OrderDistributionRouter.get('/getOrdersByStatus', OrderDistributionController.doGet);
 
 
 
