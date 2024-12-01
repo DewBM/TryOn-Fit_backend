@@ -41,4 +41,9 @@ import CartRouter from './routes/CartRoutes';
 app.use('/cart',CartRouter);
 app.use('/auth', authRouter);
 
+
+//update order status
+import OrderDistributionRoutes from './routes/OrderDistributionRoutes';
+app.use('/order', OrderDistributionRoutes);
+
 export default app;
