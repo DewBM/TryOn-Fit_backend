@@ -43,11 +43,16 @@ app.use('/cart',CartRouter);
 app.use('/auth', authRouter);
 
 
+import inquiryRouter from './routes/InquiryRoutes';
+app.use('/inquiry', inquiryRouter);
+
+
 import ReportRouter from './routes/ReportRouts';
 app.use('/report',ReportRouter)
 
 //update order status
 import OrderDistributionRoutes from './routes/OrderDistributionRoutes';
 app.use('/order', OrderDistributionRoutes);
+
 
 export default app;
