@@ -1,6 +1,7 @@
-import { date, integer, numeric, pgEnum, pgTable, primaryKey, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { date, integer, numeric, pgEnum, pgTable, primaryKey, serial, text, timestamp  } from "drizzle-orm/pg-core";
 import { customersTable } from "./Customer";
 import { productVariantsTable } from "./Product";
+
 
 const orderStatusEnum = pgEnum('order_status', ['Confirmed', 'Processing', 'Shipped', 'Delivered']);
 

@@ -14,11 +14,28 @@ import { Product } from "../../types/custom_types";
 import { uploadProductImgs } from "../../utils/imgHandler";
 
 export async function getAllProducts() {
-  return db.query.productsTable.findMany();
+  try {
+    const result = await db.query.productsTable.findMany();
+    return {
+      isSuccess: true,
+      data: result,
+      msg: "Products retrieved successfully",
+      error: null
+    }
+  }
+  catch(e) {
+    return {
+      isSuccess: false,
+      data: null,
+      msg: "Couldn't get products from database.",
+      error: e
+    }
+  }
 }
 
 export async function queryProducts(prompt: string) {
-  return await db
+  try {
+    const products = await db
     .select({
       ...getTableColumns(productVariantsTable),
       rank: sql`ts_rank(searchable_text, websearch_to_tsquery('english', ${prompt}))`,
@@ -27,13 +44,27 @@ export async function queryProducts(prompt: string) {
     .where(sql`searchable_text @@ websearch_to_tsquery('english', ${prompt})`)
     // .orderBy(sql`ts_rank(searchable_text, websearch_to_tsquery('english', ${prompt}))`);
     .orderBy((t) => desc(t.rank));
+
+    return {
+      isSuccess: true,
+      data: products,
+      msg: "Products queried successfully from database.",
+      error: null
+    };
+  }
+  catch (e) {
+    return {
+      isSuccess: false,
+      data: null,
+      msg: "Error executing query to get products from database.",
+      error: e
+    };
+  }
 }
 
 export async function insertProduct(product: Product) {
   try {
     await db.transaction(async (tx) => {
-      // await tx.insert(categoriesTable).values({category_type: product.category}).onConflictDoNothing();
-
       await tx
         .insert(productsTable)
         .values({
