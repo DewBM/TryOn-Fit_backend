@@ -3,10 +3,11 @@ import { createSupplier, getSupplier , updateSupplier,deleteSupplier} from "../s
 
 export async function doGet( req : Request , resp : Response){
     try{
+        console.log("1");
         const data = await getSupplier();
         resp.status(201).send(data);
     }catch(error){
-        resp.status(500).send({ error: 'Failed to create Supplier' });
+        resp.status(500).send({ error: 'Failed to get Supplier1' });
     }
 }
 

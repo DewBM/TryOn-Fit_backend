@@ -38,9 +38,13 @@ import inquiryFormRouter from './routes/InquiryFormRoutes';
 app.use('/inquiryform', inquiryFormRouter)
 
 import CartRouter from './routes/CartRoutes';
+
 app.use('/cart',CartRouter);
 app.use('/auth', authRouter);
 
+
+import ReportRouter from './routes/ReportRouts';
+app.use('/report',ReportRouter)
 
 //update order status
 import OrderDistributionRoutes from './routes/OrderDistributionRoutes';
