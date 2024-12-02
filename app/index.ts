@@ -37,4 +37,7 @@ import CartRouter from './routes/CartRoutes';
 app.use('/cart',CartRouter);
 app.use('/auth', authRouter);
 
+import inquiryRouter from './routes/InquiryRoutes';
+app.use('/inquiry', inquiryRouter);
+
 export default app;
