@@ -41,7 +41,10 @@ export type Product = {
    price: string,
    variants: VariantType[],
 };
-
+export type filterDateType = {
+   startDate : Date;
+   endDate : Date;
+};
 
 export type AgeGroupType = "adult" | "kids";
 export type GenderType = "Male" | "Female" | "Unisex";

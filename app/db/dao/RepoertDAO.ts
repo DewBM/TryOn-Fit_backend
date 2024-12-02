@@ -2,10 +2,11 @@ import { and, between, desc, eq, sql } from "drizzle-orm"; // Import required he
 import { db } from ".."; // Import your database instance
 import { orderItemsTable, ordersTable, productsTable, suppliersTable } from "../schema"; // Import table schemas
 import { productVariantsTable } from "../schema/Product";
+import { filterDateType } from "../../types/custom_types";
 
-export async function getAllSupplier() {
-  const startDate = new Date("2024-01-01"); // Start date for filtering
-  const endDate = new Date("2024-12-31"); // End date for filtering
+export async function getAllSupplier(filterDate : filterDateType) {
+  const startDate = new Date(filterDate.startDate); // Start date for filtering
+  const endDate = new Date(filterDate.endDate); // End date for filtering
 
   try {
     console.log("3")

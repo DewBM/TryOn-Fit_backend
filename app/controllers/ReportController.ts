@@ -4,7 +4,7 @@ import { getRevenueBySupplier } from '../services/ReportService';
 export async function doGet(req:Request,resp: Response) {
     try {
         console.log("1")
-        const data = await getRevenueBySupplier();
+        const data = await getRevenueBySupplier(req.body);
         console.log(data);
         resp.status(201).send(data);
     } catch (error) {
