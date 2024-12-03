@@ -35,3 +35,63 @@ export async function getAllSupplier(filterDate : filterDateType) {
     throw error; // Rethrow the error to the caller
   }
 }
+
+
+export async function getmonthyrevenue(month: string, year: string,) {
+  // const month = filterDate;
+console.log("3month")
+  try {
+    return await db
+  .select({
+    supplierId: productsTable.supplier, // Fetch supplier ID
+    totalRevenue: sql<number>`SUM((${orderItemsTable.price} - COALESCE(${orderItemsTable.disount}, 0)) * ${orderItemsTable.quantity})`, // Calculate total revenue
+  })
+  .from(ordersTable)
+  .innerJoin(orderItemsTable, eq(ordersTable.order_id, orderItemsTable.order_id)) // Join order items table
+  .innerJoin(productVariantsTable, eq(orderItemsTable.item_id, productVariantsTable.variant_id)) // Join product variants table
+  .innerJoin(productsTable, eq(productVariantsTable.product_id, productsTable.product_id)) // Join products table
+  .where(
+    and(
+      eq(ordersTable.order_status, "Delivered"), // Filter by order status
+      eq(sql<number>`EXTRACT(MONTH FROM ${ordersTable.order_date})`, month), // Filter by month
+      eq(sql<number>`EXTRACT(YEAR FROM ${ordersTable.order_date})`, year) // Filter by year
+    )
+  )
+  .groupBy(productsTable.supplier); // Group by supplier ID
+
+    
+  } catch (error) {
+    console.error("Error fetching revenue by supplier:", error); // Log the error for debugging
+    throw error; // Rethrow the error to the caller
+    
+  }
+}
+
+export async function getyealyrevenue(year: string,) {
+  // const month = filterDate;
+console.log("3year")
+  try {
+    return await db
+  .select({
+    supplierId: productsTable.supplier, // Fetch supplier ID
+    totalRevenue: sql<number>`SUM((${orderItemsTable.price} - COALESCE(${orderItemsTable.disount}, 0)) * ${orderItemsTable.quantity})`, // Calculate total revenue
+  })
+  .from(ordersTable)
+  .innerJoin(orderItemsTable, eq(ordersTable.order_id, orderItemsTable.order_id)) // Join order items table
+  .innerJoin(productVariantsTable, eq(orderItemsTable.item_id, productVariantsTable.variant_id)) // Join product variants table
+  .innerJoin(productsTable, eq(productVariantsTable.product_id, productsTable.product_id)) // Join products table
+  .where(
+    and(
+      eq(ordersTable.order_status, "Delivered"), // Filter by order status
+      eq(sql<number>`EXTRACT(YEAR FROM ${ordersTable.order_date})`, year) // Filter by year
+    )
+  )
+  .groupBy(productsTable.supplier); // Group by supplier ID
+
+    
+  } catch (error) {
+    console.error("Error fetching revenue by supplier:", error); // Log the error for debugging
+    throw error; // Rethrow the error to the caller
+    
+  }
+}
