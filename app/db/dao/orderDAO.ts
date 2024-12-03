@@ -3,6 +3,8 @@ import { db } from "..";
 import { orderItemsTable, ordersTable } from "../schema";
 import { OrderInsert, OrderItemInsert } from "../schema/Order";
 import {StatusType} from "../../types/custom_types"
+import { productVariantsTable } from "../schema/Product";
+import { productsTable } from "../schema/Product";
 
 export async function queryOrders() {
    try {
@@ -129,5 +131,43 @@ export async function getOrdersByStatus(status: StatusType) {
    } catch (e) {
       console.log(e);
       throw new Error("Couldn't fetch orders.");
+   }
+}
+
+
+export async function queryOrderItemsWithDetails(order_id: number) {
+   try {
+      const orderItemsWithDetails = await db
+         .select({
+            orderId: orderItemsTable.order_id,
+            itemId: orderItemsTable.item_id,
+            quantity: orderItemsTable.quantity,
+            price: orderItemsTable.price,
+            discount: orderItemsTable.disount,
+            variantName: productVariantsTable.name,
+            variantColor: productVariantsTable.color,
+            productId: productVariantsTable.product_id,
+            productCategory: productsTable.category,
+            productGender: productsTable.gender,
+         })
+         .from(orderItemsTable)
+         .innerJoin(productVariantsTable, eq(orderItemsTable.item_id, productVariantsTable.variant_id))
+         .innerJoin(productsTable, eq(productVariantsTable.product_id, productsTable.product_id))
+         .where(eq(orderItemsTable.order_id, order_id));
+
+      return {
+         isSuccess: true,
+         data: orderItemsWithDetails,
+         msg: "",
+         error: ""
+      };
+   } catch (e) {
+      console.error(e);
+      return {
+         isSuccess: false,
+         data: null,
+         msg: "Couldn't get detailed order items by order_id from the database.",
+         error: e
+      };
    }
 }
