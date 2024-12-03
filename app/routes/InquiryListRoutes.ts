@@ -1,5 +1,5 @@
 import { Router } from "express"
-import * as InquiryController from "../controllers/InquiryController"
+import * as InquiryController from "../controllers/InquiryListController"
 
 const inquiryRouter = Router();
 

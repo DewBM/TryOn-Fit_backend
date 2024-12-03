@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from "..";
-import { inquiry_reportTable, InsertInquiryReport } from "../schema/InquiryForm";
+import { inquiry_reportTable } from "../schema/InquiryForm";
 
 
 
@@ -30,4 +30,6 @@ import { inquiry_reportTable, InsertInquiryReport } from "../schema/InquiryForm"
           };
         }
       }
+
+
       
