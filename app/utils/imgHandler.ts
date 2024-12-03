@@ -42,6 +42,17 @@ export async function uploadProductImgs(product: Product) {
 }
 
 
+
+export async function getImageById(image_id: string) {
+  const { data } = supabase.storage.from(PRODUCT_BUCKET).getPublicUrl(image_id)
+  if (!data.publicUrl)
+    return null;
+  else
+    return data.publicUrl
+}
+
+
+
 async function rollBackUploaded(uploaded: string[]) {
   if (uploaded.length==0)
     return;

@@ -53,4 +53,7 @@ app.use('/report',ReportRouter)
 import OrderDistributionRoutes from './routes/OrderDistributionRoutes';
 app.use('/order', OrderDistributionRoutes);
 
+import FitonRouter from './routes/FitonRoutes'
+app.use('/fiton', FitonRouter);
+
 export default app;
