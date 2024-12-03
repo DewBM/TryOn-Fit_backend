@@ -7,10 +7,11 @@ import { filterDateType } from "../../types/custom_types";
 export async function getAllSupplier(filterDate : filterDateType) {
   const startDate = new Date(filterDate.startDate); // Start date for filtering
   const endDate = new Date(filterDate.endDate); // End date for filtering
+  // console.log(startDate,endDate);
 
   try {
     console.log("3")
-    const revenueBySupplier = await db
+    return await db
       .select({
         supplier: productsTable.supplier,
         totalRevenue: sql<number>`SUM((${orderItemsTable.price} - COALESCE(${orderItemsTable.disount}, 0)) * ${orderItemsTable.quantity})`,
@@ -28,7 +29,7 @@ export async function getAllSupplier(filterDate : filterDateType) {
       )
       .groupBy(productsTable.supplier) // Group by supplier
       
-    return revenueBySupplier; 
+     
     } catch (error) {
     console.error("Error fetching revenue by supplier:", error); // Log the error for debugging
     throw error; // Rethrow the error to the caller
