@@ -43,9 +43,8 @@ app.use('/cart',CartRouter);
 app.use('/auth', authRouter);
 
 
-import inquiryRouter from './routes/InquiryRoutes';
+import inquiryRouter from './routes/InquiryListRoutes';
 app.use('/inquiry', inquiryRouter);
-
 
 import ReportRouter from './routes/ReportRouts';
 app.use('/report',ReportRouter)
@@ -53,6 +52,5 @@ app.use('/report',ReportRouter)
 //update order status
 import OrderDistributionRoutes from './routes/OrderDistributionRoutes';
 app.use('/order', OrderDistributionRoutes);
-
 
 export default app;

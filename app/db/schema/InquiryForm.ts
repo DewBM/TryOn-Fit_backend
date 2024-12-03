@@ -1,4 +1,4 @@
-import { pgTable, serial, text ,integer, numeric} from "drizzle-orm/pg-core";
+import { pgTable, serial, text ,integer, numeric, timestamp, } from "drizzle-orm/pg-core";
 import { ordersTable } from "./Order";
 import { productsTable } from "./Product";
 import { customersTable} from "./Customer";
@@ -17,7 +17,7 @@ export const inquiry_reportTable = pgTable('InquiryReport', {
   name : text('name'),
   contact_num: text('contact_num').notNull(),
   status: text('status').notNull().default('pending'),
-
+  date: timestamp('date').notNull().defaultNow(),
  
 
 
