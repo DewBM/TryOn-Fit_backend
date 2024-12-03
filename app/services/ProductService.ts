@@ -9,9 +9,7 @@ export const getProducts = () => {
 
 
 export const searchProducts = async (prompt: string) => {
-   const result = await queryProducts(prompt);
-   console.log(result);
-   return result;
+   return await queryProducts(prompt);
 }
 
 

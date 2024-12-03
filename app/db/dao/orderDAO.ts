@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "..";
 import { orderItemsTable, ordersTable } from "../schema";
 import { OrderInsert, OrderItemInsert } from "../schema/Order";
-
+import {StatusType} from "../../types/custom_types"
 
 export async function queryOrders() {
    try {
@@ -94,7 +94,7 @@ export async function insertNewOrder(order: OrderInsert & {order_items: OrderIte
 }
 
 
-export async function updateOrderStatus(order_id: number, status: 'Confirmed'|'Processing'|'Shipped'|'Delivered') {
+export async function updateOrderStatus(order_id: number, status: StatusType) {
    try {
       if (status==='Delivered')
          await db.update(ordersTable).set({order_status: status, delivery_date: new Date()}).where(eq(ordersTable.order_id, order_id));
@@ -114,5 +114,20 @@ export async function updateOrderStatus(order_id: number, status: 'Confirmed'|'P
          msg: "Couldn't update order status.",
          error: e
       };
+   }
+}
+
+
+export async function getOrdersByStatus(status: StatusType) {
+   try {
+      const orders = await db
+         .select()
+         .from(ordersTable)
+         .where(eq(ordersTable.order_status, status));
+
+      return orders;
+   } catch (e) {
+      console.log(e);
+      throw new Error("Couldn't fetch orders.");
    }
 }
