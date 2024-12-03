@@ -56,4 +56,7 @@ app.use('/order', OrderDistributionRoutes);
 import FitonRouter from './routes/FitonRoutes'
 app.use('/fiton', FitonRouter);
 
+import searchRouter from './routes/SearchRoutes';
+app.use('/search', searchRouter);
+
 export default app;
