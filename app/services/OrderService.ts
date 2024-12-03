@@ -29,3 +29,8 @@ export async function updateStatus(order_id: number, status: StatusType) {
 export async function fetchOrdersByStatus(status: StatusType) {
    return await getOrdersByStatus(status);
 }
+
+// Service function to fetch all orders
+export async function fetchAllOrders() {
+   return await getAllOrders();
+}

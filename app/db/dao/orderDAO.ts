@@ -1,7 +1,7 @@
-import { eq } from "drizzle-orm";
+import { eq,sql } from "drizzle-orm";
 import { db } from "..";
 import { orderItemsTable, ordersTable } from "../schema";
-import { OrderInsert, OrderItemInsert } from "../schema/Order";
+import { OrderInsert, OrderItemInsert ,productVariantsTable ,productTable ,sizeStocksTable } from "../schema/Order";
 import {StatusType} from "../../types/custom_types"
 
 export async function queryOrders() {
@@ -26,26 +26,65 @@ export async function queryOrders() {
 }
 
 
+// export async function queryItemsByOrderId(order_id: number) {
+//    try {
+//       const order_items = await db.select().from(orderItemsTable).where(eq(orderItemsTable.order_id, order_id));
+//       return {
+//          isSuccess: true,
+//          data: order_items,
+//          msg: "",
+//          error: ""
+//       };
+//    }
+//    catch (e) {
+//       console.log(e);
+//       return {
+//          isSuccess: false,
+//          data: null,
+//          msg: "Couldn't get order items by order_id form database.",
+//          error: e
+//       };
+//    }
+// }
+
 export async function queryItemsByOrderId(order_id: number) {
    try {
-      const order_items = await db.select().from(orderItemsTable).where(eq(orderItemsTable.order_id, order_id));
+      const orderItemsWithDetails = await db
+         .select({
+            orderId: orderItemsTable.order_id,
+            itemId: orderItemsTable.item_id,
+            quantity: orderItemsTable.quantity,
+            price: orderItemsTable.price,
+            discount: orderItemsTable.disount,
+            variantName: productVariantsTable.name,
+            variantColor: productVariantsTable.color,
+            productId: productVariantsTable.product_id,
+            productCategory: productTable.category,
+            productGender: productTable.gender,
+            design: productVariantsTable.design,
+         })
+         .from(orderItemsTable)
+         .innerJoin(productVariantsTable, eq(orderItemsTable.item_id, productVariantsTable.variant_id ))
+         .innerJoin(productTable, eq(productVariantsTable.product_id, productTable.product_id))
+         .where(eq(orderItemsTable.order_id, order_id));
+
       return {
          isSuccess: true,
-         data: order_items,
+         data: orderItemsWithDetails,
          msg: "",
          error: ""
       };
-   }
-   catch (e) {
-      console.log(e);
+   } catch (e) {
+      console.error(e);
       return {
          isSuccess: false,
          data: null,
-         msg: "Couldn't get order items by order_id form database.",
+         msg: "Couldn't get detailed order items by order_id from the database.",
          error: e
       };
    }
 }
+
 
 
 export async function queryOrdersByCustomer(customer_id: number) {
@@ -129,5 +168,20 @@ export async function getOrdersByStatus(status: StatusType) {
    } catch (e) {
       console.log(e);
       throw new Error("Couldn't fetch orders.");
+   }
+}
+
+
+// DAO function to get all orders (without filtering by status)
+export async function getAllOrders() {
+   try {
+      const orders = await db
+         .select()
+         .from(ordersTable);  // No filtering by status, just fetch all records
+
+      return orders;
+   } catch (e) {
+      console.log(e);
+      throw new Error("Couldn't fetch all orders.");
    }
 }
