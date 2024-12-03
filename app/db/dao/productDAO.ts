@@ -35,32 +35,43 @@ export async function getAllProducts() {
 
 export async function queryProducts(prompt: string) {
   try {
-    const products = await db
-    .select({
-      ...getTableColumns(productVariantsTable),
-      rank: sql`ts_rank(searchable_text, websearch_to_tsquery('english', ${prompt}))`,
-    })
-    .from(productVariantsTable)
-    .where(sql`searchable_text @@ websearch_to_tsquery('english', ${prompt})`)
-    // .orderBy(sql`ts_rank(searchable_text, websearch_to_tsquery('english', ${prompt}))`);
-    .orderBy((t) => desc(t.rank));
+    let products;
+
+    if (prompt.trim() === "") {
+      // Fetch all products if the prompt is empty
+      products = await db
+        .select({
+          ...getTableColumns(productVariantsTable),
+        })
+        .from(productVariantsTable)
+    } else {
+      // Fetch filtered products based on the prompt
+      products = await db
+        .select({
+          ...getTableColumns(productVariantsTable),
+          rank: sql`ts_rank(searchable_text, websearch_to_tsquery('english', ${prompt}))`,
+        })
+        .from(productVariantsTable)
+        .where(sql`searchable_text @@ websearch_to_tsquery('english', ${prompt})`)
+        .orderBy((t) => desc(t.rank));
+    }
 
     return {
       isSuccess: true,
       data: products,
       msg: "Products queried successfully from database.",
-      error: null
+      error: null,
     };
-  }
-  catch (e) {
+  } catch (e) {
     return {
       isSuccess: false,
       data: null,
       msg: "Error executing query to get products from database.",
-      error: e
+      error: e,
     };
   }
 }
+
 
 export async function insertProduct(product: Product) {
   try {
