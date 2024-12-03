@@ -12,10 +12,22 @@ import {
 import { error } from "console";
 import { Product } from "../../types/custom_types";
 import { uploadProductImgs } from "../../utils/imgHandler";
+import { inventoriesTable } from "../schema";
 
 export async function getAllProducts() {
   try {
-    const result = await db.query.productsTable.findMany();
+    // const result = await db.query.productsTable.findMany();
+    const result = await db.select({
+      product_id: productsTable.product_id,
+      name: productVariantsTable.name,
+      price: productVariantsTable.price,
+      stock_quantity: inventoriesTable.stock_quantity,
+      status: inventoriesTable.status
+    })
+    .from(productsTable)
+    .innerJoin(productVariantsTable, eq(productsTable.product_id, productVariantsTable.product_id))
+    .innerJoin(inventoriesTable, eq(productsTable.product_id, inventoriesTable.product_id));
+    
     return {
       isSuccess: true,
       data: result,
