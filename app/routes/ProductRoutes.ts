@@ -32,7 +32,7 @@ const storage = multer.diskStorage({
    }
  });
 
-productRrouter.get('/', passporthMiddleware, authenticate(['ADMIN']), ProductController.doGet);
+productRrouter.get('/', passporthMiddleware, authenticate(['CUSTOMER']), ProductController.doGet);
 productRrouter.post('/', passporthMiddleware, authenticate(['ADMIN']), upload.single('file'), ProductController.doPost);
 // module.exports = () => {
 //    router.get('/', getClothItems)
