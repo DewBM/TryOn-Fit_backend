@@ -48,5 +48,5 @@ export type GenderType = "Male" | "Female" | "Unisex";
 
 
 //order distribution(update status)
-export type StatusType = "Confirmed" | "Processing" | "Shipped" | "Delivered";
+export type StatusType = "Confirmed" | "Processing" | "Shipped" | "Delivered" | "Completed";
 
