@@ -6,5 +6,6 @@ import { upload } from "../middleware/multerMiddleware";
 const FitonRouter = Router();
 
 FitonRouter.post('/user', passporthMiddleware, upload.single('image'), FitonController.userImageUpload);
+FitonRouter.post('/', passporthMiddleware, FitonController.fiton);
 
 export default FitonRouter;

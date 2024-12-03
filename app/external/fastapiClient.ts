@@ -27,10 +27,37 @@ export default class FastAPIClient {
             }
             return await response.json();
         } catch (error) {
-            console.error('Error calling FastAPI GET:', error);
+            console.error('Error calling FastAPI POST:', error);
             return {
                 isSuccess: false,
                 msg: "Error calling FastAPI POST",
+                error: error
+            }
+        }
+    }
+
+    static async generateFiton(user_id: number, garment_url: string) {
+        const url = `${FASTAPI_BASE_URL}/fiton`;
+
+        const data = {
+            user_id: user_id,
+            garment_url: garment_url
+        };
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+            
+            return await response.json();
+
+        } catch (error) {
+            console.error('Error calling FastAPI POST for fiton generation:', error);
+            return {
+                isSuccess: false,
+                msg: "Error calling FastAPI POST for fiton generation",
                 error: error
             }
         }
