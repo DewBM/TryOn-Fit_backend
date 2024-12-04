@@ -38,8 +38,10 @@ import inquiryFormRouter from './routes/InquiryFormRoutes';
 app.use('/inquiryform', inquiryFormRouter)
 
 import CartRouter from './routes/CartRoutes';
+
 app.use('/cart',CartRouter);
 app.use('/auth', authRouter);
+
 
 
 import PaymentRouter from './routes/paymentRoutes';
@@ -47,5 +49,22 @@ app.use('/merchant',PaymentRouter);
 
 import OrderRouter from './routes/orderRoutes';
 app.use('/status',OrderRouter);
+
+import inquiryRouter from './routes/InquiryListRoutes';
+app.use('/inquiry', inquiryRouter);
+
+import ReportRouter from './routes/ReportRouts';
+app.use('/report',ReportRouter)
+
+//update order status
+import OrderDistributionRoutes from './routes/OrderDistributionRoutes';
+app.use('/order', OrderDistributionRoutes);
+
+import FitonRouter from './routes/FitonRoutes'
+app.use('/fiton', FitonRouter);
+
+import searchRouter from './routes/SearchRoutes';
+app.use('/search', searchRouter);
+
 
 export default app;

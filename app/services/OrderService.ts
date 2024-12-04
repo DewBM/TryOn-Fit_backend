@@ -1,5 +1,6 @@
-import { insertNewOrder, queryItemsByOrderId, queryOrders, queryOrdersByCustomer, updateOrderStatus } from "../db/dao/orderDAO";
+import { insertNewOrder, queryItemsByOrderId, queryOrders, queryOrdersByCustomer, updateOrderStatus , getOrdersByStatus } from "../db/dao/orderDAO";
 import { OrderInsert, OrderItemInsert } from "../db/schema/Order";
+import { StatusType } from "../types/custom_types"
 
 export async function getAllOrders() {
    return await queryOrders();
@@ -21,6 +22,15 @@ export async function createOrder(order: OrderInsert & {order_items: OrderItemIn
 }
 
 
-export async function updateStatus(order_id: number, status: 'Confirmed'|'Processing'|'Shipped'|'Delivered') {
+export async function updateStatus(order_id: number, status: StatusType) {
    return await updateOrderStatus(order_id, status);
+}
+
+export async function fetchOrdersByStatus(status: StatusType) {
+   return await getOrdersByStatus(status);
+}
+
+// Service function to fetch all orders
+export async function fetchAllOrders() {
+   return await getAllOrders();
 }

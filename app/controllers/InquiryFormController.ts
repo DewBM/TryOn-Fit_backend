@@ -4,9 +4,9 @@ import { getinquiryform } from '../services/InquiryFormService';
 import { updateInquiryForm } from '../services/InquiryFormService';
 import { deleteInquiryForm } from '../services/InquiryFormService';
 
-export async function doPost(req: Request, res: Response) {
+export async function doPost(req: Request, res: Response) { ``
     const body = req.body;
-    // console.log(body);
+    
 
     if (body) {
         const result = await createinquiryform(body);

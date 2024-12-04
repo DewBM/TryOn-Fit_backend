@@ -42,6 +42,7 @@ export type Product = {
    variants: VariantType[],
 };
 
+
 // types/custom_types.ts
 
 export type Payment = {
@@ -57,5 +58,16 @@ export type Payment = {
  
 
 
+export type filterDateType = {
+   startDate : Date;
+   endDate : Date;
+};
+
+
 export type AgeGroupType = "adult" | "kids";
 export type GenderType = "Male" | "Female" | "Unisex";
+
+
+//order distribution(update status)
+export type StatusType = "Confirmed" | "Processing" | "Shipped" | "Delivered" | "Completed";
+
