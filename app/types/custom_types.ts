@@ -41,10 +41,28 @@ export type Product = {
    price: string,
    variants: VariantType[],
 };
+
+
+// types/custom_types.ts
+
+export type Payment = {
+   payment_id: string;  // Unique identifier for the payment
+   user_id: number;     // ID of the user making the payment
+   order_id: string;    // ID of the order being paid for
+   amount: number;      // Payment amount (in the appropriate currency)
+   payment_method: string;  // Method of payment (e.g., 'credit_card', 'paypal')
+   payment_status: string;  // Status of the payment (e.g., 'completed', 'pending')
+   createdAt: Date;         // Timestamp when the payment was created
+   updatedAt: Date;         // Timestamp when the payment was last updated
+ }
+ 
+
+
 export type filterDateType = {
    startDate : Date;
    endDate : Date;
 };
+
 
 export type AgeGroupType = "adult" | "kids";
 export type GenderType = "Male" | "Female" | "Unisex";
