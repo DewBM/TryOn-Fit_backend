@@ -4,6 +4,7 @@ import { getAddressByCustomerId } from "../db/dao/addressDAO";
 import { updateCustomerByCustomerId } from "../services/CustomerService";
 import { updateAddressByCustomerId } from "../db/dao/addressDAO";
 
+
 export async function doGet(req: Request, res: Response) {
   try {
     console.log("Fetching customer and address details...");
@@ -153,3 +154,22 @@ export async function doPut(req: Request, res: Response) {
     });
   }
 }
+
+
+
+export const getCustomerById = async (req: Request, res: Response) => {
+  const { customer_id } = req.query;
+  if (!customer_id) {
+      return res.status(400).json({ isSuccess: false, msg: "Customer ID is required." });
+  }
+  try {
+      const customer = await getCustomerByCustomerId(Number(customer_id)); // Example DB call
+      if (!customer) {
+          return res.status(404).json({ isSuccess: false, msg: "Customer not found." });
+      }
+      return res.status(200).json({ isSuccess: true, data: customer });
+  } catch (error) {
+      console.error(error);
+      return res.status(500).json({ isSuccess: false, msg: "Server error." });
+  }
+};

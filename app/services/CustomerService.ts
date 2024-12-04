@@ -8,6 +8,7 @@ export const getCustomerByCustomerId = (customer_id: number) => {
 };
 
 
+
 export const updateCustomerByCustomerId = async (
   customer_id: number,
   updatedData: Partial<SelectCustomer>
