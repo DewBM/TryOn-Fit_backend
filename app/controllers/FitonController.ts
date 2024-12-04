@@ -38,11 +38,11 @@ export async function userImageUpload(req: Request, res: Response) {
 
 
 export async function fiton(req: Request, res: Response) {
-    const user_id = req.user?.userId;
+    const user_id = String(req.user?.userId);
     const body = req.body;
-    const variant_id = body.variant_id;
+    const variant_id = body.variant_id
 
-    if (!user_id || typeof user_id !== "number") {
+    if (!user_id) {
         return res.status(400).json({
             isSuccess: false,
             msg: "Invalid or missing User ID.",
@@ -50,7 +50,7 @@ export async function fiton(req: Request, res: Response) {
         });
     }
 
-    if (!variant_id || typeof variant_id !== "number") {
+    if (!variant_id) {
         return res.status(400).json({
             isSuccess: false,
             msg: "Invalid or missing product variant ID.",
