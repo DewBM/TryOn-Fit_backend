@@ -2,7 +2,7 @@
    "compilerOptions": {
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
-      //"target": "ES5",
+      //"target": "ESNext",
       "target": "ESNext", // temporary override when using drizzle-kit
       "module": "commonjs",
       "outDir": "./dist",
@@ -13,3 +13,4 @@
       "typeRoots": ["./app/types", "./node_modules/@types"]
    }
 }
+

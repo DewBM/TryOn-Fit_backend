@@ -41,4 +41,11 @@ import CartRouter from './routes/CartRoutes';
 app.use('/cart',CartRouter);
 app.use('/auth', authRouter);
 
+
+import PaymentRouter from './routes/paymentRoutes';
+app.use('/merchant',PaymentRouter);
+
+import OrderRouter from './routes/orderRoutes';
+app.use('/status',OrderRouter);
+
 export default app;
