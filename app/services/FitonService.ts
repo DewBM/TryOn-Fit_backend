@@ -7,7 +7,7 @@ export async function processUserImage(user_id: number, fileBuffer: Buffer, file
 }
 
 
-export async function fitonGarment(user_id: number, variant_id: number) {
+export async function fitonGarment(user_id: string, variant_id: number) {
     const result = await ProductService.getVariantById(String(variant_id));
 
     if (!result.isSuccess)

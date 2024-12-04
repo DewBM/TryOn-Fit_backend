@@ -36,7 +36,7 @@ export default class FastAPIClient {
         }
     }
 
-    static async generateFiton(user_id: number, garment_url: string) {
+    static async generateFiton(user_id: string, garment_url: string) {
         const url = `${FASTAPI_BASE_URL}/fiton`;
 
         const data = {
