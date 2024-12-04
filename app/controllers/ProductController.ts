@@ -2,15 +2,8 @@ import { Request, Response } from 'express';
 import * as ProductService from '../services/ProductService';
 
 export async function doGet(req: Request, res: Response) {
-   const param = await req.query.search as string;
-   if (param) {
-      const result = await ProductService.searchProducts(param);
-      res.status(result.isSuccess? 200 : 400).json(result);
-   }
-   else {
-      const result = await ProductService.getProducts();
-      res.status(result.isSuccess? 200 : 500).json(result.data);
-   }
+   const result = await ProductService.getProducts();
+   res.status(result.isSuccess? 200 : 500).json(result.data);
 }
 
 
