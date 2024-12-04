@@ -4,8 +4,8 @@ import { authenticate, passporthMiddleware } from "../middleware/authMiddleware"
 const OrderRouter = Router();
 
 
-OrderRouter.get('/', passporthMiddleware, OrderController.doGet);
-OrderRouter.post('/', passporthMiddleware, OrderController.doPost);
+// OrderRouter.get('/', passporthMiddleware, OrderController.doGet);
+// OrderRouter.post('/', passporthMiddleware, OrderController.doPost);
 // OrderRouter.put('/', passporthMiddleware, OrderController.doPut);
 // OrderRouter.delete('/', passporthMiddleware, OrderController.doDel);
 
