@@ -44,7 +44,7 @@ app.use('/auth', authRouter);
 
 
 
-import PaymentRouter from './routes/paymentRoutes';
+import PaymentRouter from './routes/PaymentRoutes';
 app.use('/merchant',PaymentRouter);
 
 import OrderRouter from './routes/orderRoutes';
