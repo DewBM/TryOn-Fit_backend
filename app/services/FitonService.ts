@@ -34,3 +34,8 @@ export async function fitonGarment(user_id: string, variant_id: number) {
         return await FastAPIClient.generateFiton(user_id, publicUrl);
     }
 }
+
+
+export async function getImage(image_path: any) {
+    return await FastAPIClient.getImageFromAPI(image_path);
+}
