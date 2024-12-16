@@ -65,3 +65,17 @@ export async function fiton(req: Request, res: Response) {
     else 
         return res.status(400).json(result);
 }
+
+
+export async function getGeneratedImages(req: Request, res: Response) {
+    const { imagePath } = req.query; // Get the `imagePath` from query params
+
+    try {
+        const imageBlob = await FitonService.getImage(imagePath);
+        res.setHeader('Content-Type', 'image/jpeg'); // Set appropriate content type
+        res.send(imageBlob); // Send the image back to the frontend
+    } catch (err) {
+        console.error("Error in getImage controller:", err);
+        res.status(500).json({ error: "Failed to fetch image from FastAPI" });
+    }
+}
