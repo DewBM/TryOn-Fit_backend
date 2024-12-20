@@ -14,11 +14,7 @@ export async function doGet(req: Request , res: Response){
         const result = await getinquirylist();
         console.log(result); 
 
-        if (result.isSuccess) {
-            res.status(200).send(result);
-        } else {
-            res.status(500).send(result);
-        }
+        res.status(201).send(result);
 
     } catch (error) {
         

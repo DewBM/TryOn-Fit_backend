@@ -43,7 +43,12 @@ app.use('/cart',CartRouter);
 app.use('/auth', authRouter);
 
 
-import inquiryRouter from './routes/InquiryListRoutes';
-app.use('/inquiry', inquiryRouter);
+import inquiryListRouter from './routes/InquiryListRoutes';
+app.use('/inquirylist', inquiryListRouter);
+
+import inquiryCardsRouter from'./routes/InquiryCardsRoutes';
+app.use('/inquiryCards', inquiryCardsRouter);
 
 export default app;
+
+

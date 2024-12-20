@@ -1,10 +1,10 @@
 import { Router } from "express"
-import * as InquiryController from "../controllers/InquiryListController"
+import * as InquiryListController from "../controllers/InquiryListController"
 
-const inquiryRouter = Router();
-
-
-inquiryRouter.get('/', InquiryController.doGet);
+const inquiryListRouter = Router();
 
 
-export default inquiryRouter;
+inquiryListRouter.get('/', InquiryListController.doGet);
+
+
+export default inquiryListRouter;

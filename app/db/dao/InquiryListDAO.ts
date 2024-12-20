@@ -9,15 +9,11 @@ import { inquiry_reportTable } from "../schema/InquiryForm";
       
           const inquiryLists = await db.select().from(inquiry_reportTable).execute();
       
-          console.log("Successfully fetched inquiry forms!");
+          console.log("Successfully fetched inquiry lists!");
       
         
-          return {
-            isSuccess: true,
-            data: inquiryLists, 
-            msg: "Successfully fetched inquiry forms!",
-            error: null,
-          };
+          return inquiryLists;
+           
         } catch (error) {
           console.error("Error executing query", error);
       
