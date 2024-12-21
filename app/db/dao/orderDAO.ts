@@ -185,3 +185,37 @@ export async function getAllOrders() {
       throw new Error("Couldn't fetch all orders.");
    }
 }
+
+
+export async function queryOrderDetails(order_id: number) {
+   try {
+      const orderDetails = await db
+         .select()
+         .from(ordersTable)
+         .where(eq(ordersTable.order_id, order_id));
+
+      if (orderDetails.length > 0) {
+         return {
+            isSuccess: true,
+            data: orderDetails,
+            msg: "",
+            error: "",
+         };
+      } else {
+         return {
+            isSuccess: false,
+            data: null,
+            msg: "No order found with the provided order_id.",
+            error: "",
+         };
+      }
+   } catch (e) {
+      console.error(e);
+      return {
+         isSuccess: false,
+         data: null,
+         msg: "Couldn't fetch order details from the database.",
+         error: e,
+      };
+   }
+}
