@@ -49,6 +49,13 @@ app.use('/inquirylist', inquiryListRouter);
 import inquiryCardsRouter from'./routes/InquiryCardsRoutes';
 app.use('/inquiryCards', inquiryCardsRouter);
 
+import ReportRouter from './routes/ReportRouts';
+app.use('/report',ReportRouter)
+
+//update order status
+import OrderDistributionRoutes from './routes/OrderDistributionRoutes';
+app.use('/order', OrderDistributionRoutes);
+
 export default app;
 
 
