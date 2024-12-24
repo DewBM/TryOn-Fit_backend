@@ -61,7 +61,7 @@ export async function updateInquiryFormSolution(id: number, solution: string) {
   try {
 
     const updatedInquiry = await db.update(inquiry_reportTable)
-      .set({ solution: solution })
+      .set({ solution: solution, status:"solved"})
       .where(eq(inquiry_reportTable.inquiry_id,id))
       .returning();
 

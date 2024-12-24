@@ -16,7 +16,7 @@ export const getinquiryform = () => {
 }
 
 
-export const updateInquiryForm = (id:number, solution: string) =>{
+export const updateInquiryForm = (id: number, solution: string, status: any) =>{
   return updateInquiryFormSolution(id,solution);
 }
 
