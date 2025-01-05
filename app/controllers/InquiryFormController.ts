@@ -55,11 +55,11 @@ export async function doGet(req: Request , res: Response){
 
 
 export async function doPut(req: Request , res: Response){
-    const { id , solution} = req.body;
+    const { inquiry_id , solution, status} = req.body;
 
-    if(id && solution){
+    if(inquiry_id && solution){
         try{
-            const result =  await updateInquiryForm(id, solution);
+            const result =  await updateInquiryForm(inquiry_id, solution ,status);
 
             if (result.isSuccess){
                 res.status(201).send(result);
