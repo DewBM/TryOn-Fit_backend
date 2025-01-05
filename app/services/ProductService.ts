@@ -1,7 +1,8 @@
 import path from "path";
 import { getAllProducts, insertProduct, queryProducts, queryVariantById, getProductDetailsByVariantId, getProductIdByVariantDAO } from "../db/dao/productDAO";
-import { readProductExcel } from "../utils/excel";
+import { createProductTemplate, readProductExcel } from "../utils/excel";
 import { Product } from "../types/custom_types";
+import { getImageById } from "../utils/imgHandler";
 
 export const getProducts = () => {
    return getAllProducts();
@@ -9,7 +10,24 @@ export const getProducts = () => {
 
 
 export const searchProducts = async (prompt: string) => {
-   return await queryProducts(prompt);
+   const result = await queryProducts(prompt);
+   
+   if (result.isSuccess && result.data!=null) {
+      const newData = await Promise.all(
+         result.data.map(async item => {
+            if (item.img_front != "" && item.img_front != null) {
+               item.img_front = await getImageById(item.img_front);
+            }
+            if (item.img_back != "" && item.img_back != null) {
+               item.img_back = await getImageById(item.img_back);
+            }
+            return item;
+         })
+      );
+
+      result.data = newData;
+   }
+   return result;
 }
 
 
@@ -39,4 +57,9 @@ export async function getProductsbyVariant(variant_id: string) {
 export async function getProductIdByVariant(variant_id: string) {
    return await  getProductIdByVariantDAO(variant_id);
    
+}
+
+
+export async function generateProductTemplate(supplier_id: string, category: string) {
+   return await createProductTemplate(supplier_id, category);
 }

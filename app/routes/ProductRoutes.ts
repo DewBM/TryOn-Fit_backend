@@ -32,8 +32,9 @@ const storage = multer.diskStorage({
    }
  });
 
-productRrouter.get('/', passporthMiddleware, authenticate(['ADMIN']), ProductController.doGet);
-productRrouter.post('/', passporthMiddleware, authenticate(['ADMIN']), upload.single('file'), ProductController.doPost);
+productRrouter.get('/', passporthMiddleware, authenticate(['SK']), ProductController.doGet);
+productRrouter.post('/', passporthMiddleware, authenticate(['SK']), upload.single('file'), ProductController.doPost);
+productRrouter.post('/excel_template', passporthMiddleware, authenticate(['SK']), ProductController.getProductTemplate);
 // module.exports = () => {
 //    router.get('/', getClothItems)
 // }

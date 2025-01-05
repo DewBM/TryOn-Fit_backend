@@ -1,4 +1,4 @@
-import ExcelJS, { CellValue, Workbook, Worksheet } from 'exceljs';
+import ExcelJS, { CellValue, ValueType, Workbook, Worksheet } from 'exceljs';
 import { AgeGroupType, GenderType, Product, SizeType, VariantType } from '../types/custom_types';
 
 const HEADER_ROW = 5;
@@ -59,14 +59,16 @@ export function readExcelFile() {
 }
 
 
-export function createProductTemplate(supplier: string, category: string) {
+export  async function createProductTemplate(supplier: string, category: string) {
    const workbook = new ExcelJS.Workbook();
    const sheet = addProductSheet(workbook, ['Male', 'Female', 'Unisex'], ['Adult', 'Kids'], ['S', 'M', 'L', 'XL', 'XXL', 'XXXL']);
-   
-   workbook.xlsx.writeFile('sample.xlsx')
-     .then(() => {
-       console.log('File created!');
-     });
+
+   // workbook.xlsx.writeFile('sample.xlsx')
+   //   .then(() => {
+   //     console.log('File created!');
+   //   });
+
+   return await workbook.xlsx.writeBuffer();
 }
 
 
@@ -121,8 +123,8 @@ export function addProductSheet(workbook: Workbook, gender_list: string[], age_g
    sheet.getCell(`F${HEADER_ROW}`).value = 'Size';
    sheet.getCell(`G${HEADER_ROW}`).value = 'Quantity';
    sheet.getCell(`H${HEADER_ROW}`).value = 'Description';
-   sheet.getCell(`${HEADER_ROW}`).value = 'Front Image';
-   sheet.getCell(`${HEADER_ROW}`).value = 'Rear Image';
+   sheet.getCell(`I${HEADER_ROW}`).value = 'Front Image';
+   sheet.getCell(`J${HEADER_ROW}`).value = 'Rear Image';
 
 
    sheet.columns = [
@@ -263,7 +265,8 @@ export async function readProductExcel(file: string) {
             if (row.getCell('A').value == NEW_PRODUCT_SEPERATOR) {
                if(sizes.length!=0) {
                   variant.sizes = sizes;
-                  product.variants?.push(variant as VariantType);
+                  product.variants?.push({ ...variant } as VariantType);
+                  
                }
                counter = 0;
                sizes = [];

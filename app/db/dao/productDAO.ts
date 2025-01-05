@@ -12,10 +12,22 @@ import {
 import { error } from "console";
 import { Product } from "../../types/custom_types";
 import { uploadProductImgs } from "../../utils/imgHandler";
+import { inventoriesTable } from "../schema";
 
 export async function getAllProducts() {
   try {
-    const result = await db.query.productsTable.findMany();
+    // const result = await db.query.productsTable.findMany();
+    const result = await db.select({
+      product_id: productsTable.product_id,
+      name: productVariantsTable.name,
+      price: productVariantsTable.price,
+      stock_quantity: inventoriesTable.stock_quantity,
+      status: inventoriesTable.status
+    })
+    .from(productsTable)
+    .innerJoin(productVariantsTable, eq(productsTable.product_id, productVariantsTable.product_id))
+    .innerJoin(inventoriesTable, eq(productsTable.product_id, inventoriesTable.product_id));
+    
     return {
       isSuccess: true,
       data: result,
@@ -35,32 +47,43 @@ export async function getAllProducts() {
 
 export async function queryProducts(prompt: string) {
   try {
-    const products = await db
-    .select({
-      ...getTableColumns(productVariantsTable),
-      rank: sql`ts_rank(searchable_text, websearch_to_tsquery('english', ${prompt}))`,
-    })
-    .from(productVariantsTable)
-    .where(sql`searchable_text @@ websearch_to_tsquery('english', ${prompt})`)
-    // .orderBy(sql`ts_rank(searchable_text, websearch_to_tsquery('english', ${prompt}))`);
-    .orderBy((t) => desc(t.rank));
+    let products;
+
+    if (prompt.trim() === "") {
+      // Fetch all products if the prompt is empty
+      products = await db
+        .select({
+          ...getTableColumns(productVariantsTable),
+        })
+        .from(productVariantsTable)
+    } else {
+      // Fetch filtered products based on the prompt
+      products = await db
+        .select({
+          ...getTableColumns(productVariantsTable),
+          rank: sql`ts_rank(searchable_text, websearch_to_tsquery('english', ${prompt}))`,
+        })
+        .from(productVariantsTable)
+        .where(sql`searchable_text @@ websearch_to_tsquery('english', ${prompt})`)
+        .orderBy((t) => desc(t.rank));
+    }
 
     return {
       isSuccess: true,
       data: products,
       msg: "Products queried successfully from database.",
-      error: null
+      error: null,
     };
-  }
-  catch (e) {
+  } catch (e) {
     return {
       isSuccess: false,
       data: null,
       msg: "Error executing query to get products from database.",
-      error: e
+      error: e,
     };
   }
 }
+
 
 export async function insertProduct(product: Product) {
   try {

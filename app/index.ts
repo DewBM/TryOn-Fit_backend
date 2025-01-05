@@ -49,12 +49,28 @@ app.use('/inquirylist', inquiryListRouter);
 import inquiryCardsRouter from'./routes/InquiryCardsRoutes';
 app.use('/inquiryCards', inquiryCardsRouter);
 
+import PaymentRouter from './routes/PaymentRoutes';
+app.use('/merchant',PaymentRouter);
+
+import OrderRouter from './routes/orderRoutes';
+app.use('/status',OrderRouter);
+
+import inquiryRouter from './routes/InquiryListRoutes';
+app.use('/inquiry', inquiryRouter);
+
 import ReportRouter from './routes/ReportRouts';
 app.use('/report',ReportRouter)
 
 //update order status
 import OrderDistributionRoutes from './routes/OrderDistributionRoutes';
 app.use('/order', OrderDistributionRoutes);
+
+import FitonRouter from './routes/FitonRoutes'
+app.use('/fiton', FitonRouter);
+
+import searchRouter from './routes/SearchRoutes';
+app.use('/search', searchRouter);
+
 
 export default app;
 
