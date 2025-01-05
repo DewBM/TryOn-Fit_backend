@@ -43,6 +43,11 @@ app.use('/cart',CartRouter);
 app.use('/auth', authRouter);
 
 
+import inquiryListRouter from './routes/InquiryListRoutes';
+app.use('/inquirylist', inquiryListRouter);
+
+import inquiryCardsRouter from'./routes/InquiryCardsRoutes';
+app.use('/inquiryCards', inquiryCardsRouter);
 
 import PaymentRouter from './routes/PaymentRoutes';
 app.use('/merchant',PaymentRouter);
@@ -68,3 +73,5 @@ app.use('/search', searchRouter);
 
 
 export default app;
+
+
