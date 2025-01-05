@@ -62,4 +62,21 @@ export default class FastAPIClient {
             }
         }
     }
+
+    static async getImageFromAPI(image_path: any) {
+        const fastApiUrl = `http://127.0.0.1:8000/fiton?image_path=${encodeURIComponent(image_path)}`;
+
+        try {
+            const response = await fetch(fastApiUrl);
+            if (!response.ok) {
+                throw new Error(`FastAPI responded with status: ${response.status}`);
+            }
+
+            const blob = await response.arrayBuffer(); // Get the binary data
+            return Buffer.from(blob);
+        } catch (err) {
+            console.error("Error calling FastAPI:", err);
+            throw err;
+        }
+    }
 }

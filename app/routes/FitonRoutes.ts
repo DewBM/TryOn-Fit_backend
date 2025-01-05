@@ -7,5 +7,6 @@ const FitonRouter = Router();
 
 FitonRouter.post('/user', passporthMiddleware, upload.single('image'), FitonController.userImageUpload);
 FitonRouter.post('/', passporthMiddleware, FitonController.fiton);
+FitonRouter.get('/', FitonController.getGeneratedImages);
 
 export default FitonRouter;
