@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { StatusType  } from "../types/custom_types";
-import { updateStatus , fetchOrdersByStatus ,fetchAllOrders ,getItemsByOrderId } from '../services/OrderService'; 
+import { updateStatus , fetchOrdersByStatus ,fetchAllOrders ,getItemsByOrderId ,getOrderDetails} from '../services/OrderService'; 
 // Controller method to update order status
 export const doPut = async (req: Request, res: Response) => {
     const { order_id, status } = req.body; 
@@ -143,3 +143,35 @@ export const doGetOrderDetailsById = async (req: Request, res: Response) => {
       });
    }
 };
+
+
+
+
+
+export async function getOrderDetailsByOrderId(req: Request, res: Response) {
+   const { order_id } = req.params;
+
+   try {
+      const result = await getOrderDetails(Number(order_id));
+
+      if (result.isSuccess) {
+         return res.status(200).json(result);
+      } else {
+         return res.status(400).json({
+            isSuccess: result.isSuccess,
+            msg: result.msg,
+            error: result.error,
+         });
+      }
+   } catch (error: unknown) {
+      const typedError = error as Error;
+      console.error(typedError);
+
+      return res.status(500).json({
+         isSuccess: false,
+         msg: "An error occurred while fetching the order details.",
+         error: typedError.message || "Unknown error",
+      });
+   }
+};
+
