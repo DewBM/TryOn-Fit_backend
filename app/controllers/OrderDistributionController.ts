@@ -175,3 +175,50 @@ export async function getOrderDetailsByOrderId(req: Request, res: Response) {
    }
 };
 
+
+
+//  order details for DC
+
+
+
+export const fetchOrderDetails = async (req: Request, res: Response) => {
+   try {
+     const { orderId } = req.params;
+ 
+     
+     const parsedOrderId = Number(orderId);
+     if (!orderId || isNaN(parsedOrderId)) {
+       return res.status(400).json({
+         isSuccess: false,
+         msg: "Invalid order ID provided.",
+         error: "Order ID must be a valid number.",
+       });
+     }
+ 
+     
+     const serviceResponse = await getOrderDetails(parsedOrderId);
+ 
+     
+     if (serviceResponse.isSuccess) {
+       return res.status(200).json(serviceResponse);
+     }
+ 
+     
+     return res.status(404).json({
+       isSuccess: false,
+       msg: serviceResponse.msg || "Order not found.",
+       error: serviceResponse.error,
+     });
+   } catch (error: unknown) {
+     const typedError = error as Error;
+     console.error("Error in fetchOrderDetails controller:", typedError);
+ 
+     
+     return res.status(500).json({
+       isSuccess: false,
+       msg: "An internal server error occurred.",
+       error: typedError.message || "Unknown error",
+     });
+   }
+ };
+ 
