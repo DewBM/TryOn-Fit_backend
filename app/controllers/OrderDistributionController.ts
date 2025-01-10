@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { StatusType  } from "../types/custom_types";
-import { updateStatus , fetchOrdersByStatus ,fetchAllOrders ,getItemsByOrderId ,getOrderDetails} from '../services/OrderService'; 
+import { updateStatus , fetchOrdersByStatus ,fetchAllOrders ,getItemsByOrderId ,getOrderDetails,getOrderStatus} from '../services/OrderService'; 
 // Controller method to update order status
 export const doPut = async (req: Request, res: Response) => {
     const { order_id, status } = req.body; 
@@ -152,7 +152,7 @@ export async function getOrderDetailsByOrderId(req: Request, res: Response) {
    const { order_id } = req.params;
 
    try {
-      const result = await getOrderDetails(Number(order_id));
+      const result = await getOrderStatus(Number(order_id));
 
       if (result.isSuccess) {
          return res.status(200).json(result);
