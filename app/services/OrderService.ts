@@ -35,7 +35,12 @@ export async function fetchAllOrders() {
    return await getAllOrders();
 }
 
+//get order sttaus byID
 
+
+export async function getOrderStatus(order_id: number) {
+  return await queryOrderDetails(order_id);
+}
 
 // new order view part 
 
