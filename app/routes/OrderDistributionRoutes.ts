@@ -19,6 +19,10 @@ OrderDistributionRouter.get('/getOrdersById/:id', OrderDistributionController.do
 
 OrderDistributionRouter.get('/fetchOrderDetails/:orderId', OrderDistributionController.fetchOrderDetails);
 
+// Total orders - Today
+
+OrderDistributionRouter.get('/getTotalOrdersToday', OrderDistributionController.getTotalOrdersToday);
+
 export default OrderDistributionRouter;
 
 

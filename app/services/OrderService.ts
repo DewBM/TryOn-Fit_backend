@@ -1,4 +1,4 @@
-import { insertNewOrder, queryItemsByOrderId, queryOrders, queryOrdersByCustomer, updateOrderStatus , getOrdersByStatus ,queryOrderDetails , getOrderById , getOrderSummary , getProductVariantById , getOrderItems} from "../db/dao/orderDAO";
+import { insertNewOrder, queryItemsByOrderId, queryOrders, queryOrdersByCustomer, updateOrderStatus , getOrdersByStatus ,queryOrderDetails , getOrderById , getOrderSummary , getProductVariantById , getOrderItems , getTotalOrdersToday} from "../db/dao/orderDAO";
 import { OrderInsert, OrderItemInsert } from "../db/schema/Order";
 import { StatusType } from "../types/custom_types"
 
@@ -125,4 +125,34 @@ export const getOrderDetails = async (orderId: number) => {
  };
  
  
- 
+ // total orders - Today
+
+ export async function fetchTotalOrdersForToday() {
+  try {
+     const response = await getTotalOrdersToday();
+
+     if (!response.isSuccess) {
+        return {
+           isSuccess: false,
+           msg: response.msg || "Unable to fetch total orders for today.",
+           data: null,
+           error: response.error || "Unknown error occurred.",
+        };
+     }
+
+     return {
+        isSuccess: true,
+        msg: "Successfully fetched total orders for today.",
+        data: response.data, 
+        error: "",
+     };
+  } catch (error) {
+     console.error("Service Error:", error);
+     return {
+        isSuccess: false,
+        msg: "An error occurred while fetching total orders for today.",
+        data: null,
+        error: error instanceof Error ? error.message : String(error),
+     };
+  }
+}

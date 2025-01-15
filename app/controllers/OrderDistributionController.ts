@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { StatusType  } from "../types/custom_types";
-import { updateStatus , fetchOrdersByStatus ,fetchAllOrders ,getItemsByOrderId ,getOrderDetails,getOrderStatus} from '../services/OrderService'; 
+import { updateStatus , fetchOrdersByStatus ,fetchAllOrders ,getItemsByOrderId ,getOrderDetails,getOrderStatus , fetchTotalOrdersForToday} from '../services/OrderService'; 
 // Controller method to update order status
 export const doPut = async (req: Request, res: Response) => {
     const { order_id, status } = req.body; 
@@ -222,3 +222,33 @@ export const fetchOrderDetails = async (req: Request, res: Response) => {
    }
  };
  
+
+ // total orders - Today
+
+ export async function getTotalOrdersToday(req: Request, res: Response) {
+   console.log("Inside getTotalOrdersToday controller");
+   try {
+      const serviceResponse = await fetchTotalOrdersForToday();
+
+      if (!serviceResponse.isSuccess) {
+         return res.status(500).json({
+            success: false,
+            message: serviceResponse.msg,
+            error: serviceResponse.error,
+         });
+      }
+
+      return res.status(200).json({
+         success: true,
+         message: serviceResponse.msg,
+         data: serviceResponse.data, 
+      });
+   } catch (error) {
+      console.error("Controller Error:", error);
+      return res.status(500).json({
+         success: false,
+         message: "An unexpected error occurred while fetching total orders.",
+         error: error instanceof Error ? error.message : String(error),
+      });
+   }
+}
