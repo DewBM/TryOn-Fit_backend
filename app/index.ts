@@ -52,8 +52,8 @@ app.use('/inquiryCards', inquiryCardsRouter);
 import PaymentRouter from './routes/PaymentRoutes';
 app.use('/merchant',PaymentRouter);
 
-import OrderRouter from './routes/orderRoutes';
-app.use('/status',OrderRouter);
+import OrderRouter from './routes/OrderRoutes';
+app.use('/order',OrderRouter);
 
 import inquiryRouter from './routes/InquiryListRoutes';
 app.use('/inquiry', inquiryRouter);
