@@ -39,10 +39,11 @@ export async function fetchAllOrders() {
    return await getAllOrders();
 }
 
+//get order sttaus byID
 
 
-export async function getOrderDetails(order_id: number) {
-   return await queryOrderDetails(order_id);
+export async function getOrderStatus(order_id: number) {
+  return await queryOrderDetails(order_id);
 }
 
 
@@ -54,3 +55,84 @@ export async function getorderstatuspage(order_id:number){
 export async function fetchOrderId(customer_id:number){
    return await getOrderIdsByCustomerId(customer_id);
 }
+// new order view part 
+
+
+export const getOrderDetails = async (orderId: number) => {
+   try {
+     // Fetch order and related data concurrently for better performance
+     const [orderResponse, itemsResponse, summaryResponse] = await Promise.all([
+       getOrderById(orderId),
+       getOrderItems(orderId),
+       getOrderSummary(orderId),
+     ]);
+ 
+     // Validate order response
+     if (!orderResponse.isSuccess || !orderResponse.data) {
+       return {
+         isSuccess: false,
+         msg: "Order not found.",
+         data: null,
+         error: orderResponse.error,
+       };
+     }
+     const order = orderResponse.data;
+ 
+     // Validate items response
+     if (!itemsResponse.isSuccess) {
+       return {
+         isSuccess: false,
+         msg: "Failed to fetch order items.",
+         data: null,
+         error: itemsResponse.error,
+       };
+     }
+     const items = itemsResponse.data;
+ 
+     // Enrich items with variant details
+     const enrichedItems = await Promise.all(
+       items.map(async (item) => {
+         if (item.item_id) {
+           const variantResponse = await getProductVariantById(item.item_id);
+           return {
+             ...item,
+             variant: variantResponse.isSuccess ? variantResponse.data : null,
+           };
+         }
+         return { ...item, variant: null };
+       })
+     );
+ 
+     // Validate summary response
+     if (!summaryResponse.isSuccess) {
+       return {
+         isSuccess: false,
+         msg: "Failed to fetch order summary.",
+         data: null,
+         error: summaryResponse.error,
+       };
+     }
+     const summary = summaryResponse.data;
+ 
+     return {
+       isSuccess: true,
+       msg: "Order details fetched successfully.",
+       data: {
+         order,
+         items: enrichedItems,
+         summary,
+       },
+       error: "",
+     };
+   } catch (error: unknown) {
+     const typedError = error as Error;
+     console.error("Error in getOrderDetails service:", typedError);
+ 
+     return {
+       isSuccess: false,
+       msg: "An error occurred while fetching order details.",
+       data: null,
+       error: typedError.message || "Unknown error",
+     };
+   }
+ };
