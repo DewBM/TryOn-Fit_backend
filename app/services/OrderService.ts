@@ -1,4 +1,4 @@
-import { insertNewOrder, queryItemsByOrderId, queryOrders, queryOrdersByCustomer, updateOrderStatus , getOrdersByStatus ,queryOrderDetails , getOrderById , getOrderSummary , getProductVariantById , getOrderItems , getTotalOrdersToday} from "../db/dao/orderDAO";
+import { insertNewOrder, queryItemsByOrderId, queryOrders, queryOrdersByCustomer, updateOrderStatus , getOrdersByStatus ,queryOrderDetails , getOrderById , getOrderSummary , getProductVariantById , getOrderItems , getTotalOrdersToday , getTotalConfirmedOrders , getTotalProcessingOrders , getTotalShippedOrders} from "../db/dao/orderDAO";
 import { OrderInsert, OrderItemInsert } from "../db/schema/Order";
 import { StatusType } from "../types/custom_types"
 
@@ -154,5 +154,114 @@ export const getOrderDetails = async (orderId: number) => {
         data: null,
         error: error instanceof Error ? error.message : String(error),
      };
+  }
+}
+
+// order status condiremed 
+
+export async function fetchTotalConfirmedOrders() {
+  try {
+    
+    const daoResponse = await getTotalConfirmedOrders();
+
+    if (!daoResponse.isSuccess) {
+      return {
+        isSuccess: false,
+        data: 0,
+        msg: "Failed to fetch total confirmed orders.",
+        error: daoResponse.error,
+      };
+    }
+
+    
+    const totalOrders = daoResponse.data;
+
+    return {
+      isSuccess: true,
+      data: totalOrders,
+      msg: "Successfully retrieved total confirmed orders.",
+      error: "",
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      isSuccess: false,
+      data: 0,
+      msg: "An unexpected error occurred in the service layer.",
+      error: e instanceof Error ? e.message : String(e),
+    };
+  }
+}
+
+// order status Processing
+
+export async function fetchTotalProcessingOrders() {
+  try {
+    
+    const daoResponse = await getTotalProcessingOrders();
+
+    if (!daoResponse.isSuccess) {
+      return {
+        isSuccess: false,
+        data: 0,
+        msg: "Failed to fetch total processing orders.",
+        error: daoResponse.error,
+      };
+    }
+
+    
+    const totalOrders = daoResponse.data;
+
+    return {
+      isSuccess: true,
+      data: totalOrders,
+      msg: "Successfully retrieved total processing orders.",
+      error: "",
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      isSuccess: false,
+      data: 0,
+      msg: "An unexpected error occurred in the service layer.",
+      error: e instanceof Error ? e.message : String(e),
+    };
+  }
+}
+
+
+// order status Shipped
+
+export async function fetchTotalShippedOrders() {
+  try {
+    
+    const daoResponse = await getTotalShippedOrders();
+
+    if (!daoResponse.isSuccess) {
+      return {
+        isSuccess: false,
+        data: 0,
+        msg: "Failed to fetch total shipped orders.",
+        error: daoResponse.error,
+      };
+    }
+
+    
+    const totalOrders = daoResponse.data;
+
+    return {
+      isSuccess: true,
+      data: totalOrders,
+      msg: "Successfully retrieved total shiiped orders.",
+      error: "",
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      isSuccess: false,
+      data: 0,
+      msg: "An unexpected error occurred in the service layer.",
+      error: e instanceof Error ? e.message : String(e),
+    };
   }
 }

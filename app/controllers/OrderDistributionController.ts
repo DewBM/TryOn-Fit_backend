@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { StatusType  } from "../types/custom_types";
-import { updateStatus , fetchOrdersByStatus ,fetchAllOrders ,getItemsByOrderId ,getOrderDetails,getOrderStatus , fetchTotalOrdersForToday} from '../services/OrderService'; 
+import { updateStatus , fetchOrdersByStatus ,fetchAllOrders ,getItemsByOrderId ,getOrderDetails,getOrderStatus , fetchTotalOrdersForToday , fetchTotalConfirmedOrders , fetchTotalProcessingOrders , fetchTotalShippedOrders} from '../services/OrderService'; 
 // Controller method to update order status
 export const doPut = async (req: Request, res: Response) => {
     const { order_id, status } = req.body; 
@@ -252,3 +252,64 @@ export const fetchOrderDetails = async (req: Request, res: Response) => {
       });
    }
 }
+
+
+// order status - confiremed 
+
+export async function getTotalConfirmedOrders(req:Request, res:Response) {
+   const response = await fetchTotalConfirmedOrders();
+ 
+   if (!response.isSuccess) {
+     return res.status(500).json({
+       success: false,
+       message: response.msg,
+       error: response.error,
+     });
+   }
+ 
+   res.status(200).json({
+     success: true,
+     data: response.data,
+     message: response.msg,
+   });
+ }
+
+ // order status - confiremed 
+
+export async function getTotalProcessingOrders(req:Request, res:Response) {
+   const response = await fetchTotalProcessingOrders();
+ 
+   if (!response.isSuccess) {
+     return res.status(500).json({
+       success: false,
+       message: response.msg,
+       error: response.error,
+     });
+   }
+ 
+   res.status(200).json({
+     success: true,
+     data: response.data,
+     message: response.msg,
+   });
+ }
+
+ // order status - shipped 
+
+export async function getTotalShippedOrders(req:Request, res:Response) {
+   const response = await fetchTotalShippedOrders();
+ 
+   if (!response.isSuccess) {
+     return res.status(500).json({
+       success: false,
+       message: response.msg,
+       error: response.error,
+     });
+   }
+ 
+   res.status(200).json({
+     success: true,
+     data: response.data,
+     message: response.msg,
+   });
+ }

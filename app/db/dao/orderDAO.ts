@@ -442,3 +442,94 @@ export async function getTotalOrdersToday() {
     };
   }
 }
+
+//order status- confirmend 
+
+export async function getTotalConfirmedOrders() {
+   try {
+     const result = await db
+       .select({
+         totalOrders: sql`COUNT(*)`.as("total_orders"),
+       })
+       .from(ordersTable)
+       .where(
+         sql`${ordersTable.order_status} = 'Confirmed'`
+       );
+ 
+     return {
+       isSuccess: true,
+       data: result[0]?.totalOrders || 0,
+       msg: "Total confirmed orders fetched successfully.",
+       error: "",
+     };
+   } catch (e) {
+     console.error(e);
+     return {
+       isSuccess: false,
+       data: 0,
+       msg: "Failed to fetch total confirmed orders.",
+       error: e instanceof Error ? e.message : String(e),
+     };
+   }
+ }
+
+ //order status- processing
+
+ export async function getTotalProcessingOrders() {
+   try {
+     const result = await db
+       .select({
+         totalOrders: sql`COUNT(*)`.as("total_orders"),
+       })
+       .from(ordersTable)
+       .where(
+         sql`${ordersTable.order_status} = 'Processing'`
+       );
+ 
+     return {
+       isSuccess: true,
+       data: result[0]?.totalOrders || 0,
+       msg: "Total processing orders fetched successfully.",
+       error: "",
+     };
+   } catch (e) {
+     console.error(e);
+     return {
+       isSuccess: false,
+       data: 0,
+       msg: "Failed to fetch total processing orders.",
+       error: e instanceof Error ? e.message : String(e),
+     };
+   }
+ }
+
+
+ //order status- shipped
+
+ export async function getTotalShippedOrders() {
+   try {
+     const result = await db
+       .select({
+         totalOrders: sql`COUNT(*)`.as("total_orders"),
+       })
+       .from(ordersTable)
+       .where(
+         sql`${ordersTable.order_status} = 'Shipped'`
+       );
+ 
+     return {
+       isSuccess: true,
+       data: result[0]?.totalOrders || 0,
+       msg: "Total Shipped orders fetched successfully.",
+       error: "",
+     };
+   } catch (e) {
+     console.error(e);
+     return {
+       isSuccess: false,
+       data: 0,
+       msg: "Failed to fetch total shipped orders.",
+       error: e instanceof Error ? e.message : String(e),
+     };
+   }
+ }

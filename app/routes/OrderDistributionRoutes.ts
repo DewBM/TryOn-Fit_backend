@@ -23,6 +23,15 @@ OrderDistributionRouter.get('/fetchOrderDetails/:orderId', OrderDistributionCont
 
 OrderDistributionRouter.get('/getTotalOrdersToday', OrderDistributionController.getTotalOrdersToday);
 
+// order status- confirmed
+OrderDistributionRouter.get('/getTotalConfirmedOrders', OrderDistributionController.getTotalConfirmedOrders);
+
+// order status- processing
+OrderDistributionRouter.get('/getTotalProcessingOrders', OrderDistributionController.getTotalProcessingOrders);
+
+// order status- shipped
+OrderDistributionRouter.get('/getTotalShippedOrders', OrderDistributionController.getTotalShippedOrders);
+
 export default OrderDistributionRouter;
 
 
