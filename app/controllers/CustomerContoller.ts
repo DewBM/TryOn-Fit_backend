@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { getAddressByCustomerId } from "../db/dao/addressDAO";
 import { updateCustomerByCustomerId } from "../services/CustomerService";
 import { updateAddressByCustomerId } from "../db/dao/addressDAO";
-import { getCustomerByCustomerId,storeBodyMeasurements} from "../services/CustomerService";
+import { getCustomerByCustomerId,storeBodyMeasurements,getCustomerId} from "../services/CustomerService";
 
 export async function doGet(req: Request, res: Response) {
   try {
@@ -174,3 +174,29 @@ export async function addMeasurements(req: Request, res: Response) {
     res.status(500).json(result);
   }
 }
+
+
+
+
+export async function  doGetCustomerId(req: Request, res: Response) {
+  try {
+    // Extract `user_id` from query parameters or request body
+    const userId = parseInt(req.query.user_id as string);
+
+    if (isNaN(userId)) {
+      return res.status(400).json({ message: "Invalid or missing user_id" });
+    }
+
+    // Call the service function to fetch the customer_id
+    const customerId = await getCustomerId(userId);
+
+    if (customerId) {
+      return res.status(200).json({ customer_id: customerId });
+    } else {
+      return res.status(404).json({ message: "Customer not found for the provided user_id" });
+    }
+  } catch (error) {
+    console.error("Error fetching customer_id:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};

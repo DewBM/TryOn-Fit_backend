@@ -53,7 +53,7 @@ import PaymentRouter from './routes/PaymentRoutes';
 app.use('/merchant',PaymentRouter);
 
 import OrderRouter from './routes/orderRoutes';
-app.use('/status',OrderRouter);
+app.use('/order',OrderRouter);
 
 import inquiryRouter from './routes/InquiryListRoutes';
 app.use('/inquiry', inquiryRouter);

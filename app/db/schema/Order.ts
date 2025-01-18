@@ -36,7 +36,7 @@ export const ordersTable = pgTable('order', {
    sub_total: numeric('sub_total'),
    discount: numeric('discount'),
 });
-
+export type OrderInsert = typeof ordersTable.$inferInsert;
 
 export const orderItemsTable = pgTable('order_item', {
    order_id: integer('order_id').references(()=> ordersTable.order_id),
@@ -47,6 +47,7 @@ export const orderItemsTable = pgTable('order_item', {
 }, (table) => ({
    pk: primaryKey({columns: [table.order_id, table.item_id]})
 }));
+export type OrderItemInsert = typeof orderItemsTable.$inferInsert;
 
 export const productVariantsTable = pgTable('product_variants', {
    variant_id: text('variant_id').primaryKey(),
@@ -65,8 +66,8 @@ export const productVariantsTable = pgTable('product_variants', {
 
 export type ProductVariantInsert = typeof productVariantsTable.$inferInsert;
 
-export type OrderInsert = typeof ordersTable.$inferInsert;
-export type OrderItemInsert = typeof orderItemsTable.$inferInsert;
+
+
 
 //////////////////
 export type ProductInsert = typeof productTable.$inferInsert;

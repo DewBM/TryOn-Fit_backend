@@ -1,4 +1,5 @@
-import { insertNewOrder, queryItemsByOrderId, queryOrders, queryOrdersByCustomer, updateOrderStatus , getOrdersByStatus ,queryOrderDetails , getOrderById , getOrderSummary , getProductVariantById , getOrderItems , getTotalOrdersToday , getTotalConfirmedOrders , getTotalProcessingOrders , getTotalShippedOrders} from "../db/dao/orderDAO";
+import { insertNewOrder, queryItemsByOrderId, queryOrders, queryOrdersByCustomer, updateOrderStatus , getOrdersByStatus ,queryOrderDetails , getOrderById , getOrderSummary , getProductVariantById , getOrderItems , getTotalOrdersToday , getTotalConfirmedOrders , getTotalProcessingOrders , getTotalShippedOrders , insertOrder, getOrderItemswithVarientDetails,getOrderIdsByCustomerId,} from "../db/dao/orderDAO";
+
 import { OrderInsert, OrderItemInsert } from "../db/schema/Order";
 import { StatusType } from "../types/custom_types"
 
@@ -19,6 +20,10 @@ export async function getOrdersByCustomer(customer_id: number) {
 
 export async function createOrder(order: OrderInsert & {order_items: OrderItemInsert[]}) {
    return await insertNewOrder(order);
+}
+
+export async function createnewOrder(order:OrderInsert) {
+   return await insertOrder(order);
 }
 
 
@@ -42,6 +47,15 @@ export async function getOrderStatus(order_id: number) {
   return await queryOrderDetails(order_id);
 }
 
+
+export async function getorderstatuspage(order_id:number){
+   return await getOrderItemswithVarientDetails(order_id);
+}
+
+
+export async function fetchOrderId(customer_id:number){
+   return await getOrderIdsByCustomerId(customer_id);
+}
 // new order view part 
 
 
@@ -122,6 +136,7 @@ export const getOrderDetails = async (orderId: number) => {
        error: typedError.message || "Unknown error",
      };
    }
+
  };
  
  
@@ -265,3 +280,6 @@ export async function fetchTotalShippedOrders() {
     };
   }
 }
+
+ };
+
