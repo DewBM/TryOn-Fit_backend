@@ -280,6 +280,3 @@ export async function fetchTotalShippedOrders() {
     };
   }
 }
-
- };
-
