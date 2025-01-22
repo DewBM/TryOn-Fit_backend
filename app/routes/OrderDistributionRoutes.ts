@@ -32,6 +32,9 @@ OrderDistributionRouter.get('/getTotalProcessingOrders', OrderDistributionContro
 // order status- shipped
 OrderDistributionRouter.get('/getTotalShippedOrders', OrderDistributionController.getTotalShippedOrders);
 
+// order volume- chart
+OrderDistributionRouter.get('/getWeeklyOrderVolume', OrderDistributionController.getWeeklyOrderVolume);
+
 export default OrderDistributionRouter;
 
 

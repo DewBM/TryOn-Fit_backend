@@ -1,4 +1,4 @@
-import { insertNewOrder, queryItemsByOrderId, queryOrders, queryOrdersByCustomer, updateOrderStatus , getOrdersByStatus ,queryOrderDetails , getOrderById , getOrderSummary , getProductVariantById , getOrderItems , getTotalOrdersToday , getTotalConfirmedOrders , getTotalProcessingOrders , getTotalShippedOrders , insertOrder, getOrderItemswithVarientDetails,getOrderIdsByCustomerId,} from "../db/dao/orderDAO";
+import { insertNewOrder, queryItemsByOrderId, queryOrders, queryOrdersByCustomer, updateOrderStatus , getOrdersByStatus ,queryOrderDetails , getOrderById , getOrderSummary , getProductVariantById , getOrderItems , getTotalOrdersToday , getTotalConfirmedOrders , getTotalProcessingOrders , getTotalShippedOrders , insertOrder, getOrderItemswithVarientDetails,getOrderIdsByCustomerId, getWeeklyOrderVolume} from "../db/dao/orderDAO";
 
 import { OrderInsert, OrderItemInsert } from "../db/schema/Order";
 import { StatusType } from "../types/custom_types"
@@ -280,3 +280,33 @@ export async function fetchTotalShippedOrders() {
     };
   }
 }
+
+
+// order volume - chart 
+
+export const fetchWeeklyOrderVolume = async () => {
+  try {
+    const result = await getWeeklyOrderVolume();
+    
+    if (result.isSuccess) {
+      return {
+        success: true,
+        data: result.data,
+        message: result.msg,
+      };
+    } else {
+      return {
+        success: false,
+        message: result.msg,
+        error: result.error,
+      };
+    }
+  } catch (error) {
+    console.error("Error fetching weekly order volume:", error);
+    return {
+      success: false,
+      message: "Error fetching weekly order volume",
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
+};

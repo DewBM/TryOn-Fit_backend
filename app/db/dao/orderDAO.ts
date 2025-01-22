@@ -767,3 +767,53 @@ export async function getOrderIdsByCustomerId(customerId: number): Promise<numbe
    }
 
  }
+
+
+ // order volume - chart
+
+export async function getWeeklyOrderVolume() {
+  try {
+    const today = new Date();
+
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay()); 
+
+    const endOfWeek = new Date(startOfWeek); 
+    endOfWeek.setDate(startOfWeek.getDate() + 6); 
+
+    const startDate = startOfWeek.toISOString().split("T")[0];
+    const endDate = endOfWeek.toISOString().split("T")[0];
+
+    console.log("Start of the week:", startDate);
+    console.log("End of the week:", endDate);
+
+    const result = await db
+      .select({
+        date: sql`DATE(${ordersTable.order_date})`.as("date"), 
+        totalOrders: sql`COUNT(*)`.as("total_orders"),
+      })
+      .from(ordersTable)
+      .where(
+        sql`${ordersTable.order_date} BETWEEN ${startDate} AND ${endDate}`
+      )
+      .groupBy(sql`DATE(${ordersTable.order_date})`)
+      .orderBy(sql`DATE(${ordersTable.order_date}) DESC`);  
+
+    const reversedResult = result.reverse();
+
+    return {
+      isSuccess: true,
+      data: reversedResult || [],
+      msg: "Weekly order volume fetched successfully.",
+      error: "",
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      isSuccess: false,
+      data: [],
+      msg: "Failed to fetch weekly order volume.",
+      error: e instanceof Error ? e.message : String(e),
+    };
+  }
+}
