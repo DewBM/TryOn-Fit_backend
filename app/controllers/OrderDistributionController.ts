@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { StatusType  } from "../types/custom_types";
-import { updateStatus , fetchOrdersByStatus ,fetchAllOrders ,getItemsByOrderId ,getOrderDetails,getOrderStatus , fetchTotalOrdersForToday , fetchTotalConfirmedOrders , fetchTotalProcessingOrders , fetchTotalShippedOrders} from '../services/OrderService'; 
+import { updateStatus , fetchOrdersByStatus ,fetchAllOrders ,getItemsByOrderId ,getOrderDetails,getOrderStatus , fetchTotalOrdersForToday , fetchTotalConfirmedOrders , fetchTotalProcessingOrders , fetchTotalShippedOrders , fetchWeeklyOrderVolume} from '../services/OrderService'; 
 // Controller method to update order status
 export const doPut = async (req: Request, res: Response) => {
     const { order_id, status } = req.body; 
@@ -313,3 +313,33 @@ export async function getTotalShippedOrders(req:Request, res:Response) {
      message: response.msg,
    });
  }
+
+
+ //order volume - chart
+
+ export const getWeeklyOrderVolume = async (req: Request, res: Response) => {
+   try {
+     const result = await fetchWeeklyOrderVolume();
+     
+     if (result.success) {
+       return res.status(200).json({
+         success: true,
+         data: result.data,
+         message: result.message,
+       });
+     } else {
+       return res.status(500).json({
+         success: false,
+         message: result.message,
+         error: result.error,
+       });
+     }
+   } catch (error) {
+     console.error("Error in getWeeklyOrderVolume controller:", error);
+     return res.status(500).json({
+       success: false,
+       message: "Internal Server Error",
+       error: error instanceof Error ? error.message : String(error),
+     });
+   }
+ };
