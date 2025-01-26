@@ -39,4 +39,10 @@ productRrouter.post('/excel_template', passporthMiddleware, authenticate(['SK'])
 //    router.get('/', getClothItems)
 // }
 
+
+//Total products
+productRrouter.get("/fetchTotalProducts", ProductController.fetchTotalProducts);
+
+//Total catergories
+productRrouter.get("/fetchTotalCategories", ProductController.fetchTotalCategories);
 export default productRrouter;

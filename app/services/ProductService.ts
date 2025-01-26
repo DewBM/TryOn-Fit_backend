@@ -1,5 +1,5 @@
 import path from "path";
-import { getAllProducts, insertProduct, queryProducts, queryVariantById, getProductDetailsByVariantId, getProductIdByVariantDAO } from "../db/dao/productDAO";
+import { getAllProducts, insertProduct, queryProducts, queryVariantById, getProductDetailsByVariantId, getProductIdByVariantDAO , getTotalNumberOfProducts , getTotalNumberOfCategories } from "../db/dao/productDAO";
 import { createProductTemplate, readProductExcel } from "../utils/excel";
 import { Product } from "../types/custom_types";
 import { getImageById } from "../utils/imgHandler";
@@ -63,3 +63,39 @@ export async function getProductIdByVariant(variant_id: string) {
 export async function generateProductTemplate(supplier_id: string, category: string) {
    return await createProductTemplate(supplier_id, category);
 }
+
+
+// Total no of products
+
+export async function fetchTotalNumberOfProducts() {
+   try {
+     const result = await getTotalNumberOfProducts();
+     return result;
+   } catch (error) {
+     console.error("Error in getTotalNumberOfProductsService:", error);
+     return {
+       isSuccess: false,
+       data: null,
+       msg: "Service layer error while fetching total number of products",
+       error,
+     };
+   }
+ }
+
+
+ //Total catergories
+
+ export async function fetchTotalNumberOfCategories() {
+   try {
+     const result = await getTotalNumberOfCategories();
+     return result;
+   } catch (error) {
+     console.error("Error in fetchTotalNumberOfCategoriesService:", error);
+     return {
+       isSuccess: false,
+       data: null,
+       msg: "Service layer error while fetching total number of categories",
+       error,
+     };
+   }
+ }

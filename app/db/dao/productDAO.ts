@@ -243,3 +243,55 @@ export async function getProductIdByVariantDAO(variant_id: string) {
     };
   }
 }
+
+
+// Total products 
+
+export async function getTotalNumberOfProducts() {
+  try {
+    const result = await db
+      .select({ count: sql<number>`COUNT(*)` }) 
+      .from(productsTable);
+
+    return {
+      isSuccess: true,
+      data: result[0]?.count || 0, 
+      msg: "Total number of products fetched successfully",
+      error: "",
+    };
+  } catch (error) {
+    console.error("Error fetching total number of products:", error);
+    return {
+      isSuccess: false,
+      data: null,
+      msg: "Couldn't fetch total number of products",
+      error,
+    };
+  }
+}
+
+
+//Total catergories 
+
+export async function getTotalNumberOfCategories() {
+  try {
+    const result = await db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(categoriesTable);
+
+    return {
+      isSuccess: true,
+      data: result[0]?.count || 0,
+      msg: "Total number of categories fetched successfully",
+      error: "",
+    };
+  } catch (error) {
+    console.error("Error fetching total number of categories:", error);
+    return {
+      isSuccess: false,
+      data: null,
+      msg: "Couldn't fetch total number of categories",
+      error,
+    };
+  }
+}
