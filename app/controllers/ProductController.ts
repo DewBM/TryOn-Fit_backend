@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import * as ProductService from '../services/ProductService';
-import { fetchTotalNumberOfProducts , fetchTotalNumberOfCategories } from '../services/ProductService';
+import { fetchTotalNumberOfProducts , fetchTotalNumberOfCategories , fetchLowStockProducts ,fetchLowStockVariantCount } from '../services/ProductService';
 const { v4: uuidv4 } = require('uuid');
 
 export async function doGet(req: Request, res: Response) {
@@ -114,3 +114,52 @@ export async function fetchTotalProducts(req: Request, res: Response) {
      });
    }
  }
+
+
+ // low stock products
+
+ export async function getAllLowStockProducts(req: Request, res: Response) {
+  const result = await fetchLowStockProducts();
+
+  if (result.isSuccess) {
+    res.status(200).json({
+      success: true,
+      message: result.msg,
+      data: result.data,
+    });
+  } else {
+    res.status(500).json({
+      success: false,
+      message: result.msg,
+      error: result.error,
+    });
+  }
+}
+
+// low quantity count
+
+export async function getLowStockVariantCount(req: Request, res: Response) {
+  try {
+    const result = await fetchLowStockVariantCount(); 
+
+    if (result.isSuccess) {
+      res.status(200).json({
+        success: true,
+        message: result.msg,
+        data: result.data,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: result.msg,
+        error: result.error,
+      });
+    }
+  } catch (error) {
+    console.error("Error in controller:", error);
+    res.status(500).json({
+      success: false,
+      message: "An unexpected error occurred.",
+    });
+  }
+}

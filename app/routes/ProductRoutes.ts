@@ -45,4 +45,10 @@ productRrouter.get("/fetchTotalProducts", ProductController.fetchTotalProducts);
 
 //Total catergories
 productRrouter.get("/fetchTotalCategories", ProductController.fetchTotalCategories);
+
+//low quantity products
+productRrouter.get("/getAllLowStockProducts", ProductController.getAllLowStockProducts);
+
+//low quantity products count
+productRrouter.get("/getLowStockVariantCount", ProductController.getLowStockVariantCount);
 export default productRrouter;
