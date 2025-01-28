@@ -11,6 +11,11 @@ OrderRouter.get('/getstatus', passporthMiddleware, OrderController. getstatus);
 OrderRouter.get('/getorderId', passporthMiddleware, OrderController.getorderId);
 OrderRouter.post('/',  OrderController.doPost);
 
+//sales
+
+OrderRouter.get ('/getTotalSalesPerMonth', OrderController.getTotalSalesPerMonth);
+
+
 
 
 
