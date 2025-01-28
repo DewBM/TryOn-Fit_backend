@@ -1,14 +1,9 @@
-import {
-  integer,
-  pgEnum,
-  pgTable,
-  serial,
-  text,
-  uniqueIndex,
-  varchar,
-} from "drizzle-orm/pg-core";
+
 import { users } from "./User";
 import { addressesTable } from "./Address";
+import { GenderType } from "../../types/custom_types";
+import { integer, numeric, pgTable, serial, bigint, text ,pgEnum} from "drizzle-orm/pg-core";
+const genderEnum = pgEnum('gender', ['Male', 'Female', 'Unisex']);
 
 export const customersTable = pgTable("Customer", {
   customer_id: serial("customer_id").primaryKey(),
@@ -44,6 +39,16 @@ export const bodyMeasurementsTable = pgTable("body_measurement", {
   bicep: integer("bicep"),
 });
 
+
+export const customers = pgTable("Customer", {
+  customerId: bigint("customer_id", { mode: "number" }).primaryKey(),
+  userId: integer("user_id").references(() => users.userId),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  email: text("email"),
+  phone: text("phone"),
+  gender: genderEnum("gender"),
+});
 export type SelectCustomer = typeof customersTable.$inferSelect;
 // export type SelectAddress = typeof addressesTable.$inferSelect;
 export type SelectBodyMeasurements = typeof bodyMeasurementsTable.$inferSelect;
