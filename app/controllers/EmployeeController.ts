@@ -17,6 +17,7 @@ export async function doPost( req: Request , resp: Response){
     
     try {
         const data = await createEmployee(req.body);
+        console.log(data);
         resp.status(201).send(data);
     } catch (error) {
         resp.status(500).send({ error: 'Failed to create employee' });
@@ -39,12 +40,13 @@ export async function doPut(req : Request , resp : Response) {
 }
 
 export async function doDel(req : Request , resp : Response) {
+    
        
     const id = 27;
-    console.log(id);
+    console.log(req.body);
     try {
         const data = await deleteEmployee( req.body);
-        
+        return resp.status(200).send("Successfully deleted");
         resp.status(201).send(data);
     } catch (error) {
         resp.status(500).send({ error: 'Failed to update employee' });

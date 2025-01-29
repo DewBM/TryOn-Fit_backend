@@ -4,6 +4,18 @@ import { suppliersTable } from "../schema/Supplier"
 import {SelectSupllier} from "../schema/Supplier"
 import { sql } from "drizzle-orm";
 
+interface supDataType {
+    supplier_id: string;
+    first_name: string;
+    last_name: string;
+    brand_name: string;
+    contact_no: string;
+    address: string;
+    email: string;
+    status: string;
+    register_date: string;
+  }
+
 export async function getAllSupplier() {
     try{
         return db.query.suppliersTable.findMany();
@@ -36,7 +48,7 @@ export async function createNewSupplier(supData:SelectSupllier) {
     }
 }
 
-export async function updateSupplierData(supData:SelectSupllier) {
+export async function updateSupplierData(supData:supDataType) {
     console.log(supData)
     const id = supData.supplier_id
     try{
@@ -49,7 +61,7 @@ export async function updateSupplierData(supData:SelectSupllier) {
                 address: supData.address,
                 email: supData.email,
                 register_date : supData.register_date,
-                status: supData.status
+                // status: supData.status
             
          })
         .where(eq(suppliersTable.supplier_id,id));

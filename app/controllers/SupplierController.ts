@@ -14,6 +14,7 @@ export async function doGet( req : Request , resp : Response){
 
 
 export async function doPost( req: Request , resp: Response){
+    console.log("huuuuuu");
     
     try {
         const data = await createSupplier(req.body);
@@ -25,6 +26,7 @@ export async function doPost( req: Request , resp: Response){
 
 export async function doPut(req : Request , resp : Response) {
     const supid ="";
+    
     
     try{
         const data = await updateSupplier(req.body);

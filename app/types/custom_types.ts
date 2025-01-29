@@ -41,6 +41,12 @@ export type Product = {
    price: string,
    variants: VariantType[],
 };
+export type storeManagerDashboardTypes = {
+   totalEmployees: number,
+   totalProducts: number,
+   totalSuppliers: number,
+   revenue: number,
+}
 
 
 // types/custom_types.ts
