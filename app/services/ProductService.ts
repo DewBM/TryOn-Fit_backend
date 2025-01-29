@@ -1,5 +1,5 @@
 import path from "path";
-import { getAllProducts, insertProduct, queryProducts, queryVariantById, getProductDetailsByVariantId, getProductIdByVariantDAO } from "../db/dao/productDAO";
+import { getAllProducts, insertProduct, queryProducts, queryVariantById, getProductDetailsByVariantId, getProductIdByVariantDAO ,getProductFrontImageByVariantId} from "../db/dao/productDAO";
 import { createProductTemplate, readProductExcel } from "../utils/excel";
 import { Product } from "../types/custom_types";
 import { getImageById } from "../utils/imgHandler";
@@ -62,4 +62,9 @@ export async function getProductIdByVariant(variant_id: string) {
 
 export async function generateProductTemplate(supplier_id: string, category: string) {
    return await createProductTemplate(supplier_id, category);
+}
+
+
+export async function getProductFrontImageByVariant(variant_id: string) {
+   return await getProductFrontImageByVariantId(variant_id);
 }

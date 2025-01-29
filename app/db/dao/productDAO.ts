@@ -243,3 +243,37 @@ export async function getProductIdByVariantDAO(variant_id: string) {
     };
   }
 }
+
+export async function getProductFrontImageByVariantId(variant_id: string) {
+  try {
+    const variant = await db
+      .select({ img_front: productVariantsTable.img_front })
+      .from(productVariantsTable)
+      .where(eq(productVariantsTable.variant_id, variant_id))
+      .limit(1);
+
+    if (variant.length > 0 && variant[0].img_front) {
+      return {
+        isSuccess: true,
+        data: variant[0].img_front,
+        msg: "Product front image fetched successfully",
+        error: "",
+      };
+    } else {
+      return {
+        isSuccess: false,
+        data: null,
+        msg: "Product front image not found for the given variant ID",
+        error: "",
+      };
+    }
+  } catch (e) {
+    return {
+      isSuccess: false,
+      data: null,
+      msg: "Couldn't fetch product front image",
+      error: e,
+    };
+  }
+}
+

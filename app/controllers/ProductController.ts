@@ -49,3 +49,13 @@ export async function getProductTemplate(req: Request, res: Response) {
          error: 'Supplier ID and/or category cannot be empty',
       });
 }
+
+
+export async function getProductFrontImageByVariants(req: Request, res: Response) {
+   const { variant_id } = req.body;
+   const result = await ProductService.getProductFrontImageByVariant(variant_id);
+   if (result.isSuccess)
+      res.status(200).json(result);
+   else
+      res.status(500).json(result);
+}

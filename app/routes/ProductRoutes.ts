@@ -38,5 +38,5 @@ productRrouter.post('/excel_template', passporthMiddleware, authenticate(['SK'])
 // module.exports = () => {
 //    router.get('/', getClothItems)
 // }
-
+productRrouter.get('getProductFrontImageByVariants', passporthMiddleware,  ProductController.getProductFrontImageByVariants);
 export default productRrouter;
