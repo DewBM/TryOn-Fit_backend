@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import * as ProductService from '../services/ProductService';
+import { fetchTotalNumberOfProducts , fetchTotalNumberOfCategories , fetchLowStockProducts ,fetchLowStockVariantCount } from '../services/ProductService';
 const { v4: uuidv4 } = require('uuid');
 
 export async function doGet(req: Request, res: Response) {
@@ -69,4 +70,117 @@ export async function getProductTemplate(req: Request, res: Response) {
          msg: 'Supplier ID and/or category cannot be empty',
          error: 'Supplier ID and/or category cannot be empty',
       });
+}
+
+//Total products
+
+export async function fetchTotalProducts(req: Request, res: Response) {
+   try {
+     const result = await fetchTotalNumberOfProducts();
+ 
+     // Send the appropriate HTTP response based on the result
+     if (result.isSuccess) {
+       res.status(200).json({
+         success: true,
+         data: result.data,
+         message: result.msg,
+       });
+     } else {
+       res.status(500).json({
+         success: false,
+         data: null,
+         message: result.msg,
+         error: result.error,
+       });
+     }
+   } catch (error) {
+     console.error("Error in fetchTotalNumberOfProductsController:", error);
+     res.status(500).json({
+       success: false,
+       data: null,
+       message: "Controller error while fetching total number of products",
+       error,
+     });
+   }
+ }
+
+
+//Total catergories
+
+ export async function fetchTotalCategories(req: Request, res: Response) {
+   try {
+     const result = await fetchTotalNumberOfCategories();
+ 
+     if (result.isSuccess) {
+       res.status(200).json({
+         success: true,
+         data: result.data,
+         message: result.msg,
+       });
+     } else {
+       res.status(500).json({
+         success: false,
+         data: null,
+         message: result.msg,
+         error: result.error,
+       });
+     }
+   } catch (error) {
+     console.error("Error in fetchTotalNumberOfCategoriesController:", error);
+     res.status(500).json({
+       success: false,
+       data: null,
+       message: "Controller error while fetching total number of categories",
+       error,
+     });
+   }
+ }
+
+
+ // low stock products
+
+ export async function getAllLowStockProducts(req: Request, res: Response) {
+  const result = await fetchLowStockProducts();
+
+  if (result.isSuccess) {
+    res.status(200).json({
+      success: true,
+      message: result.msg,
+      data: result.data,
+    });
+  } else {
+    res.status(500).json({
+      success: false,
+      message: result.msg,
+      error: result.error,
+    });
+  }
+}
+
+// low quantity count
+
+export async function getLowStockVariantCount(req: Request, res: Response) {
+  try {
+    const result = await fetchLowStockVariantCount(); 
+
+    if (result.isSuccess) {
+      res.status(200).json({
+        success: true,
+        message: result.msg,
+        data: result.data,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: result.msg,
+        error: result.error,
+      });
+    }
+  } catch (error) {
+    console.error("Error in controller:", error);
+    res.status(500).json({
+      success: false,
+      message: "An unexpected error occurred.",
+    });
+  }
 }

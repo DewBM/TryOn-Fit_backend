@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from ".."
 import { suppliersTable } from "../schema/Supplier"
 import {SelectSupllier} from "../schema/Supplier"
+import { sql } from "drizzle-orm";
 
 export async function getAllSupplier() {
     try{
@@ -68,3 +69,29 @@ export async function deleteExistSuplier(id:{supplier_id:string}) {
     }
     
 }
+
+
+//Total suppliers 
+
+export async function getTotalNumberOfSuppliers() {
+    try {
+      const result = await db
+        .select({ count: sql<number>`COUNT(*)` }) // Correct usage of sql for COUNT
+        .from(suppliersTable);
+  
+      return {
+        isSuccess: true,
+        data: result[0]?.count || 0, // Return the count or 0 if undefined
+        msg: "Total number of suppliers fetched successfully",
+        error: "",
+      };
+    } catch (error) {
+      console.error("Error fetching total number of suppliers:", error);
+      return {
+        isSuccess: false,
+        data: null,
+        msg: "Couldn't fetch total number of suppliers",
+        error,
+      };
+    }
+  }

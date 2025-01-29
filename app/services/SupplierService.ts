@@ -1,5 +1,5 @@
 // import { getURL } from "next/dist/shared/lib/utils";
-import {createNewSupplier,getAllSupplier, updateSupplierData,deleteExistSuplier} from "../db/dao/SupplierDao"
+import {createNewSupplier,getAllSupplier, updateSupplierData,deleteExistSuplier , getTotalNumberOfSuppliers} from "../db/dao/SupplierDao"
 import { SelectSupllier } from "../db/schema/Supplier";
 
 // interface supDataType {
@@ -25,3 +25,20 @@ export const updateSupplier = (supData : SelectSupllier) => {
 export const deleteSupplier = (id : {supplier_id:string}) => {
    return deleteExistSuplier(id );
 }
+
+//Total suppliers
+
+export async function fetchTotalNumberOfSuppliers() {
+   try {
+     const result = await getTotalNumberOfSuppliers();
+     return result;
+   } catch (error) {
+     console.error("Error in fetchTotalNumberOfSuppliersService:", error);
+     return {
+       isSuccess: false,
+       data: null,
+       msg: "Service layer error while fetching total number of suppliers",
+       error,
+     };
+   }
+ }

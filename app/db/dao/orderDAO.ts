@@ -817,3 +817,36 @@ export async function getWeeklyOrderVolume() {
     };
   }
 }
+
+
+// sales 
+
+export async function getTotalSalesPerMonth() {
+  try {
+    const result = await db
+      .select({
+        totalOrders: sql`COUNT(*)`.as("total_orders"), // Counting the total number of orders
+        month: sql`TO_CHAR(order_date, 'YYYY-MM')`.as("month"), // Formatting order_date as month in PostgreSQL
+      })
+      .from(ordersTable)
+      .groupBy(sql`TO_CHAR(order_date, 'YYYY-MM')`) // Grouping by the formatted month in PostgreSQL
+      .orderBy(sql`TO_CHAR(order_date, 'YYYY-MM')`); // Ordering by the formatted month
+
+    return {
+      isSuccess: true,
+      data: result || [],
+      msg: "Total orders per month fetched successfully.",
+      error: "",
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      isSuccess: false,
+      data: [],
+      msg: "Failed to fetch total orders per month.",
+      error: e instanceof Error ? e.message : String(e),
+    };
+  }
+}
+
+

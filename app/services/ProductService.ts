@@ -1,8 +1,9 @@
 import path from "path";
-import { getAllProducts, insertProduct, queryProducts, queryVariantById, getProductDetailsByVariantId, getProductIdByVariantDAO, selectCategories } from "../db/dao/productDAO";
+import { getAllProducts, insertProduct, queryProducts, queryVariantById, getProductDetailsByVariantId, getProductIdByVariantDAO , getTotalNumberOfProducts , getTotalNumberOfCategories ,getLowStockVariantCount, selectCategories } from "../db/dao/productDAO";
 import { createProductTemplate, readProductExcel } from "../utils/excel";
 import { Product } from "../types/custom_types";
 import { getImageById } from "../utils/imgHandler";
+import { getLowStockVariants } from "../db/dao/productDAO";
 
 export const getProducts = () => {
    return getAllProducts();
@@ -71,3 +72,104 @@ export async function generateProductTemplate(supplier_id: string, category: str
 export async function getCategories() {
    return await selectCategories();
 }
+
+// Total no of products
+
+export async function fetchTotalNumberOfProducts() {
+   try {
+     const result = await getTotalNumberOfProducts();
+     return result;
+   } catch (error) {
+     console.error("Error in getTotalNumberOfProductsService:", error);
+     return {
+       isSuccess: false,
+       data: null,
+       msg: "Service layer error while fetching total number of products",
+       error,
+     };
+   }
+ }
+
+
+ //Total catergories
+
+ export async function fetchTotalNumberOfCategories() {
+   try {
+     const result = await getTotalNumberOfCategories();
+     return result;
+   } catch (error) {
+     console.error("Error in fetchTotalNumberOfCategoriesService:", error);
+     return {
+       isSuccess: false,
+       data: null,
+       msg: "Service layer error while fetching total number of categories",
+       error,
+     };
+   }
+ }
+
+
+
+ //low stock products 
+
+ 
+export async function fetchLowStockProducts() {
+  try { 
+    const result = await getLowStockVariants();
+
+    if (result.isSuccess) { 
+      return {
+        isSuccess: true,
+        data: result.data,
+        msg: result.msg,
+      };
+    } else {
+      
+      return {
+        isSuccess: false,
+        data: null,
+        msg: "Failed to retrieve low stock products.",
+        error: result.error,
+      };
+    }
+  } catch (error) {
+    return {
+      isSuccess: false,
+      data: null,
+      msg: "An unexpected error occurred while retrieving low stock products.",
+      error,
+    };
+  }
+}
+
+
+// low quantity product count
+
+export async function fetchLowStockVariantCount() {
+   try {
+     const result = await getLowStockVariantCount(); // Call DAO function
+ 
+     if (result.isSuccess) {
+       return {
+         isSuccess: true,
+         data: result.totalLowStock, // Return the count of low-stock variants
+         msg: result.msg,
+       };
+     } else {
+       return {
+         isSuccess: false,
+         data: null,
+         msg: result.msg,
+         error: result.error,
+       };
+     }
+   } catch (e) {
+     console.error("Error in fetchLowStockVariantCount:", e);
+     return {
+       isSuccess: false,
+       data: null,
+       msg: "Error processing request.",
+       error: e,
+     };
+   }
+ }
