@@ -7,6 +7,11 @@ export async function doGet(req: Request, res: Response) {
    res.status(result.isSuccess? 200 : 500).json(result.data);
 }
 
+export async function doGetCategories(req: Request, res: Response) {
+   const result = await ProductService.getCategories();
+   res.status(result.isSuccess? 200 : 500).json(result.data);
+}
+
 
 export async function doPost(req: Request, res: Response) {
    const { supplier, category } = req.body;
@@ -22,6 +27,22 @@ export async function doPost(req: Request, res: Response) {
    }
 }
 
+
+export async function productInsert(req: Request, res: Response) {
+   const product = req.body;
+   console.log("Product: ", product);
+
+   if (!product) {
+      res.status(400).send('No product data');
+   }
+   else {
+      const result = await ProductService.createDirectProduct(product);
+      if (result.isSuccess)
+         res.status(200).json(result);
+      else
+      res.status(500).json(result);
+   }
+}
 
 export async function getProductTemplate(req: Request, res: Response) {
    const { supplier_id, category } = req.body;

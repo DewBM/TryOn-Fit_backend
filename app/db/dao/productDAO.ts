@@ -89,6 +89,11 @@ export async function insertProduct(product: Product) {
   try {
     await db.transaction(async (tx) => {
       await tx
+        .insert(categoriesTable)
+        .values({category_type: product.category})
+        .onConflictDoNothing();
+
+      await tx
         .insert(productsTable)
         .values({
           product_id: product.product_id,
@@ -111,6 +116,7 @@ export async function insertProduct(product: Product) {
             color: variant.color,
             design: variant.design,
             description: variant.description,
+            img_front: variant.variant_id,
             price: product.price,
             createdAt: new Date(),
             updatedAt: new Date(),
@@ -129,17 +135,17 @@ export async function insertProduct(product: Product) {
         }
       }
 
-      for (const variant of product.variants) {
-        await tx
-          .update(productVariantsTable)
-          .set({
-            img_front: variant.img_front.name,
-            img_back: variant.img_rear ? variant.img_rear.name : "",
-          })
-          .where(eq(productVariantsTable.variant_id, variant.variant_id));
-      }
+      // for (const variant of product.variants) {
+      //   await tx
+      //     .update(productVariantsTable)
+      //     .set({
+      //       img_front: variant.variant_id,
+      //       img_back: variant.img_rear ? variant.img_rear.name : "",
+      //     })
+      //     .where(eq(productVariantsTable.variant_id, variant.variant_id));
+      // }
 
-      await uploadProductImgs(product);
+      // await uploadProductImgs(product);
     });
 
     return {
@@ -155,6 +161,7 @@ export async function insertProduct(product: Product) {
     };
   }
 }
+
 
 export async function queryVariantById(variant_id: string) {
   try {
@@ -241,5 +248,26 @@ export async function getProductIdByVariantDAO(variant_id: string) {
       msg: "Couldn't fetch product ID",
       error: error,
     };
+  }
+}
+
+export async function selectCategories() {
+  try {
+    const result = await db.query.categoriesTable.findMany();
+    
+    return {
+      isSuccess: true,
+      data: result,
+      msg: "Products retrieved successfully",
+      error: null
+    }
+  }
+  catch(e) {
+    return {
+      isSuccess: false,
+      data: null,
+      msg: "Couldn't get products from database.",
+      error: e
+    }
   }
 }

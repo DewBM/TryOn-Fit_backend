@@ -1,5 +1,5 @@
 import path from "path";
-import { getAllProducts, insertProduct, queryProducts, queryVariantById, getProductDetailsByVariantId, getProductIdByVariantDAO } from "../db/dao/productDAO";
+import { getAllProducts, insertProduct, queryProducts, queryVariantById, getProductDetailsByVariantId, getProductIdByVariantDAO, selectCategories } from "../db/dao/productDAO";
 import { createProductTemplate, readProductExcel } from "../utils/excel";
 import { Product } from "../types/custom_types";
 import { getImageById } from "../utils/imgHandler";
@@ -44,6 +44,10 @@ export const createProduct = async (filename: string) => {
    
 }
 
+export const createDirectProduct = async (product: Product) => {
+   return await insertProduct(product);
+}
+
 
 export async function getVariantById(variant_id: string) {
    return await queryVariantById(variant_id);
@@ -62,4 +66,8 @@ export async function getProductIdByVariant(variant_id: string) {
 
 export async function generateProductTemplate(supplier_id: string, category: string) {
    return await createProductTemplate(supplier_id, category);
+}
+
+export async function getCategories() {
+   return await selectCategories();
 }
