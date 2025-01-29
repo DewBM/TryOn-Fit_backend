@@ -1,5 +1,5 @@
 import { customersTable } from "./Customer";
-import { productsTable, sizeChartsTable } from "./Product";
+import { categoriesTable, productsTable, sizeChartsTable } from "./Product";
 import { employeesTable } from "./Employee";
 import { users } from "./User";
 import { suppliersTable } from "./Supplier";
@@ -18,5 +18,6 @@ export {
    cartsTable,
    cartItemsTable,
    ordersTable,
-   orderItemsTable
+   orderItemsTable,
+   categoriesTable
 }

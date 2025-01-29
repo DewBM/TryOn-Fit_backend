@@ -92,7 +92,8 @@ export async function getCartItemsWithVariantDetails(cartId: number) {
             color: productVariantsTable.color,
             price: productVariantsTable.price,
             description: productVariantsTable.description,
-            userId: cartsTable.user_id,  // Added user_id here
+            userId: cartsTable.user_id, 
+            img_front: productVariantsTable.img_front // Added user_id here
          })
          .from(cartItemsTable)
          .innerJoin(
@@ -347,3 +348,4 @@ export async function addToCartDAO(user_id: number, variant_id: string, quantity
        };
    }
 }
+

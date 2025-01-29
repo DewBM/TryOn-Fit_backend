@@ -4,9 +4,19 @@ import { authenticate, passporthMiddleware } from "../middleware/authMiddleware"
 const OrderRouter = Router();
 
 
-// OrderRouter.get('/', passporthMiddleware, OrderController.doGet);
-// OrderRouter.post('/', passporthMiddleware, OrderController.doPost);
-// OrderRouter.put('/', passporthMiddleware, OrderController.doPut);
-// OrderRouter.delete('/', passporthMiddleware, OrderController.doDel);
+// OrderRouter.get('/',  OrderController.doGet);
+// OrderRouter.post('/',  OrderController.doPost);
+OrderRouter.get('/', passporthMiddleware, OrderController.doGet);
+OrderRouter.get('/getstatus', passporthMiddleware, OrderController. getstatus);
+OrderRouter.get('/getorderId', passporthMiddleware, OrderController.getorderId);
+OrderRouter.post('/',  OrderController.doPost);
+
+//sales
+
+OrderRouter.get ('/getTotalSalesPerMonth', OrderController.getTotalSalesPerMonth);
+
+
+
+
 
 export default OrderRouter;

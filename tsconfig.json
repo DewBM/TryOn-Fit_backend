@@ -1,5 +1,6 @@
 {
-   "compilerOptions": {
+   "compilerOptions": 
+   {
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       //"target": "ESNext",
@@ -13,4 +14,3 @@
       "typeRoots": ["./app/types", "./node_modules/@types"]
    }
 }
-

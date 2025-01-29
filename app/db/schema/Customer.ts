@@ -52,3 +52,4 @@ export const customers = pgTable("Customer", {
 export type SelectCustomer = typeof customersTable.$inferSelect;
 // export type SelectAddress = typeof addressesTable.$inferSelect;
 export type SelectBodyMeasurements = typeof bodyMeasurementsTable.$inferSelect;
+

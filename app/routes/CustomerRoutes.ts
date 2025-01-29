@@ -15,6 +15,8 @@ CustomerRouter.get('/', CustomerContoller.doGet);
 //measusrement 
 CustomerRouter.post('/measurements', passporthMiddleware, CustomerContoller.addMeasurements);
 
+CustomerRouter.get('/doGetCustomerId', passporthMiddleware, CustomerContoller.doGetCustomerId);
+
 export default CustomerRouter;
 
 

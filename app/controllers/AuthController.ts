@@ -93,17 +93,13 @@ export async function doSignup(req: Request, res: Response) {
 }
 
 
-
-
-
-
 export async function doSignin(req: Request, res: Response) {
    const body = req.body;
    const {isSuccess, user} = await UserService.verifyUser(body);
    if (isSuccess && user){
       const token = jwtUtils.generateJWT(user); 
       res.cookie('access-token', token, {sameSite: 'lax', secure: false, maxAge:1000*60*60*24});
-      res.status(200).json({isSuccess: true, msg: 'login successfull', role: user.role});
+      res.status(200).json({isSuccess: true, msg: 'login successfull', role: user.role,user_id:user.userId});
    }
    else
       res.status(401).send({isSuccess: false, msg: 'incorrect username or password'});

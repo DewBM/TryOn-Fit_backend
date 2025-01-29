@@ -1,12 +1,14 @@
 import { SelectCustomer } from "../db/schema/Customer";
 // import { updateCustomerByCustomerId as updateCustomerInDAO } from "../db/dao/customerDAO";
-import { getCustomerByCustomerId as fetchCustomerById ,addBodyMeasurements } from "../db/dao/customerDAO";
+import { getCustomerByCustomerId as fetchCustomerById ,addBodyMeasurements, getCustomerIdByUserId } from "../db/dao/customerDAO";
 import {Customer} from '../types/custom_types'
-
 
 
 export async function getCustomerByCustomerId(userId: number): Promise<Customer | null> {
   return await getCustomerByCustomerId(userId);
+
+export const getCustomerId =(user_id:number) =>{
+  return getCustomerIdByUserId(user_id)
 }
 
 // export const updateCustomerByCustomerId = async (

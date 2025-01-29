@@ -33,10 +33,24 @@ const storage = multer.diskStorage({
  });
 
 productRrouter.get('/', passporthMiddleware, authenticate(['SK']), ProductController.doGet);
+productRrouter.post('/product_insert', passporthMiddleware, authenticate(['SK']), upload.single('file'), ProductController.productInsert);
 productRrouter.post('/', passporthMiddleware, authenticate(['SK']), upload.single('file'), ProductController.doPost);
 productRrouter.post('/excel_template', passporthMiddleware, authenticate(['SK']), ProductController.getProductTemplate);
+productRrouter.get('/categories', ProductController.doGetCategories);
 // module.exports = () => {
 //    router.get('/', getClothItems)
 // }
 
+
+//Total products
+productRrouter.get("/fetchTotalProducts", ProductController.fetchTotalProducts);
+
+//Total catergories
+productRrouter.get("/fetchTotalCategories", ProductController.fetchTotalCategories);
+
+//low quantity products
+productRrouter.get("/getAllLowStockProducts", ProductController.getAllLowStockProducts);
+
+//low quantity products count
+productRrouter.get("/getLowStockVariantCount", ProductController.getLowStockVariantCount);
 export default productRrouter;

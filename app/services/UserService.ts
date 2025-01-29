@@ -102,4 +102,5 @@ export async function verifyUser({username, password}: userDAO.User) {
 
 export async function getUser(userId: number) {
    return await userDAO.getUserById(userId);
+
 }

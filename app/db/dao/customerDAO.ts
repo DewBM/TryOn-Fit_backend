@@ -112,3 +112,25 @@ export async function addBodyMeasurements(customer_id: number, measurements: Rec
     return { isSuccess: false, msg: "Failed.... to add measurements...", error: e };
   }
 }
+
+
+export const getCustomerIdByUserId = async (userId: number): Promise<number | null> => {
+  try {
+    const result = await db
+      .select({
+        customer_id: customersTable.customer_id,
+      })
+      .from(customersTable)
+      .where(eq(customersTable.user_id, userId));
+
+    if (result.length > 0) {
+      return result[0].customer_id; // Return the customer_id
+    } else {
+      return null; // No matching record found
+    }
+    console.log("userId",userId);
+  } catch (error) {
+    console.error("Error fetching customer_id by user_id:", error);
+    throw error; // Handle or propagate the error
+  }
+};

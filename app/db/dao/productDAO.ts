@@ -89,6 +89,11 @@ export async function insertProduct(product: Product) {
   try {
     await db.transaction(async (tx) => {
       await tx
+        .insert(categoriesTable)
+        .values({category_type: product.category})
+        .onConflictDoNothing();
+
+      await tx
         .insert(productsTable)
         .values({
           product_id: product.product_id,
@@ -111,6 +116,7 @@ export async function insertProduct(product: Product) {
             color: variant.color,
             design: variant.design,
             description: variant.description,
+            img_front: variant.variant_id,
             price: product.price,
             createdAt: new Date(),
             updatedAt: new Date(),
@@ -129,17 +135,17 @@ export async function insertProduct(product: Product) {
         }
       }
 
-      for (const variant of product.variants) {
-        await tx
-          .update(productVariantsTable)
-          .set({
-            img_front: variant.img_front.name,
-            img_back: variant.img_rear ? variant.img_rear.name : "",
-          })
-          .where(eq(productVariantsTable.variant_id, variant.variant_id));
-      }
+      // for (const variant of product.variants) {
+      //   await tx
+      //     .update(productVariantsTable)
+      //     .set({
+      //       img_front: variant.variant_id,
+      //       img_back: variant.img_rear ? variant.img_rear.name : "",
+      //     })
+      //     .where(eq(productVariantsTable.variant_id, variant.variant_id));
+      // }
 
-      await uploadProductImgs(product);
+      // await uploadProductImgs(product);
     });
 
     return {
@@ -155,6 +161,7 @@ export async function insertProduct(product: Product) {
     };
   }
 }
+
 
 export async function queryVariantById(variant_id: string) {
   try {
@@ -240,6 +247,143 @@ export async function getProductIdByVariantDAO(variant_id: string) {
       data: null,
       msg: "Couldn't fetch product ID",
       error: error,
+    };
+  }
+}
+
+export async function selectCategories() {
+  try {
+    const result = await db.query.categoriesTable.findMany();
+    
+    return {
+      isSuccess: true,
+      data: result,
+      msg: "Products retrieved successfully",
+      error: null
+    }
+  }
+  catch(e) {
+    return {
+      isSuccess: false,
+      data: null,
+      msg: "Couldn't get products from database.",
+      error: e
+    }
+
+// Total products 
+
+export async function getTotalNumberOfProducts() {
+  try {
+    const result = await db
+      .select({ count: sql<number>`COUNT(*)` }) 
+      .from(productsTable);
+
+    return {
+      isSuccess: true,
+      data: result[0]?.count || 0, 
+      msg: "Total number of products fetched successfully",
+      error: "",
+    };
+  } catch (error) {
+    console.error("Error fetching total number of products:", error);
+    return {
+      isSuccess: false,
+      data: null,
+      msg: "Couldn't fetch total number of products",
+      error,
+    };
+  }
+}
+
+
+//Total catergories 
+
+export async function getTotalNumberOfCategories() {
+  try {
+    const result = await db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(categoriesTable);
+
+    return {
+      isSuccess: true,
+      data: result[0]?.count || 0,
+      msg: "Total number of categories fetched successfully",
+      error: "",
+    };
+  } catch (error) {
+    console.error("Error fetching total number of categories:", error);
+    return {
+      isSuccess: false,
+      data: null,
+      msg: "Couldn't fetch total number of categories",
+      error,
+    };
+  }
+}
+
+
+//low stock products
+
+export async function getLowStockVariants() {
+  try {
+    const result = await db
+      .select({
+        product_id: productsTable.product_id,
+        product_name: productVariantsTable.name,
+        variant_id: productVariantsTable.variant_id,
+        stock_quantity: sizeStocksTable.quantity,
+      })
+      .from(productsTable)
+      .innerJoin(productVariantsTable, eq(productsTable.product_id, productVariantsTable.product_id))
+      .innerJoin(sizeStocksTable, eq(productVariantsTable.variant_id, sizeStocksTable.variant_id))
+      .where(sql`${sizeStocksTable.quantity} < 5`);
+
+    console.log("Low stock variants:", result);
+
+    return {
+      isSuccess: true,
+      data: result,
+      msg: "Low stock variants retrieved successfully.",
+      error: null,
+    };
+  } catch (e) {
+    console.error("Error retrieving low stock variants:", e);
+    return {
+      isSuccess: false,
+      data: null,
+      msg: "Error retrieving low stock variants.",
+      error: e,
+    };
+  }
+}
+
+
+// low quanity product count 
+
+export async function getLowStockVariantCount() {
+  try {
+    const result = await db
+      .select({
+        total_low_stock: sql`COUNT(DISTINCT ${productVariantsTable.variant_id})`.as("total_low_stock"),
+      })
+      .from(sizeStocksTable)
+      .innerJoin(productVariantsTable, eq(sizeStocksTable.variant_id, productVariantsTable.variant_id))
+      .innerJoin(productsTable, eq(productVariantsTable.product_id, productsTable.product_id))
+      .where(sql`${sizeStocksTable.quantity} < 5`);
+
+    return {
+      isSuccess: true,
+      totalLowStock: result[0]?.total_low_stock || 0, // Total count
+      msg: "Low stock variant count retrieved successfully.",
+      error: null,
+    };
+  } catch (e) {
+    console.error("Error retrieving low stock variant count:", e);
+    return {
+      isSuccess: false,
+      totalLowStock: 0,
+      msg: "Error retrieving low stock variant count.",
+      error: e,
     };
   }
 }
