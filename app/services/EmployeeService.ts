@@ -33,7 +33,13 @@ export const updateEmployee = (EmpData : {
     return updateExistEmp(EmpData);
 };
 
-export const deleteEmployee = (id : {emp_id : number}) => {
-    return deleteExistEmployee(id );
+// export const deleteEmployee = (id : {emp_id : number}) => {
+//     console.log("iddd" , id);
+//     return deleteExistEmployee(id);
+// }
+
+export const deleteEmployee = (id: { empId: number }) => {
+    return deleteExistEmployee(id);
 }
+
 

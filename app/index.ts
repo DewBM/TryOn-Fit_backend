@@ -71,6 +71,9 @@ app.use('/fiton', FitonRouter);
 import searchRouter from './routes/SearchRoutes';
 app.use('/search', searchRouter);
 
+import {DashboardRouter} from './routes/DashbordRoutes';
+app.use('/dashboard', DashboardRouter);
+
 
 export default app;
 
