@@ -8,4 +8,7 @@ supplierRouter.post('/', SupplierController.doPost);
 supplierRouter.put('/', SupplierController.doPut);
 supplierRouter.delete('/',SupplierController.doDelete);
 
+//Total suppliers
+supplierRouter.get("/fetchTotalSuppliers", SupplierController.fetchTotalSuppliers);
+
 export default supplierRouter;

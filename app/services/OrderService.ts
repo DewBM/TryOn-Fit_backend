@@ -1,4 +1,4 @@
-import { insertNewOrder, queryItemsByOrderId, queryOrders, queryOrdersByCustomer, updateOrderStatus , getOrdersByStatus ,queryOrderDetails , getOrderById , getOrderSummary , getProductVariantById , getOrderItems , getTotalOrdersToday , getTotalConfirmedOrders , getTotalProcessingOrders , getTotalShippedOrders , insertOrder, getOrderItemswithVarientDetails,getOrderIdsByCustomerId, getWeeklyOrderVolume} from "../db/dao/orderDAO";
+import { insertNewOrder, queryItemsByOrderId, queryOrders, queryOrdersByCustomer, updateOrderStatus , getOrdersByStatus ,queryOrderDetails , getOrderById , getOrderSummary , getProductVariantById , getOrderItems , getTotalOrdersToday , getTotalConfirmedOrders , getTotalProcessingOrders , getTotalShippedOrders , insertOrder, getOrderItemswithVarientDetails,getOrderIdsByCustomerId, getWeeklyOrderVolume , getTotalSalesPerMonth} from "../db/dao/orderDAO";
 
 import { OrderInsert, OrderItemInsert } from "../db/schema/Order";
 import { StatusType } from "../types/custom_types"
@@ -310,3 +310,26 @@ export const fetchWeeklyOrderVolume = async () => {
     };
   }
 };
+
+//sales
+
+export async function fetchTotalSalesPerMonth() {
+  const result = await getTotalSalesPerMonth();
+
+  if (result.isSuccess) {
+    // Optionally, you could manipulate or format the data here before sending it back
+    return {
+      isSuccess: true,
+      data: result.data,
+      msg: result.msg,
+      error: "",
+    };
+  } else {
+    return {
+      isSuccess: false,
+      data: [],
+      msg: result.msg,
+      error: result.error,
+    };
+  }
+}

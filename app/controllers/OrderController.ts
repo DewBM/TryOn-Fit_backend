@@ -5,6 +5,7 @@ import { createOrder ,createnewOrder} from "../services/OrderService";
 import { getCustomerId } from "../services/CustomerService";
 import { getorderstatuspage } from "../services/OrderService";
 import { fetchOrderId } from "../services/OrderService";
+import { fetchTotalSalesPerMonth } from "../services/OrderService";
 
 
   // export async function doGet(req: Request, res: Response) {
@@ -596,6 +597,39 @@ export async function getorderId(req: Request, res: Response) {
       isSuccess: false,
       data: null,
       msg: "An error occurred while fetching orders.",
+    });
+  }
+}
+
+
+//sales
+
+export async function getTotalSalesPerMonth(req: Request, res: Response) {
+  try {
+    const result = await fetchTotalSalesPerMonth(); // Call the service to get total sales data
+    
+    if (result.isSuccess) {
+      // If the service call is successful, return a 200 response with data
+      res.status(200).json({
+        success: true,
+        message: result.msg,
+        data: result.data,
+      });
+    } else {
+      // If there's an issue, return a 500 response with the error message
+      res.status(500).json({
+        success: false,
+        message: result.msg,
+        error: result.error,
+      });
+    }
+  } catch (error) {
+    // Handle unexpected errors
+    console.error("Error in controller:", error);
+    res.status(500).json({
+      success: false,
+      message: "An unexpected error occurred while fetching total sales.",
+      
     });
   }
 }

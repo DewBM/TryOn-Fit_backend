@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createSupplier, getSupplier , updateSupplier,deleteSupplier} from "../services/SupplierService"
+import { createSupplier, getSupplier , updateSupplier,deleteSupplier , fetchTotalNumberOfSuppliers} from "../services/SupplierService"
 
 export async function doGet( req : Request , resp : Response){
     try{
@@ -46,3 +46,34 @@ export async function doDelete(req : Request , resp : Response) {
     }
     
 }
+
+//Total suppliers
+
+export async function fetchTotalSuppliers(req: Request, res: Response) {
+    try {
+      const result = await fetchTotalNumberOfSuppliers();
+  
+      if (result.isSuccess) {
+        res.status(200).json({
+          success: true,
+          data: result.data,
+          message: result.msg,
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          data: null,
+          message: result.msg,
+          error: result.error,
+        });
+      }
+    } catch (error) {
+      console.error("Error in fetchTotalNumberOfSuppliersController:", error);
+      res.status(500).json({
+        success: false,
+        data: null,
+        message: "Controller error while fetching total number of suppliers",
+        error,
+      });
+    }
+  }
