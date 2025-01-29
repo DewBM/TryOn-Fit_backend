@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from "..";
-import { SelectCustomer } from "../schema/Customer";
+import { SelectCustomer, customersTable } from "../schema/Customer";
 import { customers ,bodyMeasurementsTable } from "../schema/Customer";
 
 // export async function getCustomerByCustomerId(customer_id: number) {

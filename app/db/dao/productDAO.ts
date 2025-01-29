@@ -269,7 +269,8 @@ export async function selectCategories() {
       msg: "Couldn't get products from database.",
       error: e
     }
-
+  }
+}
 // Total products 
 
 export async function getTotalNumberOfProducts() {
